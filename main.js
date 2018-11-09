@@ -132,7 +132,6 @@ class Sphere {
 		// this.element.setAttribute('src', 'delet.gif');
 		// this.element.setAttribute('opacity', '0.5');
 
-
 		// this.element.setAttribute('shadow', 'cast:false; receive: false;');
 
 		this.element = document.createElement('a-sphere')
