@@ -3,13 +3,31 @@
 <html>
     <head>
         <title>Jose's Stuff</title>
+        <script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
     </head>
     <body style="font-family:courier; color:white; background-color: black">
-        <h1>a place for stufff</h1>
+        <h1>a place for stuff</h1>
         <p>I don't want to keep creating new repos for new stuff. I'll put stuff here instead.</p>
         <p>"Remember kids, the only difference between screwing around and science is writing it down" - Alex Jason (balistics expert)</p>
-
+        <p>=====</p>
+        <p>Oh, hi there! For now please enjoy this simple scene.</p>
         <section id="main"></section>
+
+        <a-scene>
+
+            <a-box position="-1 0.5 -11" rotation="0 45 0" color="blue" opacity="0.2"></a-box>
+            <a-sphere position="0 1.25 -13" radius="1.25" color="red" opacity="0.2"></a-sphere>
+            <a-cylinder position="1 0.75 -11" radius="0.5" height="1.5" color="green" opacity="0.2"></a-cylinder>
+            <a-plane position="0 0 -12" rotation="-90 0 0" width="4" height="4" color="green" opacity="0.2"></a-plane>
+            <!-- <a-sky color="#ECECEC"></a-sky> -->
+
+            <!-- <a-video src="delet.gif" position="0 1 -5"></a-video> -->
+            <!-- <a-video src="vid.mp4"  width="1.28" height=".72" position="0 2 -5"></a-video> -->
+
+            <!-- <a-link href="https://www.google.com" position="-1 1 -5" title="My Homepage"></a-link> -->
+
+        </a-scene>
+
         <script src="main.js"></script>
     </body>
 </html>

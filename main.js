@@ -14,6 +14,9 @@
 // #	press F to do something
 
 
+// flat 2D stuff
+
+
 const square_color = 'gray';
 const text_background = 'gray';
 const std_size = 100;
@@ -116,4 +119,108 @@ function do_stuff() {
 // MAIN "DO STUFF" chunk, apparently it didn't like running before the class definition, 
 // I guess classes arent hoisted like functions are, all this scope stuff is pretty confusing
 
+
+
+
+// vr 3d stuff
+
+const SCENE = document.querySelector('a-scene');
+
+class Sphere {
+	constructor(config={}) {
+		// this.element = document.createElement('a-image')
+		// this.element.setAttribute('src', 'delet.gif');
+		// this.element.setAttribute('opacity', '0.5');
+
+
+		// this.element.setAttribute('shadow', 'cast:false; receive: false;');
+
+		this.element = document.createElement('a-sphere')
+		this.element.setAttribute('color', config.color || 'white');
+		this.element.setAttribute('radius', '0.01');
+		this.element.setAttribute('material', "shader: flat")
+
+
+		this.element.setAttribute('position', `${config.pos_x} ${config.pos_y} ${config.pos_z}`);
+		SCENE.appendChild(this.element)
+	}
+}
+class Marker extends Sphere {
+	// this is just a convenience class
+	constructor(x, y, z) {
+		super({pos_x:x, pos_y:y, pos_z:z})
+	}
+}
+
+class Plane {
+	constructor(config={}) {
+
+		this.element = document.createElement('a-plane')
+		this.element.setAttribute('color', config.color || 'white');
+		this.element.setAttribute('height', '1');
+		this.element.setAttribute('width', '1');
+		// this.element.setAttribute('material', "shader: flat");
+		this.element.setAttribute('rotation', '-90 0 0');
+		this.element.setAttribute('opacity', '0.2');
+
+		this.element.setAttribute('position', `${config.pos_x} ${config.pos_y} ${config.pos_z}`);
+		SCENE.appendChild(this.element)
+
+	}
+}
+class FloorPannel extends Plane{
+	constructor(x, z, ) {
+		super({pos_x:x, pos_y:0, pos_z:z})
+	}
+}
+
+
+// class EventCube
+
+function do_3d_stuff() {
+	// make a floor
+	for (let i = -10; i <= 10; i++) {
+		// for (let j = -10; j <= 10; j++) {
+			for (let k = -10; k <= 10; k++) {
+				new Marker(i, 0, k)
+			}
+		// }
+	}
+	for (let i = -4;  i < 4; i++) {
+		for (let k = -8; k < 0; k++) {
+			let color = (i+k) % 2 ? 'red' : 'white';
+			new Plane({pos_x:i+.5, pos_y:0, pos_z:k-.5, color: color})
+			// new FloorPannel(i+.5, k-.5);
+			// new FloorPannel(i-.5, k-.5);
+		}
+	}
+	// make some corner spires
+	for (let i of [-10, 10]) {
+		for (let j of [1, 2, 3]) {
+			for (let k of [-10, 10]) {
+				new Marker(i, j, k);
+			}
+		}
+	}
+	// make a neat circle to hold everything
+	{
+		this.element = document.createElement('a-ring')
+		this.element.setAttribute('color', 'white');
+		// this.element.setAttribute('height', `${Math.sqrt(20*20)}`);
+		// this.element.setAttribute('width', `${Math.sqrt(20*20)}`);
+		this.element.setAttribute('radius-inner', `${Math.sqrt(10*10+10*10)-0.005}`);
+		this.element.setAttribute('radius-outer', `${Math.sqrt(10*10+10*10)+0.005}`);
+		// this.element.setAttribute('width', '20');
+		// this.element.setAttribute('material', "shader: flat");
+		this.element.setAttribute('rotation', '-90 0 0');
+		// this.element.setAttribute('opacity', '0.2');
+
+		// this.element.setAttribute('position', `${config.pos_x} ${config.pos_y} ${config.pos_z}`);
+		SCENE.appendChild(this.element)
+
+	}
+}
+
+
 do_stuff();
+do_3d_stuff();
