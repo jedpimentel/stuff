@@ -1,4 +1,4 @@
-// split this into different docs once it reaches a thausand lines
+// split this into different docs once this gets too long
 
 // TODO: 
 // - webcam mirror
@@ -15,16 +15,12 @@
 
 
 // flat 2D stuff
-
-
 const square_color = 'gray';
 const text_background = 'gray';
 const std_size = 100;
 
 const MainElement = document.getElementById("main");
 MainElement.style.backgroundColor = '#AAAAAA ';
-
-// =====
 
 class Square {
 	constructor(config={}) {
@@ -50,10 +46,7 @@ class Square {
 		this.element.style.top = `${pos_y}px`;
 
 		MainElement.appendChild(this.element);
-
-		console.log('stuff');
-		// return self
-
+		// return self ?
 	}
 };
 
@@ -66,26 +59,11 @@ class Circle extends Square {
 
 }
 
-
-// not good anymore since Square was made into a class
-// function Key(char, x, y) {
-// 	self.element = Square(undefined, undefined, x, y).element
-// 	const text = document.createElement("h1")
-// 	text.style.fontSize = `${std_size}px`;	
-// 	// maybe make the whole thing have the text background instead of just the h2?
-// 	text.style.backgroundColor = text_background	
-// 	text.style.margin = "0"	
-// 	// holy shit, you're peeking into my thought process
-// 	text.innerHTML = char
-// 	self.element.appendChild(text)
-// }
-
-// let a = new Square()
-new Square();
-
-
 function do_stuff() {
-	// Square()
+
+	// place a default square
+	new Square();
+
 	let loc = 10;
 	const step = 110;
 
@@ -97,55 +75,28 @@ function do_stuff() {
 				pos_x: 100 + step*xi,
 				pos_y: 100 + step*yi,
 			});
-				// 100
-				// 100
-				// 100 + step*xi
-				// 100 + step*yi);
 		}
 	}
 }
 
-// function main_resize_script() {
-// 	let x_max = document.documentElement.clientWidth;
-// 	let y_max = document.documentElement.clientHeight;
-// 	console.log(x_max, y_max)
-// }
-
-// main_resize_script();
-
-// WARNING !!! This WILL probably need a rate limiter, add the refactor to the "Up Next"
-// window.addEventListener('resize', main_resize_script);
-
-// MAIN "DO STUFF" chunk, apparently it didn't like running before the class definition, 
-// I guess classes arent hoisted like functions are, all this scope stuff is pretty confusing
-
-
-
-
 // vr 3d stuff
+// 			  vr 3d stuff
+// 						 vr 3d stuff
 
 const SCENE = document.querySelector('a-scene');
 
 class Sphere {
 	constructor(config={}) {
-		// this.element = document.createElement('a-image')
-		// this.element.setAttribute('src', 'delet.gif');
-		// this.element.setAttribute('opacity', '0.5');
-
-		// this.element.setAttribute('shadow', 'cast:false; receive: false;');
-
 		this.element = document.createElement('a-sphere')
 		this.element.setAttribute('color', config.color || 'white');
 		this.element.setAttribute('radius', '0.01');
 		this.element.setAttribute('material', "shader: flat")
-
-
 		this.element.setAttribute('position', `${config.pos_x} ${config.pos_y} ${config.pos_z}`);
 		SCENE.appendChild(this.element)
 	}
 }
 class Marker extends Sphere {
-	// this is just a convenience class
+	// this is just a convenience thing
 	constructor(x, y, z) {
 		super({pos_x:x, pos_y:y, pos_z:z})
 	}
@@ -153,7 +104,6 @@ class Marker extends Sphere {
 
 class Plane {
 	constructor(config={}) {
-
 		this.element = document.createElement('a-plane')
 		this.element.setAttribute('color', config.color || 'white');
 		this.element.setAttribute('height', '1');
@@ -161,20 +111,10 @@ class Plane {
 		// this.element.setAttribute('material', "shader: flat");
 		this.element.setAttribute('rotation', '-90 0 0');
 		this.element.setAttribute('opacity', '0.2');
-
 		this.element.setAttribute('position', `${config.pos_x} ${config.pos_y} ${config.pos_z}`);
 		SCENE.appendChild(this.element)
-
 	}
 }
-class FloorPannel extends Plane{
-	constructor(x, z, ) {
-		super({pos_x:x, pos_y:0, pos_z:z})
-	}
-}
-
-
-// class EventCube
 
 function do_3d_stuff() {
 	// make a floor
@@ -189,8 +129,6 @@ function do_3d_stuff() {
 		for (let k = -8; k < 0; k++) {
 			let color = (i+k) % 2 ? 'red' : 'white';
 			new Plane({pos_x:i+.5, pos_y:0, pos_z:k-.5, color: color})
-			// new FloorPannel(i+.5, k-.5);
-			// new FloorPannel(i-.5, k-.5);
 		}
 	}
 	// make some corner spires
@@ -205,21 +143,62 @@ function do_3d_stuff() {
 	{
 		this.element = document.createElement('a-ring')
 		this.element.setAttribute('color', 'white');
-		// this.element.setAttribute('height', `${Math.sqrt(20*20)}`);
-		// this.element.setAttribute('width', `${Math.sqrt(20*20)}`);
 		this.element.setAttribute('radius-inner', `${Math.sqrt(10*10+10*10)-0.005}`);
 		this.element.setAttribute('radius-outer', `${Math.sqrt(10*10+10*10)+0.005}`);
-		// this.element.setAttribute('width', '20');
 		// this.element.setAttribute('material', "shader: flat");
 		this.element.setAttribute('rotation', '-90 0 0');
-		// this.element.setAttribute('opacity', '0.2');
-
-		// this.element.setAttribute('position', `${config.pos_x} ${config.pos_y} ${config.pos_z}`);
 		SCENE.appendChild(this.element)
+	}
+	// play audio on cylinder click
+	{
+		let cyl = document.querySelector('#green-cyl');
+		let audio = document.querySelector('#audio-clip');
 
+		let paused_opacity = cyl.getAttribute('opacity');
+		let playing_opacity = 0.4;
+
+		cyl.addEventListener('click', function (evt) {
+			cyl.setAttribute('opacity', playing_opacity)
+			audio.currentTime = 0;
+			audio.play();
+		});
+		audio.addEventListener('ended', () => {
+			cyl.setAttribute('opacity', paused_opacity)
+		});
+	}
+	// play video on cube click
+	{
+		let cube = document.querySelector('#blue-cube');
+		let vid = document.querySelector('#video-asset');
+		// first frame is annoying
+		vid.currentTime = 1;
+
+		let paused_opacity = cube.getAttribute('opacity');
+		let playing_opacity = 0.4;
+		cube.addEventListener('click', function (evt) {
+			if (vid.paused) {
+				cube.setAttribute('opacity', playing_opacity)
+				vid.play();
+			} else {
+				vid.pause();
+				cube.setAttribute('opacity', paused_opacity)
+			}
+		});
+		vid.addEventListener('ended', () => {
+			vid.currentTime = 1;
+			cube.setAttribute('opacity', paused_opacity)
+		});
 	}
 }
 
+document.addEventListener("DOMContentLoaded", function(event) { 
+	do_stuff();
+	do_3d_stuff();
+});
 
-do_stuff();
-do_3d_stuff();
+// CURRENT BUGS
+
+// randomly get in console (seems related to images, sincce started getting two afrer adding more)
+// cursor.js:190 Uncaught TypeError: Cannot read property 'parent' of undefined
+//     at i.<anonymous> (cursor.js:190)
+//     at HTMLCanvasElement.<anonymous> (bind.js:12)

@@ -11,33 +11,35 @@
         <p>"Remember kids, the only difference between screwing around and science is writing it down" - Alex Jason (balistics expert)</p>
         <p>=====</p>
         <p>Oh, hi there! For now please enjoy this simple scene.</p>
+        <p>Click the green cylinder to play audio</p>
+        <p>Click the blue cube to play video</p>
+
+        <!-- REFACTOR: https://aframe.io/docs/0.8.0/components/sound.html -->
+        <audio id='audio-clip'>
+          <source src="placeholder.flac" type='audio/flac' />
+          <p>Your user agent does not support the HTML5 Audio element.</p>
+        </audio>
         <section id="main"></section>
 
         <a-scene>
 
-            <a-box position="-3 0.5 -11" rotation="0 45 0" color="blue" opacity="0.2"></a-box>
+            <!-- qwer  https://glitch.com/edit/#!/a-frame-mouse-click-example?path=index.html:25:6 -->
+            <a-entity id="camera" look-controls cursor="rayOrigin: mouse"></a-entity>
+
+            <a-assets>
+                <video id="video-asset" src="vid.mp4"></video>
+            </a-assets>
+
+            <a-box id="blue-cube" position="-3 0.5 -11" rotation="0 45 0" color="blue" opacity="0.2"></a-box>
             <a-sphere position="0 0.5 -11" radius="0.5" color="red" opacity="0.2"></a-sphere>
-            <a-cylinder position="3 0.75 -11" radius="0.5" height="1.5" color="green" opacity="0.2"></a-cylinder>
-            <!-- <a-plane position="0 0 -12" rotation="-90 0 0" width="4" height="4" color="green" opacity="0.2"></a-plane> -->
-            <!-- <a-sky color="#ECECEC"></a-sky> -->
+            <a-cylinder id='green-cyl' position="3 0.75 -11" radius="0.5" height="1.5" color="green" opacity="0.2"></a-cylinder>
 
-            <!-- <a-video src="delet.gif" position="0 1 -5"></a-video> -->
-            <!-- <a-video src="vid.mp4"  width="1.28" height=".72" position="0 2 -5"></a-video> -->
-
-            <!-- <a-link href="https://www.google.com" position="-1 1 -5" title="My Homepage"></a-link> -->
+            <a-image src="turtles-in-sink.jpg" position="0 -15 0" rotation="90 0 0" width="20.48" height="15.36"></a-image>
+            <a-image src="beach-on-cup.jpg" position="-10 2.15 0" rotation="0 90 0" width="5.76" height="10.24"></a-image>
+            <a-image src="abstract.png" position="10 2 0" rotation="0 -90 0" width="6" height="6"></a-image>
 
 
-           <!-- <a-entity>
-                <a-entity position="5 0 0"></a-entity>
-                    <a-box position="-3 0.5 -11" rotation="0 45 0" color="blue" opacity="0.2"></a-box>
-                <a-animation attribute="rotation"
-                           dur="10000"
-                           fill="forwards"
-                           easing="linear"
-                           to="0 360 0"
-                           repeat="indefinite"></a-animation>
-            </a-entity> -->
-
+            <a-video id="video-clip" src="#video-asset" position="-3 2 -11" width="2.56" height="1.44" position="0 2 -5"></a-video>
 
         </a-scene>
         <script src="main.js"></script>
