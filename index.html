@@ -24,7 +24,9 @@
         <a-scene>
 
             <!-- qwer  https://glitch.com/edit/#!/a-frame-mouse-click-example?path=index.html:25:6 -->
-            <a-entity id="camera" look-controls cursor="rayOrigin: mouse"></a-entity>
+            <a-entity id="camera" camera look-controls wasd-controls cursor="rayOrigin: mouse" position="0 1.6 0">
+                <a-cylinder id="fing-longer" position="0.2 -0.4 -0.9" radius="0.01" height= "1.0" rotation="90 0 0" color="beige" opacity="1.0"></a-cylinder>
+            </a-entity>
 
             <a-assets>
                 <video id="video-asset" src="vid.mp4"></video>

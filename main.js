@@ -125,6 +125,7 @@ function do_3d_stuff() {
 			}
 		// }
 	}
+	// make a 8x8 grid
 	for (let i = -4;  i < 4; i++) {
 		for (let k = -8; k < 0; k++) {
 			let color = (i+k) % 2 ? 'red' : 'white';
