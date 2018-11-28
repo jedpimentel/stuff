@@ -190,6 +190,38 @@ function do_3d_stuff() {
 			cube.setAttribute('opacity', paused_opacity)
 		});
 	}
+	// play tone on sphere click
+	{
+		let ball = document.querySelector('#red-sphere')
+		
+		let tone = document.createElement('audio')
+		tone.src = 'sine-432hz-pluck.flac'
+
+		let playing_opacity = 0.4;
+		let paused_opacity = ball.getAttribute('opacity');
+
+		// https://aframe.io/docs/0.8.0/core/animations.html
+		let fade_animation = document.createElement('a-animation')
+		fade_animation.setAttribute('attribute', 'material.opacity')
+		fade_animation.setAttribute('begin', 'fade')
+		fade_animation.setAttribute('end', 'end-fade')
+		fade_animation.setAttribute('from', playing_opacity)
+		fade_animation.setAttribute('to', paused_opacity)
+		fade_animation.setAttribute('dur', 1000)
+		fade_animation.setAttribute('easing', 'linear')
+		ball.appendChild(fade_animation)
+		ball.emit('fade')
+
+		ball.addEventListener('click', function(evt) {
+			ball.emit('end-fade')
+			ball.emit('fade')
+			if (tone.paused) {
+				tone.play();
+			} else {
+				tone.currentTime = 0;
+			}
+		})
+	}
 }
 
 document.addEventListener("DOMContentLoaded", function(event) { 

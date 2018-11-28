@@ -13,6 +13,7 @@
         <p>Oh, hi there! For now please enjoy this simple scene.</p>
         <p>Click the green cylinder to play audio</p>
         <p>Click the blue cube to play video</p>
+        <p>Click the red sphere to generate a tone</p>
 
         <!-- REFACTOR: https://aframe.io/docs/0.8.0/components/sound.html -->
         <audio id='audio-clip'>
@@ -33,7 +34,7 @@
             </a-assets>
 
             <a-box id="blue-cube" position="-3 0.5 -11" rotation="0 45 0" color="blue" opacity="0.2"></a-box>
-            <a-sphere position="0 0.5 -11" radius="0.5" color="red" opacity="0.2"></a-sphere>
+            <a-sphere id="red-sphere" position="0 0.5 -11" radius="0.5" color="red" opacity="0.2"></a-sphere>
             <a-cylinder id='green-cyl' position="3 0.75 -11" radius="0.5" height="1.5" color="green" opacity="0.2"></a-cylinder>
 
             <a-image src="turtles-in-sink.jpg" position="0 -15 0" rotation="90 0 0" width="20.48" height="15.36"></a-image>
