@@ -83,7 +83,8 @@ function do_stuff() {
 // 			  vr 3d stuff
 // 						 vr 3d stuff
 
-const SCENE = document.querySelector('a-scene');
+// const SCENE = document.querySelector('a-scene');
+const BLOB = document.querySelector('#blob');
 
 class Sphere {
 	constructor(config={}) {
@@ -92,7 +93,7 @@ class Sphere {
 		this.element.setAttribute('radius', '0.01');
 		this.element.setAttribute('material', "shader: flat")
 		this.element.setAttribute('position', `${config.pos_x} ${config.pos_y} ${config.pos_z}`);
-		SCENE.appendChild(this.element)
+		BLOB.appendChild(this.element)
 	}
 }
 class Marker extends Sphere {
@@ -112,7 +113,7 @@ class Plane {
 		this.element.setAttribute('rotation', '-90 0 0');
 		this.element.setAttribute('opacity', '0.2');
 		this.element.setAttribute('position', `${config.pos_x} ${config.pos_y} ${config.pos_z}`);
-		SCENE.appendChild(this.element)
+		BLOB.appendChild(this.element)
 	}
 }
 
@@ -148,7 +149,7 @@ function do_3d_stuff() {
 		this.element.setAttribute('radius-outer', `${Math.sqrt(10*10+10*10)+0.005}`);
 		// this.element.setAttribute('material', "shader: flat");
 		this.element.setAttribute('rotation', '-90 0 0');
-		SCENE.appendChild(this.element)
+		BLOB.appendChild(this.element)
 	}
 	// play audio on cylinder click
 	{
