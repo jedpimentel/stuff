@@ -223,6 +223,7 @@ function do_3d_stuff() {
 			}
 		})
 	}
+	// add chrismas balls to tree
 }
 
 document.addEventListener("DOMContentLoaded", function(event) { 
