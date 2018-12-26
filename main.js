@@ -1,3 +1,37 @@
+/* 2018-12-26 15:37 PM EST
+I have moved my code so-far into a backup folder. I'll now remix this clone.
+
+
+123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ 123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ zxcv */
+
+// First we embed the aframe scene within a square (1000x100px, for now)
+// Let's make an 0Panel (working title) to hold plain HTML
+// 0panel is a righthand cpanel on desktops, and a "gameboy" setup on phones
+
+// https://www.w3schools.com/howto/howto_js_media_queries.asp
+// https://stackoverflow.com/questions/7995752/detect-desktop-browser-not-mobile-with-javascript
+(() => {
+	const scene = document.getElementById("scene");
+	const panel = document.getElementById("0Panel");
+
+	for(const el of [scene, panel]) {
+		el.style.width = "48vw";
+		el.style.height = "90vh";
+		el.style.float = "left";
+		el.style.display = "inline-block"
+		el.style.border = "1px solid white";
+	}
+	panel.style.marginLeft = "8px";
+	panel.style.paddingLeft = "8px";
+})();
+
+
+// 123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ 123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ zxcv
+
+// -H-E-R-E- -B-E- -D-R-A-G-O-N-S- // :: STUFF TO BE REFACTORED AHEAD :::::::::
+// -H-E-R-E- -B-E- -D-R-A-G-O-N-S- // :: STUFF TO BE REFACTORED AHEAD :::     :
+// -H-E-R-E- -B-E- -D-R-A-G-O-N-S- // :: STUFF TO BE REFACTORED AHEAD :::::::::
+
 // split this into different docs once this gets too long
 
 // TODO: 
@@ -88,10 +122,12 @@ const BLOB = document.querySelector('#blob');
 
 class Sphere {
 	constructor(config={}) {
-		this.element = document.createElement('a-sphere')
+		this.element = document.createElement(config.element || 'a-sphere')
 		this.element.setAttribute('color', config.color || 'white');
 		this.element.setAttribute('radius', '0.01');
 		this.element.setAttribute('material', "shader: flat")
+				this.element.setAttribute('type', "point")
+
 		this.element.setAttribute('position', `${config.pos_x} ${config.pos_y} ${config.pos_z}`);
 		BLOB.appendChild(this.element)
 	}
@@ -224,6 +260,48 @@ function do_3d_stuff() {
 		})
 	}
 	// add chrismas balls to tree
+	{
+		// It would've been better to add them relative to the position of the tree
+		// but the existying code already has the class auto-adding the element to
+		// the general body so YOLO
+
+		// const tree = document.querySelector('#christmas-tree')
+
+		const start = {
+			x: 1.5,
+			y: 1.75,
+			z: -5.5,
+		}
+
+		function y_path(y) {
+			return {
+				x: 0,
+				y: y,
+				z: 0,
+			}
+		}
+
+		// new Sphere(config={
+		// 	pos_x: start.x,
+		// 	pos_y: start.y,
+		// 	pos_z: start.z,
+		// })
+
+		// let's make a circle of dots on top of the tree for now, placing them like 
+		// normal ornaments would be harder
+		for(let i = 0; i < 48; i++) {
+			new Marker(
+				start.x + Math.random()*2 - 1,
+				start.y + Math.random()*2 - 1,
+				start.z + Math.random()*2 - 1,
+			)
+		}
+
+
+		// console.log(tree)
+		// tree.appendChild(ball.element)
+
+	}
 }
 
 document.addEventListener("DOMContentLoaded", function(event) { 

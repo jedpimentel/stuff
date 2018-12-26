@@ -6,14 +6,6 @@
         <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
     </head>
     <body style="font-family:courier; color:white; background-color: black">
-        <h1>a place for stuff</h1>
-        <p>I don't want to keep creating new repos for new stuff. I'll put stuff here instead.</p>
-        <p>"Remember kids, the only difference between screwing around and science is writing it down" - Alex Jason (balistics expert)</p>
-        <p>=====</p>
-        <p>Oh, hi there! For now please enjoy this simple scene.</p>
-        <p>Click the green cylinder to play audio</p>
-        <p>Click the blue cube to play video</p>
-        <p>Click the red sphere to generate a tone</p>
 
         <!-- REFACTOR: https://aframe.io/docs/0.8.0/components/sound.html -->
         <audio id='audio-clip'>
@@ -22,7 +14,8 @@
         </audio>
         <section id="main"></section>
 
-        <a-scene>
+        <a-scene id="scene" embedded style="height:1000px;width:1000px;">
+        <!-- <a-scene id="scene" embedded style="height:1000px;width:1000px;"> -->
 
             <!-- qwer  https://glitch.com/edit/#!/a-frame-mouse-click-example?path=index.html:25:6 -->
             <a-entity id="camera" camera look-controls wasd-controls cursor="rayOrigin: mouse" position="0 1.6 0">
@@ -77,6 +70,25 @@
             <a-image src="abstract.png" position="10 2 0" rotation="0 -90 0" width="6" height="6"></a-image>
 
         </a-scene>
+        <div id="0Panel">
+            <h1>a place for stuff</h1>
+            <p>I don't want to keep creating new repos for new stuff. I'll put stuff here instead.</p>
+            <p>"Remember kids, the only difference between screwing around and science is writing it down" - Alex Jason (balistics expert)</p>
+            <p>=====</p>
+            <p>Oh, hi there! For now please enjoy this simple scene.</p>
+            <p>Click the green cylinder to play audio</p>
+            <p>Click the blue cube to play video</p>
+            <p>Click the red sphere to generate a tone</p>
+            <p>=====</p>
+            <p>This app is meant to be opened in FullScreen mode on desktop</p>
+            <p>On Cell phones, this side panel should go on the bottom, and include an analog button</p>
+
+            <footer>
+                <br>
+                <p style="text-align: right; padding-right: 8px">~ Merry Schrismas, Jose.</p>
+            </footer>
+        </div>
+
         <script src="main.js"></script>
     </body>
 </html>
