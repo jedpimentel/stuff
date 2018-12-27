@@ -11,18 +11,46 @@ I have moved my code so-far into a backup folder. I'll now remix this clone.
 // https://www.w3schools.com/howto/howto_js_media_queries.asp
 // https://stackoverflow.com/questions/7995752/detect-desktop-browser-not-mobile-with-javascript
 (() => {
+	// DIVIDE THE UI IN TWO
 	const scene = document.getElementById("scene");
 	const panel = document.getElementById("0Panel");
 
+	const border_siz = 1;
+	const sm_padding = 7;
+
+	// Apply Shared Styles
 	for(const el of [scene, panel]) {
-		el.style.width = "48vw";
-		el.style.height = "90vh";
+		// el.style.width = `calc(50vw - ${2*(border_siz+sm_padding)||0}px)`;
+		// el.style.height = "90vh";
 		el.style.float = "left";
 		el.style.display = "inline-block"
-		el.style.border = "1px solid white";
+		el.style.border = `${border_siz}px solid white`;
+		el.style.margin = `${sm_padding}px`;
 	}
-	panel.style.marginLeft = "8px";
-	panel.style.paddingLeft = "8px";
+	// Now the distinct styles
+	// scene.style.width = "50vw";
+	scene.style.width = `calc(50vw - ${2*(border_siz+sm_padding)||0}px)`;
+	panel.style.width = `calc(50vw - ${4*(border_siz+sm_padding)-2*border_siz||0}px)`;
+	scene.style.height = "90vh";
+	panel.style.height = `calc(90vh - ${2*sm_padding||0}px`;
+	// panel.style.marginLeft = "8px";
+	panel.style.padding = `${sm_padding}px`;
+	// layout breaks on less than 156 vertical pixels
+	panel.style.overflowY = "auto";
+
+	const cols = {
+		'red': 'red',
+		'gre': 'green',
+		'blu': 'blue',
+	}
+
+	const redel = document.getElementsByClassName("red");
+	for(const [cls, col] of Object.entries(cols)) {
+		const elements = document.getElementsByClassName(cls)
+		for (const el of elements) {
+			el.style.color = col;
+		}
+	}
 })();
 
 
