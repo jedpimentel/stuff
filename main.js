@@ -232,7 +232,7 @@ function do_3d_stuff() {
 			cyl.setAttribute('opacity', paused_opacity)
 		});
 	}
-	// play video on cube click
+	// play video on blue cube click
 	{
 		let cube = document.querySelector('#blue-cube');
 		let vid = document.querySelector('#video-asset');
@@ -287,6 +287,17 @@ function do_3d_stuff() {
 			}
 		})
 	}
+	// increase clicker score if user clicks yellow box
+	{
+		let button = document.querySelector('#clicker-button')
+		let score = document.querySelector('#clicker-score')
+
+		let score_val = 0; // frontend defaults to zero
+
+		button.addEventListener('click', function(evt) {
+			score.setAttribute('value', ++score_val);
+		})
+	}
 	// add chrismas balls to tree
 	{
 		// It would've been better to add them relative to the position of the tree
@@ -315,15 +326,14 @@ function do_3d_stuff() {
 		// 	pos_z: start.z,
 		// })
 
-		// let's make a circle of dots on top of the tree for now, placing them like 
-		// normal ornaments would be harder
-		for(let i = 0; i < 48; i++) {
-			new Marker(
-				start.x + Math.random()*2 - 1,
-				start.y + Math.random()*2 - 1,
-				start.z + Math.random()*2 - 1,
-			)
-		}
+		// places a random field of dots
+		// for(let i = 0; i < 48; i++) {
+		// 	new Marker(
+		// 		start.x + Math.random()*2 - 1,
+		// 		start.y + Math.random()*2 - 1,
+		// 		start.z + Math.random()*2 - 1,
+		// 	)
+		// }
 
 
 		// console.log(tree)
