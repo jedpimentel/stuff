@@ -10,7 +10,9 @@ I have moved my code so-far into a backup folder. I'll now remix this clone.
 
 // https://www.w3schools.com/howto/howto_js_media_queries.asp
 // https://stackoverflow.com/questions/7995752/detect-desktop-browser-not-mobile-with-javascript
-(() => {
+
+// note: putting stuff in a block like this limits the consts and lets to this scope
+{
 	// DIVIDE THE UI IN TWO
 	const scene = document.getElementById("scene");
 	const panel = document.getElementById("0Panel");
@@ -51,7 +53,26 @@ I have moved my code so-far into a backup folder. I'll now remix this clone.
 			el.style.color = col;
 		}
 	}
-})();
+}
+
+// first attempt at connecting a gamepad
+// getGamepads is EXPERIMENTAL and not supported by all browsers!!
+// https://developer.mozilla.org/en-US/docs/Web/API/Navigator/getGamepads
+{
+	console.log('stuff')
+	console.log(navigator.getGamepads())
+	// unexpectedly, this fires on the first gamepad action instead of on page load
+	window.addEventListener("gamepadconnected", e => {
+		const gp = navigator.getGamepads()[e.gamepad.index];
+		console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
+		gp.index, gp.id,
+		gp.buttons.length, gp.axes.length);
+
+		console.log('stuff')
+		console.log(navigator.getGamepads())
+
+	});
+}
 
 
 // 123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ 123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ zxcv
@@ -251,6 +272,7 @@ function do_3d_stuff() {
 			}
 		});
 		vid.addEventListener('ended', () => {
+			// first frane of spider man video isn't blank
 			vid.currentTime = 1;
 			cube.setAttribute('opacity', paused_opacity)
 		});
