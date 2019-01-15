@@ -142,7 +142,7 @@ class Circle extends Square {
 
 }
 
-function do_stuff() {
+function render_debug_geometry() {
 
 	// place a default square
 	new Square();
@@ -365,7 +365,7 @@ function do_3d_stuff() {
 }
 
 document.addEventListener("DOMContentLoaded", function(event) { 
-	do_stuff();
+	// render_debug_geometry();
 	do_3d_stuff();
 });
 
