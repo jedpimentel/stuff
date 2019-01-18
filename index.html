@@ -20,43 +20,22 @@
 
             <!-- qwer  https://glitch.com/edit/#!/a-frame-mouse-click-example?path=index.html:25:6 -->
             <!-- https://aframe.io/docs/0.8.0/components/cursor.html -->
-            <a-entity id="camera" camera look-controls="pointerLockEnabled: true" wasd-controls position="0 1.6 0">
-                <a-cylinder id="fing-longer" position="0.2 -0.4 -0.9" radius="0.01" height= "1.0" rotation="90 0 0" color="beige" opacity="1.0"></a-cylinder>
+            <!-- https://aframe.io/docs/0.8.0/primitives/a-camera.html -->
+            <!-- <a-entity id="camera" camera look-controls="pointerLockEnabled: true" wasd-controls position="0 1.6 0"> -->
 
-                <!-- <a-box  position="0.2 -0.4 -0.9" height="0.2" width="0.2" depth="0.2"></a-box> -->
+            <a-entity position="1.5 0 -3.5">
+                <a-camera look-controls="pointerLockEnabled: true" wasd-controls>
+                    <a-cylinder id="fing-longer" position="0.2 -0.4 -0.9" radius="0.01" height= "1.0" rotation="90 0 0" color="beige" opacity="1.0"></a-cylinder>
 
-                <!-- https://stackoverflow.com/questions/50721192/a-frame-raycaster-not-working-need-intersection-point-with-a-sky -->
-                <!-- important!! the aframe wiki could use an example of this -->
-                <!-- https://aframe.io/docs/0.8.0/components/laser-controls.html -->
-                <!-- https://aframe.io/docs/0.8.0/components/raycaster.html -->
-                <!-- qwer this line might need cleaning -->
-                <a-entity position="0.2 -0.4 -1.4" cursor="rayOrigin: entity; showLine: true;" raycaster="showLine: true; far: 16" line="color: white; opacity:0.5"></a-entity>
+                    <!-- <a-box  position="0.2 -0.4 -0.9" height="0.2" width="0.2" depth="0.2"></a-box> -->
 
-                <!-- cursor="rayOrigin: entity; showLine: true;" -->
-
-                <!-- pointerLockEnabled  Whether to hide the cursor using the Pointer Lock API.  true -->
-                <!-- ="pointerLockEnabled: true" -->
-
-
-                <!-- <a-entity raycaster showLine position="0.2 -0.4 -0.9"></a-entity> -->
-
-                <!-- <a-entity cursor="fuse: true; fuseTimeout: 500"
-                          position="0 0 -1"
-                          geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
-                          material="color: black; shader: flat">
-                </a-entity>
-                <a-entity laser-controls></a-entity>
-                <a-entity laser-controls 
-                          cursor="fuse: true; fuseTimeout: 500"
-                          position="0 0 -1"
-                          geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
-                          material="color: black; shader: flat"
-                          raycaster="objects: .links; far: 5;" 
-                          showLine="true;">
-                              
-                </a-entity> -->
-
-                    <!-- <a-entity laser-controls line="color: red; opacity: 0.75" position="0 0 -2"></a-entity> -->
+                    <!-- https://stackoverflow.com/questions/50721192/a-frame-raycaster-not-working-need-intersection-point-with-a-sky -->
+                    <!-- important!! the aframe wiki could use an example of this -->
+                    <!-- https://aframe.io/docs/0.8.0/components/laser-controls.html -->
+                    <!-- https://aframe.io/docs/0.8.0/components/raycaster.html -->
+                    <!-- qwer this line might need cleaning -->
+                    <a-entity position="0.2 -0.4 -1.4" cursor="rayOrigin: entity; showLine: true;" raycaster="showLine: true; far: 16" line="color: white; opacity:0.5"></a-entity>
+                </a-camera>
             </a-entity>
 
             <!-- place these things first in HTML, for render order reasons -->
@@ -72,11 +51,14 @@
                 <video id="video-asset" src="vid.mp4"></video>
             </a-assets>
 
-            <a-box id="blue-cube" position="-3 0.5 -11" rotation="0 45 0" color="blue" opacity="0.2"></a-box>
-            <a-sphere id="red-sphere" position="0 0.5 -11" radius="0.5" color="red" opacity="0.2"></a-sphere>
-            <a-cylinder id='green-cyl' position="3 0.75 -11" radius="0.5" height="1.5" color="green" opacity="0.2"></a-cylinder>
+            <a-box id="blue-cube" position="-3 0.5 -11" rotation="0 45 0" color="blue" opacity="0.3"></a-box>
+            <a-sphere id="red-sphere" position="0 0.5 -11" radius="0.5" color="red" opacity="0.3"></a-sphere>
+            <a-cylinder id='green-cyl' position="3 0.75 -11" radius="0.5" height="1.5" color="green" opacity="0.3"></a-cylinder>
 
             <a-video id="video-clip" src="#video-asset" position="-3 2 -11" width="2.56" height="1.44" position="0 2 -5"></a-video>
+
+            <a-box id="clicker-game-banner" src="clicker-game.png" position="0.5 2.5 -7.5" color="white"></a-box>
+            <a-text value="Known bugs:\n- yellow button sometimes doesn't work for a few seconds\n- click events are laggy or defaulting to 'gaze based' on mobile" position="1.1 2.5 -8"></a-text>
 
             <a-entity class='table' position='-4 0.01 -9'>
                 <a-entity class='grid-fitter' position='0.5 0 0.5'>
@@ -115,18 +97,19 @@
         </a-scene>
         <div id="0Panel">
             <p>20181228</p>
-            <p>THIS IS NOW A BLOG</p>
             <p>I will comment on the creation of this project, and also random subjects.</p>
-            <p>This project is my attempt to staple together a bunch of buzzwords</p>
             <br>
             <p>20190105</p>
-            <p>Making a Clicker game. For now it's a button that increases your score. (bug: randomly doesn't work, probably a mouse click raycaster issue)</p>
+            <p>Making a Clicker game. For now it's a button that increases your score. (bug: randomly doesn't work, probably a raycaster issue)</p>
             <br>
             <p>20190107</p>
-            <p>And to our left we have a scene powered by the A-Frame WebVR framework, and coded in HTML/JavaScript.</p>
+            <p>And to our side we have a scene powered by the A-Frame WebVR framework, written in HTML and JavaScript.</p>
             <br>
             <p>20190110</p>
-            <p>Added laser pointer to stick. Should be possible to add cardboard controls </p>
+            <p>Added laser pointer to stick. Should be possible to add cardboard controls.</p>
+            <br>
+            <!-- <p>20190116</p> -->
+            <!-- <p>Cardboard controls live!</p> -->
             <!--123456789 123456789 1234567894444444444 123456789 123456789 1234567898888888888 123456789 123456789 123456789 123456789 123456789 123456789 -->
             <br>
             <h1>A place for stuff</h1>

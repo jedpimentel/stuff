@@ -37,6 +37,7 @@ I have moved my code so-far into a backup folder. I'll now remix this clone.
 	panel.style.height = `calc(90vh - ${2*sm_padding||0}px`;
 	// panel.style.marginLeft = "8px";
 	panel.style.padding = `${sm_padding}px`;
+	panel.style.marginRight = '0';
 	// layout breaks on less than 156 vertical pixels
 	panel.style.overflowY = "auto";
 
@@ -365,7 +366,7 @@ function do_3d_stuff() {
 }
 
 document.addEventListener("DOMContentLoaded", function(event) { 
-	do_stuff();
+	// do_stuff();
 	do_3d_stuff();
 });
 
