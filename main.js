@@ -143,7 +143,7 @@ class Circle extends Square {
 
 }
 
-function do_stuff() {
+function render_debug_geometry() {
 
 	// place a default square
 	new Square();
