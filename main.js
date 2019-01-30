@@ -319,6 +319,7 @@ function do_3d_stuff() {
 
 		button.addEventListener('click', function(evt) {
 			score.setAttribute('value', ++score_val);
+			console.log('click')
 		})
 	}
 	// add chrismas balls to tree
