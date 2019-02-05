@@ -5,6 +5,7 @@
         <title>Jose's Stuff</title>
         <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+        <meta charset="UTF-8">
     </head>
     <body style="font-family:courier; color:white; background-color: black">
 
@@ -22,9 +23,8 @@
             <!-- https://aframe.io/docs/0.8.0/components/cursor.html -->
             <!-- https://aframe.io/docs/0.8.0/primitives/a-camera.html -->
             <!-- <a-entity id="camera" camera look-controls="pointerLockEnabled: true" wasd-controls position="0 1.6 0"> -->
-
             <a-entity position="1.5 0 -3.5">
-                <a-camera look-controls="pointerLockEnabled: true" wasd-controls>
+                <a-camera look-controls="pointerLockEnabled: true" near="0.001" wasd-controls>
                     <a-cylinder id="fing-longer" position="0.2 -0.4 -0.9" radius="0.01" height= "1.0" rotation="90 0 0" color="beige" opacity="1.0"></a-cylinder>
 
                     <!-- <a-box  position="0.2 -0.4 -0.9" height="0.2" width="0.2" depth="0.2"></a-box> -->
@@ -62,19 +62,51 @@
 
             <a-entity class='table' position='-4 0.01 -9'>
                 <a-entity class='grid-fitter' position='0.5 0 0.5'>
-                    <a-entity id='table-surface' position='5 0 3'>
-                        <a-entity position='0 0.7 0'>
-                            <a-cylinder color='saddlebrown' radius='1' height='0.05' position='0 0.025 0'></a-cylinder>
-                            <a-entity position='0 0.05 0'>
+                    <a-entity position='5 0 3'>
+
+                        <!-- table base -->
+                        <a-cylinder color='saddlebrown' radius='0.25' height='0.7' position='0 0.35 0'></a-cylinder>
+
+                        <!-- table top -->
+                        <a-cylinder color='saddlebrown' radius='1' height='0.05' position='0 0.725 0'></a-cylinder>
+
+                        <!-- table surface -->
+                        <a-entity position='0 0.75 0'>
+
+                            <a-entity class='table-demo' position='0 0 0'>
+
+
+                                <a-entity id='clock-hrs'><a-sphere position='0 0 -0.35' radius='0.1'></a-sphere></a-entity>
+                                <a-entity id='clock-min'><a-sphere position='0 0 -0.60' radius='0.1'></a-sphere></a-entity>
+                                <a-entity id='clock-sec'><a-sphere position='0 0 -0.85' radius='0.1'></a-sphere></a-entity>
+
+                                <!-- <a-box id="clicker-button" depth= '0.52' width="0.52" height="0.16" position="0 0.08 0" color="yellow"></a-box>
+                                <a-text value="<- click" position="0.26 0 0" rotation="-90 0 0"></a-text>
+                                <a-text value="Score:" align="center" position="0 0 0.45" rotation="-90 0 0"></a-text>
+                                <a-text id="clicker-score" value="0" align="center" position="0 0 0.70" rotation="-90 0 0"></a-text> -->
+
+                            </a-entity>
+
+                            <a-entity class='table-demo' position='-2 0 0'>
                                 <a-box id="clicker-button" depth= '0.52' width="0.52" height="0.32" position="0 0.05 0" color="yellow"></a-box>
                                 <a-text value="<- click" position="0.26 0 0" rotation="-90 0 0"></a-text>
                                 <a-text value="Score:" align="center" position="0 0 0.45" rotation="-90 0 0"></a-text>
                                 <a-text id="clicker-score" value="0" align="center" position="0 0 0.70" rotation="-90 0 0"></a-text>
                             </a-entity>
+
+                            <a-image src='chalk-effect.png' position='-2 0 -2'></a-image>
+
                         </a-entity>
-                        <a-cylinder color='saddlebrown' radius='0.25' height='0.7' position='0 0.35 0'></a-cylinder>
+
                     </a-entity>
+
+                    <a-entity id='next-button'>
+                        <a-text position='7 1 3' value='next' align='center'></a-text> 
+                        <a-box src='next.png' position='7 0.7 3' height='0.25' width='0.25' depth='0.25'></a-box>
+                    </a-entity>
+
                 </a-entity>
+
             </a-entity>
 
             <a-entity id='20181201-dream' position='-4 0.01 -9'>
@@ -96,6 +128,12 @@
 
         </a-scene>
         <div id="0Panel">
+            <br>
+            <p>TODAY'S MENU</p>
+            <br>
+            <ul><span class="red">►</span> WebVR Video Player <a href="/demo/player">[open]</a></li></ul>
+            <br>
+            <br>
             <p>20181228</p>
             <p>I will comment on the creation of this project, and also random subjects.</p>
             <br>
@@ -107,6 +145,9 @@
             <br>
             <p>20190110</p>
             <p>Added laser pointer to stick. Should be possible to add cardboard controls.</p>
+            <br>
+            <p>20190201</p>
+            <p>Imagine a table where everyone in the would could sit at, at the same time.</p>
             <br>
             <!-- <p>20190116</p> -->
             <!-- <p>Cardboard controls live!</p> -->
@@ -124,7 +165,7 @@
             <p>=====</p>
             <p>You start out in a <span class="red">MYSTERIOUS VOID</span>.</p>
             <p>Your eyes grate on the GREAT WALL OF TEXT.</p>
-            <p>You hold a stick, and stand in midst of a crude geometric landscape.</p>
+            <p>You hold a stick in your right hand, in a crude geometric landscape.</p>
             <br>
             <p>Use your W/A/S/D keys to move around</p>
             <p>Click the green cylinder to play audio</p>
@@ -143,6 +184,7 @@
             <br>
             <p>Press "F", or the "Goggles" icon to go to full-screen mode.</p>
             <p>For now, mouse and keyboard constrols only. <span class="gre">#SorryNotSorry</span></p>
+            <br>
             <footer>
                 <br>
                 <p>123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</p>
