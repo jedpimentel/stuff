@@ -10,6 +10,12 @@
         <section id="main"></section>
         <a-scene ar id="scene">
 
+            <a-assets>
+                <video id="video-asset" autoplay loop="true" src="video.mp4"></video>
+            </a-assets>
+
+            <a-light type='ambient' color='white'></a-light>
+
             <a-entity position="0 0 0">
                 <a-camera look-controls="pointerLockEnabled: true" wasd-controls>
                     <a-cylinder id="fing-longer" position="0.2 -0.2 -0.2" radius="0.01" height= "1.0" rotation="90 0 0" color="beige" opacity="1.0"></a-cylinder>
@@ -17,40 +23,41 @@
                 </a-camera>
             </a-entity>
             
+            <!-- base platform -->
             <a-circle radius='1' position='0 0 0' rotation='-90 0 0' color='gray'></a-circle>
 
+            <!-- standing "television" -->
             <a-entity position='0 1.6 0'>
 
+                <!-- frame -->
                 <a-box color='gray' width='1' height='1' depth='0.3'  position='0 0 -0.91'></a-box>
                 <a-box color='#666' width='0.3' height='1.1' depth='0.15'  position='0 -1.05 -0.91'></a-box>
 
-
-                <a-light type='ambient' color='white'></a-light>
-
-                <!-- <a-text position='0 0.35 -0.75' value='A-Player' align='center'></a-text>  -->
-                <!-- why was the front face not being textured? -->
-                <a-image src='title.png' width='0.54' height='0.2' rotate='0 180 0' position='0 0.35 -0.75'></a-image>
-
-                <!-- <a-box width='0.5' height='0.5' depth='0.01'  position='0 0 -1.25' opacity='0.2'></a-box> -->
-                <!-- <a-box width='0.5' height='0.5' depth='0.01'  position='0 0 -0.75' opacity='0.2'></a-box> -->
-
-                <!-- <a-video id='video-element' src='video.mp4' autoplay position='0 0 -0.75' width='0.5' height='0.5'></a-video> -->
-                <a-video id='video-element' src='video.mp4' autoplay loop="true" position='0 0 -0.75' width='0.5' height='0.5'></a-video>
+                <!-- screen -->
+                <a-video id='video-element' src='#video-asset' autoplay loop="true" position='0 0 -0.75' width='0.5' height='0.5'></a-video>
                 
+                <!-- labels -->
+                <a-image src='title.png' width='0.54' height='0.2' rotate='0 180 0' position='0 0.35 -0.75'></a-image>
                 <a-entity id='icon-strip' position='0 -0.35 -0.75'>
-                    <a-image src='icon-rw.png'    height='0.1' width='0.1' position='-0.2 0 0'></a-image>
-                    <a-image src='icon-play.png'  height='0.1' width='0.1' position='-0.1 0 0'></a-image>
-                    <a-image src='icon-pause.png' height='0.1' width='0.1' position='0 0 0'></a-image>
-                    <a-image src='icon-ff.png'    height='0.1' width='0.1' position='0.1 0 0'></a-image>
-                    <a-image src='icon-exit.png'  height='0.1' width='0.1' position='0.2 0 0'></a-image>
+                    <!-- <a-image src='icon-rw.png'    height='0.1' width='0.1' position='-0.2 0 0'></a-image> -->
+                    <a-image src='icon-play.png'  id='play' height='0.1' width='0.1' position='-0.1 0 0'></a-image>
+                    <a-image src='icon-pause.png' id='pause' height='0.1' width='0.1' position='0 0 0'></a-image>
+                    <!-- <a-image src='icon-ff.png'    height='0.1' width='0.1' position='0.1 0 0'></a-image> -->
+                    <!-- <a-image src='icon-exit.png'  height='0.1' width='0.1' position='0.2 0 0'></a-image> -->
                 </a-entity>
 
             </a-entity>
-
         </a-scene>
 
         <script type="text/javascript">
-            let a;
+            {
+                const play = document.querySelector('#play');
+                const pause = document.querySelector('#pause');
+                const vid = document.querySelector('#video-asset');
+
+                play.addEventListener('click', () => vid.play());
+                pause.addEventListener('click', () => vid.pause());           
+            }
         </script>
     </body>
 </html>
