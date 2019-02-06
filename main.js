@@ -19,6 +19,7 @@ I have moved my code so-far into a backup folder. I'll now remix this clone.
 
 	const border_siz = 1;
 	const sm_spacing = 7;
+	const magic_numb = 2;
 
 	// Apply Shared Styles
 	for(const el of [scene, panel]) {
@@ -28,11 +29,12 @@ I have moved my code so-far into a backup folder. I'll now remix this clone.
 		el.style.display = "inline-block";
 		el.style.border = `${border_siz}px solid white`;
 		el.style.margin = `${sm_spacing}px 0px 0px ${sm_spacing}px`;
+		el.style.marginLeft = `${sm_spacing}px`;
 	}
 	// Now the distinct styles
 	// scene.style.width = "50vw";
-	scene.style.width = `calc(50vw - ${(2*border_siz+(3/2)*sm_spacing)||0}px)`;
-	panel.style.width = `calc(50vw - ${(2*border_siz+(7/2)*sm_spacing)||0}px)`;
+	scene.style.width = `calc(50vw - ${magic_numb+(2*border_siz+(3/2)*sm_spacing)}px )`;
+	panel.style.width = `calc(50vw - ${magic_numb+(2*border_siz+(7/2)*sm_spacing)}px )`;
 	scene.style.height = "90vh";
 	panel.style.height = `calc(90vh - ${2*sm_spacing||0}px`;
 	// panel.style.marginLeft = "8px";
