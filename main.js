@@ -18,25 +18,25 @@ I have moved my code so-far into a backup folder. I'll now remix this clone.
 	const panel = document.getElementById("0Panel");
 
 	const border_siz = 1;
-	const sm_padding = 7;
+	const sm_spacing = 7;
 
 	// Apply Shared Styles
 	for(const el of [scene, panel]) {
-		// el.style.width = `calc(50vw - ${2*(border_siz+sm_padding)||0}px)`;
+		// el.style.width = `calc(50vw - ${2*(border_siz+sm_spacing)||0}px)`;
 		// el.style.height = "90vh";
 		el.style.float = "left";
-		el.style.display = "inline-block"
+		el.style.display = "inline-block";
 		el.style.border = `${border_siz}px solid white`;
-		el.style.margin = `${sm_padding}px 0 0 ${sm_padding}px`;
+		el.style.margin = `${sm_spacing}px 0px 0px ${sm_spacing}px`;
 	}
 	// Now the distinct styles
 	// scene.style.width = "50vw";
-	scene.style.width = `calc(50vw - ${(2*border_siz+(3/2)*sm_padding)||0}px)`;
-	panel.style.width = `calc(50vw - ${(2*border_siz+(7/2)*sm_padding)||0}px)`;
+	scene.style.width = `calc(50vw - ${(2*border_siz+(3/2)*sm_spacing)||0}px)`;
+	panel.style.width = `calc(50vw - ${(2*border_siz+(7/2)*sm_spacing)||0}px)`;
 	scene.style.height = "90vh";
-	panel.style.height = `calc(90vh - ${2*sm_padding||0}px`;
+	panel.style.height = `calc(90vh - ${2*sm_spacing||0}px`;
 	// panel.style.marginLeft = "8px";
-	panel.style.padding = `${sm_padding}px`;
+	panel.style.padding = `${sm_spacing}px`;
 	panel.style.marginRight = '0';
 	// layout breaks on less than 156 vertical pixels
 	panel.style.overflowY = "auto";
