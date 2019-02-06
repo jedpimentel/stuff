@@ -27,12 +27,12 @@ I have moved my code so-far into a backup folder. I'll now remix this clone.
 		el.style.float = "left";
 		el.style.display = "inline-block"
 		el.style.border = `${border_siz}px solid white`;
-		el.style.margin = `${sm_padding}px`;
+		el.style.margin = `${sm_padding}px 0 0 ${sm_padding}px`;
 	}
 	// Now the distinct styles
 	// scene.style.width = "50vw";
-	scene.style.width = `calc(50vw - ${2*(border_siz+sm_padding)||0}px)`;
-	panel.style.width = `calc(50vw - ${4*(border_siz+sm_padding)-2*border_siz||0}px)`;
+	scene.style.width = `calc(50vw - ${(2*border_siz+(3/2)*sm_padding)||0}px)`;
+	panel.style.width = `calc(50vw - ${(2*border_siz+(7/2)*sm_padding)||0}px)`;
 	scene.style.height = "90vh";
 	panel.style.height = `calc(90vh - ${2*sm_padding||0}px`;
 	// panel.style.marginLeft = "8px";
