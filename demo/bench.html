@@ -1,0 +1,174 @@
+
+<!DOCTYPE html> 
+<html>
+    <head>
+        <title>Player</title>
+        <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
+        <meta charset="UTF-8">
+    </head>
+    <body style="font-family:courier; color:white; background-color: black">
+        <section id="main"></section>
+        <a-scene ar id="scene">
+
+            <a-light type='ambient' color='white'></a-light>
+
+            <a-entity position="0 0 0">
+                <a-camera look-controls="pointerLockEnabled: true" wasd-controls>
+                    <a-cylinder id="fing-longer" position="0.2 -0.2 -0.2" radius="0.01" height= "1.0" rotation="90 0 0" color="beige" opacity="1.0"></a-cylinder>
+                    <a-entity position="0.2 -0.2 -0.7" cursor="rayOrigin: entity; showLine: true;" raycaster="showLine: true; far: 16" line="color: white; opacity:0.5"></a-entity>
+                </a-camera>
+            </a-entity>
+            
+            <!-- floor -->
+            <a-circle radius='1' position='0 0 0' rotation='-90 0 0' color='gray'></a-circle>
+
+            <!-- surface -->
+            <a-entity position='0 0 -0.91'>
+                <a-entity id='surface' position='0 1.101 0'>
+
+                    <a-plane color='gray' width='1' height='1' depth='0.3' rotation='-90 0 0'></a-plane>
+                    <a-ring id='ring-thing-for-test' radius-inner='0.0095' radius-outer='0.0105'></a-ring>
+                    <!-- <a-entity  line="start: 0, 0, 0; end: 0 0.1 0; color: red"></a-entity> -->
+                    <a-entity id='clock-thing' position='0 0.5 0    '></a-entity>
+                    
+                </a-entity>
+
+                <a-box color='#666' width='0.3' height='1.1' depth='0.15'  position='0 0.55 0'></a-box>  
+            </a-entity>
+
+        </a-scene>
+
+        <script type="text/javascript">
+            {
+                const surface = document.querySelector('#surface');
+                const pause = document.querySelector('#pause');
+                const vid = document.querySelector('#video-asset');
+
+                const ring_thing = document.querySelector('ring-thing-for-test');
+
+                // play.addEventListener('click', () => vid.play());
+                // pause.addEventListener('click', () => vid.pause());           
+
+
+                AFRAME.registerComponent('vector', {
+
+                    // schema: {
+                    //     target: {type: 'selector'},
+                    //     speed: {type: 'number'}
+                    // },
+
+                    init: function (input) {
+                        console.log('input', input);
+                        this.el.setAttribute('line', 'start: 0 0 0; end: 0.1 0.1 0.1; color: red');
+
+
+                        const pos_marker = document.createElement('a-ring')
+                        pos_marker.setAttribute('color', 'white');
+                        pos_marker.setAttribute('radius-inner', `${0.01 - 0.001}`);
+                        pos_marker.setAttribute('radius-outer', `${0.01 + 0.001}`);
+
+                        this.el.appendChild(pos_marker) //append a 'here marker', could be a 1cm di circle with 1mm width
+                    }
+                });
+
+                // animate? https://www.coursera.org/learn/machine-learning/supplement/EcNto/inverse-and-transpose
+
+                for(let i = 0; i < 10; i++) {
+                    const line = document.createElement('a-entity');
+                    line.setAttribute('vector', true);
+                    line.setAttribute('position', `0 ${i*0.1} 0}`);
+                    // line.setAttribute('rotation', `0 ${i*100} 0}`);
+                    line.setAttribute('rotation', `0 ${i*365/40-120} 0}`);
+
+                    surface.appendChild(line);
+                    // console.log(line);
+
+                    // 12 stripes
+                    const zero_pos = new THREE.Vector3(0, 1, 0)
+                    // center is 0, 0, 0
+                    const mark_12 = document.createElement('a-sphere');
+                    mark_12.setAttribute('radius', '0.025');
+                    mark_12.setAttribute('opacity', '0.5')
+
+                    document.querySelector('#clock-thing').appendChild(mark_12);
+                }
+
+
+
+                const clock_thing = document.querySelector('#clock-thing');
+                const clock_thing_pos = clock_thing.getAttribute('position');
+                {
+                    var material = new THREE.LineBasicMaterial({
+                        color: 0x0000ff
+                    });
+
+                    var geometry = new THREE.Geometry();
+                    geometry.vertices.push(
+                        new THREE.Vector3( -10, 0, 0 ),
+                        new THREE.Vector3( 0, 10, 0 ),
+                        new THREE.Vector3( 10, 0, 0 )
+                    );
+
+                    var line = new THREE.Line( geometry, material );
+                    // disabled as wasn't working
+                    // scene.add( line );
+
+
+
+                    const start = new THREE.Vector3(0, 0, 0);
+
+                    const top_pos = new THREE.Vector3(0, 0.5, 0);
+                    const axis_z = new THREE.Vector3(0, 0, 1)
+                    for (let i = 0; i < 12; i++) {
+
+                        const mark_12 = document.createElement('a-sphere');
+                        mark_12.setAttribute('radius', '0.025');
+                        mark_12.setAttribute('opacity', '0.5')
+
+                        // const offset = top_pos.a
+                        mark_12.setAttribute('position', `${top_pos.x} ${top_pos.y} ${top_pos.z}`)
+
+                        document.querySelector('#clock-thing').appendChild(mark_12);
+
+                        top_pos.applyAxisAngle(axis_z, 2*Math.PI/12)
+                    }
+
+                }
+
+                // function mark_pos(pos0, pos1) {
+
+                //     const x = [3, 1, 0, 4];
+                //     const y = [2, 2, 1, 3];
+
+                //     let res = 1/(2*4)
+                //     // let hfun = (a, b) => 
+                //     for(let i = 1; i <= 4; i++) {
+                //         ;
+                //     }
+                // }(0, 1)
+
+
+                for(let i = 0; i < 10; i++) {
+                    const line = document.createElement('a-entity');
+                    line.setAttribute('vector', true);
+                    line.setAttribute('position', `0 ${i*0.1} 0}`);
+                    // line.setAttribute('rotation', `0 ${i*100} 0}`);
+                    line.setAttribute('rotation', `0 ${i*365/40-120} 0}`);
+
+                    surface.appendChild(line);
+
+                    // 12 stripes
+                    const zero_pos = new THREE.Vector3(0, 1, 0)
+                    // center is 0, 0, 0
+                    const mark_12 = document.createElement('a-sphere');
+                    mark_12.setAttribute('radius', '0.025');
+                    mark_12.setAttribute('opacity', '0.5')
+
+                    document.querySelector('#clock-thing').appendChild(mark_12);
+
+
+                }
+            }
+        </script>
+    </body>
+</html>
