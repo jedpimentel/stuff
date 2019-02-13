@@ -117,20 +117,42 @@
 
                     const start = new THREE.Vector3(0, 0, 0);
 
-                    const top_pos = new THREE.Vector3(0, 0.5, 0);
-                    const axis_z = new THREE.Vector3(0, 0, 1)
+                    const top_pos = new THREE.Vector3(0, 0.25, 0);
                     for (let i = 0; i < 12; i++) {
-
                         const mark_12 = document.createElement('a-sphere');
+                        const axis_z = new THREE.Vector3(0, 0, 1)
                         mark_12.setAttribute('radius', '0.025');
-                        mark_12.setAttribute('opacity', '0.5')
-
-                        // const offset = top_pos.a
-                        mark_12.setAttribute('position', `${top_pos.x} ${top_pos.y} ${top_pos.z}`)
-
+                        mark_12.setAttribute('opacity', '0.5');
+                        mark_12.setAttribute('position', `${top_pos.x} ${top_pos.y} ${top_pos.z}`);
+                        mark_12.setAttribute('position', `${top_pos.x} ${top_pos.y} ${top_pos.z}`);
+                        mark_12.setAttribute('line', `start: 0 0 0; end: ${top_pos.x} ${top_pos.y} ${top_pos.z}; color: white`);
                         document.querySelector('#clock-thing').appendChild(mark_12);
-
                         top_pos.applyAxisAngle(axis_z, 2*Math.PI/12)
+                    }
+                    for (let j = 0; j < 12; j++) {
+                        const mark_12 = document.createElement('a-sphere');
+                        const axis_x = new THREE.Vector3(1, 0, 0)
+                        mark_12.setAttribute('radius', '0.025');
+                        mark_12.setAttribute('opacity', '0.5');
+                        mark_12.setAttribute('position', `${top_pos.x} ${top_pos.y} ${top_pos.z}`);
+                        mark_12.setAttribute('position', `${top_pos.x} ${top_pos.y} ${top_pos.z}`);
+                        mark_12.setAttribute('line', `start: 0 0 0; end: ${top_pos.x} ${top_pos.y} ${top_pos.z}; color: white`);
+                        document.querySelector('#clock-thing').appendChild(mark_12);
+                        top_pos.applyAxisAngle(axis_x, 2*Math.PI/12);
+
+                        if(j === 2) {
+                            for(let k = 0; k < 12; k++) {
+                                const mark_12 = document.createElement('a-sphere');
+                                const axis_y = new THREE.Vector3(0, 1, 0)
+                                mark_12.setAttribute('radius', '0.025');
+                                mark_12.setAttribute('opacity', '0.5');
+                                mark_12.setAttribute('position', `${top_pos.x} ${top_pos.y} ${top_pos.z}`);
+                                mark_12.setAttribute('position', `${top_pos.x} ${top_pos.y} ${top_pos.z}`);
+                                mark_12.setAttribute('line', `start: 0 0 0; end: ${top_pos.x} ${top_pos.y} ${top_pos.z}; color: white`);
+                                document.querySelector('#clock-thing').appendChild(mark_12);
+                                top_pos.applyAxisAngle(axis_y, 2*Math.PI/12);
+                            }
+                        }
                     }
 
                 }
