@@ -24,19 +24,53 @@
             <!-- create the stream -->
             <script>
               // You can also set which camera to use (front/back/etc)
-                navigator.mediaDevices.getUserMedia({audio: false, video: true})
+
+                // https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints/facingMode
+                // https://developer.mozilla.org/en-US/docs/Web/API/Media_Streams_API/Constraints#Example_Constraint_exerciser
+                const video_constraints = {
+                    // https://addpipe.com/blog/getusermedia-video-constraints/
+                    facingMode: { ideal: 'environment' },
+                };
+
+                // navigator.mediaDevices.getUserMedia({audio: false, video: true})
+                navigator.mediaDevices.getUserMedia({audio: false, video: video_constraints})
                 .then(stream => {
                     const vid_el = document.querySelector('#webcam');
                     vid_el.srcObject = stream;
                     vid_el.onloadedmetadata = () => {
-
                         // can we get the dimensions?
-                        const track = stream.getVideoTracks()
-                        console.log(track);
+                        const tracks = stream.getVideoTracks()
+                        console.log(tracks);
+                        // phones are weird because the can have both front and rear facing cameras
+                        // once I get a backend up I'll want to save user devices so app will remember which is which
+                        // a 'Device Setup' wizard could walk someone through the process of using their device for the 
+                        // first time, or to update their device config whenever a new feature is implimented
+
+                        // whole page click listener... didn't end up using
+                        // window.addEventListener("click", function(event) {
+                            // toggle video playback
+                            // if(vid_el.paused) {
+                            //     vid_el.play();
+                            // } else {
+                            //     vid_el.pause();
+                            // }
+                        // });
 
                         vid_el.play() ;
                     }
                 })
+
+                // https://stackoverflow.com/questions/18625007/enable-rear-camera-with-html5
+                navigator.mediaDevices.enumerateDevices()
+                  .then(function(devices) {
+                    devices.forEach(function(device) {
+                      console.log(device.kind + ": " + device.label +
+                        " id = " + device.deviceId);
+                    });
+                  })
+                  .catch(function(e) {
+                    console.log(e.name + ": " + e.message);
+                  });
             </script>
             <!-- apply the texture -->
             <!-- COPY-PASTE END -->
@@ -58,7 +92,7 @@
             </a-entity>
             
             <!-- base platform -->
-            <a-circle radius='1' position='0 0 0' rotation='-90 0 0' color='gray'></a-circle>
+            <a-circle radius='1' position='0 0 0' rotation='-90 0 0' color='gray' opacity='0.1'></a-circle>
 
             <!-- standing "television" -->
             <a-entity position='0 1.6 0'>   
@@ -77,17 +111,17 @@
         </a-scene>
 
         <script type="text/javascript">
-            {
-                // TODO: make this display the user's webcam on a giant display
-                // AFTER: work on gamepad.html, make a xbox/ps/switch polyfill for referring to the buttons
+            // {
+            //     // TODO: make this display the user's webcam on a giant display
+            //     // AFTER: work on gamepad.html, make a xbox/ps/switch polyfill for referring to the buttons
 
-                const play = document.querySelector('#play');
-                const pause = document.querySelector('#pause');
-                const vid = document.querySelector('#video-asset');
+            //     const play = document.querySelector('#play');
+            //     const pause = document.querySelector('#pause');
+            //     const vid = document.querySelector('#video-asset');
 
-                play.addEventListener('click', () => vid.play());
-                pause.addEventListener('click', () => vid.pause());           
-            }
+            //     play.addEventListener('click', () => vid.play());
+            //     pause.addEventListener('click', () => vid.pause());           
+            // }
         </script>
     </body>
 </html>
