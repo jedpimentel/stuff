@@ -79,16 +79,16 @@
 
             <a-light type='ambient' color='white'></a-light>
 
-            <a-entity position="0 0 0">
+
+            <a-entity position="0 0 0" opacity='0.1'>
                 <a-camera look-controls="pointerLockEnabled: true" wasd-controls>
                     <!-- <a-cylinder id="fing-longer" position="0.2 -0.2 -0.2" radius="0.01" height= "1.0" rotation="90 0 0" color="beige" opacity="1.0"></a-cylinder> -->
                     <!-- <a-entity position="0.2 -0.2 -0.7" cursor="rayOrigin: entity; showLine: true;" raycaster="showLine: true; far: 16" line="color: white; opacity:0.5"></a-entity> -->
 
                     <!-- HUD pass-through camera -->
-                    <a-video id='video-element' src='#webcam' autoplay loop="true" position='0 0 -0.75'></a-video>
+                    <!-- <a-video id='video-element' src='#webcam' autoplay loop="true" position='0 0 -0.75' ></a-video> -->
 
                 </a-camera>
-
             </a-entity>
             
             <!-- base platform -->
@@ -103,7 +103,7 @@
 
                 <!-- screen -->
                 <!-- <a-video id='video-element' src='#webcam' autoplay loop="true" position='0 0 -0.75' width='0.5' height='0.5'></a-video> -->
-                <a-video id='video-element' src='#webcam' autoplay loop="true" position='0 0 -0.75' opacity='0.1'></a-video>
+                <a-video id='video-element' src='#webcam' autoplay loop="true" position='0 0 -0.75'></a-video>
                 
                 <!-- screen title -->
                 <a-text value='webcam stuff' align='center' position='0 0.75 -0.75 opacity='0.1''></a-text>

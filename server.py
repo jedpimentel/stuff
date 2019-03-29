@@ -9,5 +9,3 @@
 # - actually write this component
 # - Real backend will be needed to stream the server's webcam
 
-# Nice to haves:
-# something to calculate the repo size, might need a database soon if I keep using scanned drawing

@@ -1,1 +1,600 @@
-{}
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"fade",
+				"fade_animation"
+			],
+			[
+				"pause",
+				"paused_opacity"
+			],
+			[
+				"add",
+				"addEventListener"
+			],
+			[
+				"app",
+				"appendChild"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "index.html",
+			"settings":
+			{
+				"buffer_size": 11469,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "main.js",
+			"settings":
+			{
+				"buffer_size": 10555,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "demo/shaggy-rogers/index.html",
+			"settings":
+			{
+				"buffer_size": 704,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "demo/bench.html",
+			"settings":
+			{
+				"buffer_size": 9478,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "a-lib.js",
+			"settings":
+			{
+				"buffer_size": 1323,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "demo/webcam.html",
+			"settings":
+			{
+				"buffer_size": 6214,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "demo/player/index.html",
+			"settings":
+			{
+				"buffer_size": 3319,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "server.py",
+			"settings":
+			{
+				"buffer_size": 354,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/C/Projects/stuff/demo/fractal.html",
+		"/C/Projects/stuff/index.html",
+		"/C/Projects/stuff/20181226/index.html",
+		"/C/Projects/stuff/main.js",
+		"/C/Projects/stuff/Spider-Man 1967 TV Show Intro.mp4",
+		"/C/Users/Jose/Documents/GitHub/The-Amazing-JavaScript-Adventure/menu.js.txt",
+		"/C/Users/Jose/Documents/GitHub/The-Amazing-JavaScript-Adventure/life.js",
+		"/C/Users/Jose/Documents/GitHub/The-Amazing-JavaScript-Adventure/kindle-test/README.md",
+		"/C/Users/Jose/Documents/GitHub/The-Amazing-JavaScript-Adventure/index.html",
+		"/C/Users/Jose/Documents/GitHub/The-Amazing-JavaScript-Adventure/main.js",
+		"/C/Users/Jose/Documents/GitHub/The-Amazing-JavaScript-Adventure/kindle-test/main.js",
+		"/C/Users/Jose/Documents/GitHub/The-Amazing-JavaScript-Adventure/kindle-test/index.html"
+	],
+	"find":
+	{
+		"height": 24.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"ttps://addpipe.com/blog/getusermedia-vide",
+			"\"user\"",
+			"track",
+			"$video",
+			"webcam stuff",
+			"text",
+			"png",
+			"axis_x",
+			"i",
+			"_12.setAttribute('radius', '0.025",
+			"ark_12.setAttribute('radius', '0.025');",
+			"0005",
+			"e-enti",
+			"sph",
+			"this.element",
+			"1",
+			"input",
+			"play",
+			"var",
+			"entiry",
+			"-0.91",
+			"a-box",
+			"click', ",
+			"                  ",
+			"cube",
+			"let",
+			"video",
+			"ht='1",
+			"eight='0.3'",
+			"0.3",
+			"dth='0.6",
+			"sition='0 0 ",
+			"'1",
+			"image",
+			"chalk",
+			"rotate",
+			"click",
+			"10",
+			"color",
+			"material",
+			"0.5",
+			"\"",
+			"video",
+			"png'",
+			"score",
+			"5",
+			"text",
+			"0.1",
+			" depth='0'",
+			"'1'",
+			"image",
+			"<a-sphere id=",
+			"n='",
+			"000",
+			"re position",
+			"sperere",
+			"1 0 ",
+			"able-dem",
+			"table-demo",
+			"table-surface",
+			"score",
+			"hello",
+			"a-box",
+			"height",
+			"table",
+			"0.1",
+			"style",
+			"height",
+			"span",
+			"clicker-button",
+			"yello",
+			"0.2",
+			"blue",
+			"do_s",
+			"camera",
+			"<p>",
+			"cursor",
+			"\n",
+			"                            ",
+			"                  ",
+			"goat",
+			"var",
+			"\t\t  ",
+			"clicker",
+			"tone",
+			"ball",
+			"clicker",
+			"cube",
+			"0.52",
+			"light",
+			"0.1",
+			"35",
+			"=",
+			"cube",
+			"cone",
+			"christmas-stuff",
+			"christma",
+			"h1",
+			"objects"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "index.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 11469,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1370,
+								1370
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 47.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "main.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 10555,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4803,
+								4806
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2167.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "demo/shaggy-rogers/index.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 704,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								683,
+								683
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "demo/bench.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 9478,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5293,
+								5044
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "a-lib.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1323,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1319,
+								1319
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"word_wrap": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "demo/webcam.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6214,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6174,
+								6174
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1335.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "demo/player/index.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3319,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2595,
+								2599
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 180.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "server.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 354,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								354,
+								354
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 24.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "index.sublime-project",
+	"replace":
+	{
+		"height": 44.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 369.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 592.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
