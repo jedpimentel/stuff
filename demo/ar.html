@@ -1,0 +1,37 @@
+
+<!DOCTYPE html> 
+<html>
+    <head>
+        <title>Player</title>
+        <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
+        <script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js"></script>
+        <meta charset="UTF-8">
+    </head>
+    <body style="font-family:courier; color:white; background-color: black">
+        <section id="main"></section>
+
+        <!-- <a-scene ar id="scene"> -->
+        <a-scene  arjs='detectionMode: mono_and_matrix; matrixCodeType: 3x3;' id="scene">
+
+            <a-light type='ambient' color='white'></a-light>
+
+
+            <a-entity position="0 0 0" opacity='1'>
+                <a-camera look-controls="pointerLockEnabled: true" wasd-controls>
+                </a-camera>
+            </a-entity>
+            
+            <!-- base platform -->
+            <a-circle radius='1' position='0 0 0' rotation='-90 0 0' color='gray' opacity='0.1'></a-circle>
+
+            <a-marker type='barcode' value='0'>
+                <a-box position='0 0.5 0' material='color: green;'></a-box>
+            </a-marker>
+
+        </a-scene>
+
+        <script type="text/javascript">
+
+        </script>
+    </body>
+</html>
