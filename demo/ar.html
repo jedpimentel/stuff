@@ -7,10 +7,25 @@
         <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.6.2/aframe/build/aframe-ar.js"></script>
         <meta charset="UTF-8">
     </head>
+    <!-- <body style="margin : 0px; overflow: hidden; font-family:courier; color:white; background-color: black"> -->
     <body style="margin : 0px; overflow: hidden; font-family:courier; color:white; background-color: black">
+    <!-- <body> -->
         <section id="main"></section>
 
-        <a-scene embedded arjs='detectionMode: mono_and_matrix; matrixCodeType: 3x3;' id="scene">
+        <!-- <a-scene embedded arjs='detectionMode: mono_and_matrix; matrixCodeType: 3x3;' id="scene"> -->
+        <a-scene arjs>
+
+
+
+            <a-anchor>
+                    <!-- define the content to be displayed on top of the marker -->
+                <a-box position='0 0.375 0' height="0.75" width="0.75" depth="0.75" color='green' opacity='0.5'>
+                    <a-text value='test' align='center'></a-text>
+                </a-box>
+                <a-plane color="green" height="0.75" width="0.75" position="0 0 0" rotation="-90 0 0"></a-plane>
+            </a-anchor>
+            <!-- define a simple camera -->
+            <a-camera-static/>
 
             <!-- <a-entity position="0 0 0" opacity='1'> -->
             <!-- <a-entity opacity='1'>
@@ -20,14 +35,26 @@
 
 
 
-            <a-entity position="0 0 0" opacity='0.1'>
-                <a-camera look-controls="pointerLockEnabled: true" wasd-controls>
+            <!-- <a-entity position="0 0 0" opacity='0.1'> -->
+            <!-- <a-entity>
+                <a-camera >
                 </a-camera>
-            </a-entity>
+            </a-entity> -->
             
             
             <!-- base platform -->
-            <a-circle radius='1' position='0 0 0' rotation='-90 0 0' color='gray'></a-circle>
+
+
+
+
+            <!-- <a-circle radius='1' position='0 0 0' rotation='-90 0 0' color='gray'></a-circle>
+
+            <a-marker preset='hiro'>
+                <a-sphere position="0 0 0" radius="0.5" color="red" opacity="0.3"></a-sphere>
+                <a-box position='0 0 0' color='green' opacity='0.5'>
+                    <a-text value='test' align='center'></a-text>
+                </a-box>
+            </a-marker>
 
             <a-marker type='barcode' value='0'>
                 <a-box position='0 0.5 0' material='color: yellow;'></a-box>
@@ -40,7 +67,11 @@
                 <a-box position='0 1 1' color='blue' opacity='0.5'>
                     <a-text value='test' align='center'></a-text>
                 </a-box>
-            </a-marker>
+            </a-marker> -->
+
+
+
+
 
         </a-scene>
 
