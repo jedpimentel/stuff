@@ -7,96 +7,29 @@
         <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.6.2/aframe/build/aframe-ar.js"></script>
         <meta charset="UTF-8">
     </head>
-    <!-- <body style="margin : 0px; overflow: hidden; font-family:courier; color:white; background-color: black"> -->
-    <body style="margin : 0px; overflow: hidden; font-family:courier; color:white; background-color: black">
-    <!-- <body> -->
-        <section id="main"></section>
 
-        <!-- <a-scene embedded arjs='detectionMode: mono_and_matrix; matrixCodeType: 3x3;' id="scene"> -->
+    <body style="margin : 0px; overflow: hidden; font-family:courier; color:white; background-color: black">
+        <!-- <section id="main"></section> -->
         <a-scene arjs>
 
-
-            <!-- <a-camera-static/> -->
-
-            <a-camera position="0 0 0" look-controls="pointerLockEnabled: true" near="0.001" wasd-controls>
+            <a-camera position="0 0 0" look-controls="enabled: false" near="0.001" wasd-controls>
                 <a-cylinder id="fing-longer" position="0.2 -0.4 -0.9" radius="0.01" height= "1.0" rotation="90 0 0" color="beige" opacity="1.0"></a-cylinder>
-
-                <!-- <a-box  position="0.2 -0.4 -0.9" height="0.2" width="0.2" depth="0.2"></a-box> -->
-
-                <!-- https://stackoverflow.com/questions/50721192/a-frame-raycaster-not-working-need-intersection-point-with-a-sky -->
-                <!-- important!! the aframe wiki could use an example of this -->
-                <!-- https://aframe.io/docs/0.8.0/components/laser-controls.html -->
-                <!-- https://aframe.io/docs/0.8.0/components/raycaster.html -->
-                <!-- qwer this line might need cleaning -->
                 <a-entity position="0.2 -0.4 -1.4" cursor="rayOrigin: entity; showLine: true;" raycaster="showLine: true; far: 16" line="color: white; opacity:0.5"></a-entity>
-
-                <!-- placed statically in front of the cursor raycaster, for debugging purposes -->
-                <!-- <a-sphere id="red-sphere" position="0.2 -0.4 -2" radius="0.1" color="red" opacity="0.3"></a-sphere> -->
             </a-camera>
 
+            <!-- works with [Hiro] cards -->
             <a-anchor>
-                    <!-- define the content to be displayed on top of the marker -->
-                <a-box id="test-thing" position='0 0.375 0' height="0.75" width="0.75" depth="0.75" color='green' opacity='0.5'>
-                    <a-text value='test' align='center'></a-text>
+                <a-box id="marker-test" position='0 0.375 0' height="0.75" width="0.75" depth="0.75" color='green' opacity='0.5'>
+                    <a-text value='test' align='center' rotation="-45 0 0"></a-text>
                 </a-box>
-
-                <!-- <a-sphere id="red-sphere" radius="0.1" color="red" opacity="0.3"></a-sphere> -->
-
                 <a-plane color="green" height="0.75" width="0.75" position="0 0 0" rotation="-90 0 0"></a-plane>
             </a-anchor>
-            <!-- define a simple camera -->
-
-            <!-- <a-entity position="0 0 0" opacity='1'> -->
-            <!-- <a-entity opacity='1'>
-                <a-camera look-controls="pointerLockEnabled: true" wasd-controls>
-                </a-camera>
-            </a-entity> -->
-
-
-
-            <!-- <a-entity position="0 0 0" opacity='0.1'> -->
-            <!-- <a-entity>
-                <a-camera >
-                </a-camera>
-            </a-entity> -->
-            
-            
-            <!-- base platform -->
-
-
-
-
-            <!-- <a-circle radius='1' position='0 0 0' rotation='-90 0 0' color='gray'></a-circle>
-
-            <a-marker preset='hiro'>
-                <a-sphere position="0 0 0" radius="0.5" color="red" opacity="0.3"></a-sphere>
-                <a-box position='0 0 0' color='green' opacity='0.5'>
-                    <a-text value='test' align='center'></a-text>
-                </a-box>
-            </a-marker>
-
-            <a-marker type='barcode' value='0'>
-                <a-box position='0 0.5 0' material='color: yellow;'></a-box>
-                <a-box position='0 -1 -1' color='red' opacity='0.5'>
-                    <a-text value='test' align='center'></a-text>
-                </a-box>
-                <a-box position='0 0 -0' color='green' opacity='0.5'>
-                    <a-text value='test' align='center'></a-text>
-                </a-box>
-                <a-box position='0 1 1' color='blue' opacity='0.5'>
-                    <a-text value='test' align='center'></a-text>
-                </a-box>
-            </a-marker> -->
-
-
-
-
 
         </a-scene>
 
         <script type="text/javascript">
             {
-                let ball = document.querySelector('#test-thing')
+                let ball = document.querySelector('#marker-test')
                 
                 let tone = document.createElement('audio')
                 tone.src = '../sine-432hz-pluck.flac'
