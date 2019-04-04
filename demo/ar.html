@@ -16,7 +16,7 @@
         <a-scene arjs>
 
 
-            <a-camera-static/>
+            <!-- <a-camera-static/> -->
 
             <a-camera position="0 0 0" look-controls="pointerLockEnabled: true" near="0.001" wasd-controls>
                 <a-cylinder id="fing-longer" position="0.2 -0.4 -0.9" radius="0.01" height= "1.0" rotation="90 0 0" color="beige" opacity="1.0"></a-cylinder>
@@ -29,15 +29,19 @@
                 <!-- https://aframe.io/docs/0.8.0/components/raycaster.html -->
                 <!-- qwer this line might need cleaning -->
                 <a-entity position="0.2 -0.4 -1.4" cursor="rayOrigin: entity; showLine: true;" raycaster="showLine: true; far: 16" line="color: white; opacity:0.5"></a-entity>
+
+                <!-- placed statically in front of the cursor raycaster, for debugging purposes -->
+                <!-- <a-sphere id="red-sphere" position="0.2 -0.4 -2" radius="0.1" color="red" opacity="0.3"></a-sphere> -->
             </a-camera>
-
-
 
             <a-anchor>
                     <!-- define the content to be displayed on top of the marker -->
                 <a-box id="test-thing" position='0 0.375 0' height="0.75" width="0.75" depth="0.75" color='green' opacity='0.5'>
                     <a-text value='test' align='center'></a-text>
                 </a-box>
+
+                <!-- <a-sphere id="red-sphere" radius="0.1" color="red" opacity="0.3"></a-sphere> -->
+
                 <a-plane color="green" height="0.75" width="0.75" position="0 0 0" rotation="-90 0 0"></a-plane>
             </a-anchor>
             <!-- define a simple camera -->
@@ -91,7 +95,38 @@
         </a-scene>
 
         <script type="text/javascript">
-            ;
+            {
+                let ball = document.querySelector('#test-thing')
+                
+                let tone = document.createElement('audio')
+                tone.src = '../sine-432hz-pluck.flac'
+
+                let playing_opacity = 0.8;
+                let paused_opacity = ball.getAttribute('opacity');
+
+                // https://aframe.io/docs/0.8.0/core/animations.html
+                // I think I remember reading that these animations would be phased out, which could be why they're not working
+                let fade_animation = document.createElement('a-animation')
+                fade_animation.setAttribute('attribute', 'material.opacity')
+                fade_animation.setAttribute('begin', 'fade')
+                fade_animation.setAttribute('end', 'end-fade')
+                fade_animation.setAttribute('from', playing_opacity)
+                fade_animation.setAttribute('to', paused_opacity)
+                fade_animation.setAttribute('dur', 1000)
+                fade_animation.setAttribute('easing', 'linear')
+                ball.appendChild(fade_animation)
+                ball.emit('fade')
+
+                ball.addEventListener('click', function(evt) {
+                    ball.emit('end-fade')
+                    ball.emit('fade')
+                    if (tone.paused) {
+                        tone.play();
+                    } else {
+                        tone.currentTime = 0;
+                    }
+                })
+            }
         </script>
     </body>
 </html>
