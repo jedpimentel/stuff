@@ -1,0 +1,89 @@
+
+<!DOCTYPE html> 
+<html>
+    <head>
+        <title>Player</title>
+        <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
+        <meta charset="UTF-8">
+    </head>
+    <body style="font-family:courier; color:white; background-color: black">
+        <section id="main"></section>
+        <a-scene ar id="scene">
+
+            <a-assets>
+                <!-- <audio id="transit" autoplay loop="true" src="transit.mp3"></audio> -->
+                <!-- <audio id="audio-test" autoplay loop="true" src="test.mp3"></audio> -->
+            </a-assets>
+
+            <a-light type='ambient' color='white'></a-light>
+
+            <a-entity position="0 0 0">
+                <a-camera look-controls="pointerLockEnabled: true" wasd-controls>
+                    <a-cylinder id="fing-longer" position="0.2 -0.2 -0.2" radius="0.01" height= "1.0" rotation="90 0 0" color="beige" opacity="1.0"></a-cylinder>
+                    <a-entity position="0.2 -0.2 -0.7" cursor="rayOrigin: entity; showLine: true;" raycaster="showLine: true; far: 16" line="color: white; opacity:0.5"></a-entity>
+                </a-camera>
+            </a-entity>
+            
+            <!-- floor -->
+            <a-circle radius='1' position='0 0 0' rotation='-90 0 0' color='gray'></a-circle>
+
+            <!-- surface -->
+            <a-entity position='0 0 -0.91'>
+                <a-entity id='surface' position='0 1.101 0'>
+
+                    <!-- surface -->
+                    <a-plane color='gray' width='1' height='1' rotation='-90 0 0'></a-plane>
+
+                    <a-entity id='rotating-stuff'>
+                        <!-- <a-animation attribute='rotation' to='0 -360 0' repeat='indefinite'  dur='10000' easing='linear'></a-animation> -->
+                        <a-animation attribute='position' to='0 0 -5' repeat='indefinite'  dur='10000' easing='linear'></a-animation>
+                        <a-text value='rotating text' align='center' rotation='-90 0 0'></a-text>
+                        <!-- <a-sphere radius='0.025' position='0 0 -0.475' sound='src: #transit; autoplay: true'> -->
+                            
+                        <!-- https://developers.google.com/web/updates/2017/09/autoplay-policy-changes#webaudio -->
+                        <!-- <a-sphere radius='0.025' position='0 0 -0.475' sound='src: #transit; autoplay: true'></a-sphere> -->
+
+                        <!-- both channels, stereo -->
+                        <!-- moving points of pink noise can be used to simulate ocean waves -->
+                        <a-sphere radius='0.025' position='0 0 -0.475' sound='src: url(test.mp3); positional: true; autoplay: true; loop: true'></a-sphere>
+
+                        <!-- https://developer.mozilla.org/en-US/docs/Web/API/ChannelSplitterNode -->
+                        <!-- split into left/right -->
+
+                        <!-- <a-sphere radius='0.025' position='0 0 -0.475' sound='src: #audio-test; autoplay: true'></a-sphere> -->
+                        <!-- <a-sphere radius='0.025' position='0 0 -0.475' sound='src: url(test.mp3    ); autoplay: true'></a-sphere> -->
+                            <!-- http://soundbible.com/1698-Public-Transit-Bus.html -->
+
+                    </a-entity>
+
+                    <a-ring id='ring-thing-for-test' radius-inner='0.0095' radius-outer='0.0105'></a-ring>
+                    <!-- <a-entity  line="start: 0, 0, 0; end: 0 0.1 0; color: red"></a-entity> -->
+                    <a-entity id='clock-thing' position='0 0.5 0'></a-entity>
+                    
+                </a-entity>
+
+                <a-box color='#666' width='0.3' height='1.1' depth='0.15'  position='0 0.55 0'></a-box>  
+            </a-entity>
+
+        </a-scene>
+
+        <script type="text/javascript">
+            {
+                // what if you could connect a text editor to an extra monitor, and
+                // automatically display a cheat sheet for the element types being editted
+                const surface = document.querySelector('#surface');
+                const pause = document.querySelector('#pause');
+                const vid = document.querySelector('#video-asset');
+
+                const ring_thing = document.querySelector('ring-thing-for-test');
+
+                // play.addEventListener('click', () => vid.play());
+                // pause.addEventListener('click', () => vid.pause());           
+
+
+                // animate? https://www.coursera.org/learn/machine-learning/supplement/EcNto/inverse-and-transpose
+
+            }
+        </script>
+    </body>
+</html>
