@@ -16,16 +16,31 @@
         <a-scene arjs>
 
 
+            <a-camera-static/>
+
+            <a-camera position="0 0 0" look-controls="pointerLockEnabled: true" near="0.001" wasd-controls>
+                <a-cylinder id="fing-longer" position="0.2 -0.4 -0.9" radius="0.01" height= "1.0" rotation="90 0 0" color="beige" opacity="1.0"></a-cylinder>
+
+                <!-- <a-box  position="0.2 -0.4 -0.9" height="0.2" width="0.2" depth="0.2"></a-box> -->
+
+                <!-- https://stackoverflow.com/questions/50721192/a-frame-raycaster-not-working-need-intersection-point-with-a-sky -->
+                <!-- important!! the aframe wiki could use an example of this -->
+                <!-- https://aframe.io/docs/0.8.0/components/laser-controls.html -->
+                <!-- https://aframe.io/docs/0.8.0/components/raycaster.html -->
+                <!-- qwer this line might need cleaning -->
+                <a-entity position="0.2 -0.4 -1.4" cursor="rayOrigin: entity; showLine: true;" raycaster="showLine: true; far: 16" line="color: white; opacity:0.5"></a-entity>
+            </a-camera>
+
+
 
             <a-anchor>
                     <!-- define the content to be displayed on top of the marker -->
-                <a-box position='0 0.375 0' height="0.75" width="0.75" depth="0.75" color='green' opacity='0.5'>
+                <a-box id="test-thing" position='0 0.375 0' height="0.75" width="0.75" depth="0.75" color='green' opacity='0.5'>
                     <a-text value='test' align='center'></a-text>
                 </a-box>
                 <a-plane color="green" height="0.75" width="0.75" position="0 0 0" rotation="-90 0 0"></a-plane>
             </a-anchor>
             <!-- define a simple camera -->
-            <a-camera-static/>
 
             <!-- <a-entity position="0 0 0" opacity='1'> -->
             <!-- <a-entity opacity='1'>
