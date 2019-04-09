@@ -12,18 +12,39 @@
         <!-- <section id="main"></section> -->
         <a-scene arjs>
 
+
+            <a-assets>
+                <img id="my-image" src="lamb.png">
+            </a-assets>
+
             <a-camera position="0 0 0" look-controls="enabled: false; pointerLockEnabled: true" near="0.001" wasd-controls>
                 <a-cylinder id="fing-longer" position="0.2 -0.4 -0.9" radius="0.01" height= "1.0" rotation="90 0 0" color="beige" opacity="1.0"></a-cylinder>
-                <a-entity position="0.2 -0.4 -1.4" cursor="rayOrigin: entity; showLine: true;" raycaster="showLine: true; far: 16" line="color: white; opacity:0.5"></a-entity>
+                <a-entity position="0.2 -0.4 -1.4" cursor="rayOrigin: entity; showLine: true;" raycaster="showLine: true; far: 16" line="color: white; opacity:0.5">
+                    <!-- <a-image src="lamb.png" rotation="-90 0 0"></a-image> -->
+                </a-entity>
             </a-camera>
 
             <!-- works with [Hiro] cards -->
             <a-anchor>
-                <a-box id="marker-test" position='0 0.375 0' height="0.75" width="0.75" depth="0.75" color='green' opacity='0.5'>
+                <!-- <a-box id="marker-test" position='0 0.375 0' height="0.75" width="0.75" depth="0.75" color='green' opacity='0.5'>
                     <a-text value='test' align='center' rotation="-45 0 0"></a-text>
+                </a-box> -->
+                <!-- <a-plane color="green" height="0.75" width="0.75" position="0 0 0" rotation="-90 0 0"></a-plane> -->
+                <!-- <a-plane color="green" height="0.75" width="0.75" position="0 0 0" rotation="-90 0 0"></a-plane> -->
+                <a-image src="#my-image" rotation="-90 0 0"></a-image>
+            </a-anchor>
+
+            <a-marker type='barcode' value='5'></a-marker>
+
+            <!-- here is a hiro preset -->
+            <!-- <a-marker preset='hiro'></a-marker> -->
+            <!-- it is the same as the marker below -->
+            <a-marker type='pattern' url='pattern-marker.patt'>
+                <a-box id="marker-test" position='0 0.375 0' height="0.75" width="0.75" depth="0.75" color='green' opacity='0.5'>
+                    <a-text value='Boston' align='center' rotation="-45 0 0"></a-text>
                 </a-box>
                 <a-plane color="green" height="0.75" width="0.75" position="0 0 0" rotation="-90 0 0"></a-plane>
-            </a-anchor>
+            </a-marker>
 
         </a-scene>
 
