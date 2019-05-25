@@ -1,0 +1,203 @@
+
+<!DOCTYPE html> 
+<html>
+    <head>
+        <title>Jose's Stuff</title>
+        <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+        <meta charset="UTF-8">
+    </head>
+    <body style="font-family:courier; color:white; background-color: black; height:100vh; overflow:none">
+
+        <!-- REFACTOR: https://aframe.io/docs/0.8.0/components/sound.html -->
+        <audio id='audio-clip'>
+          <source src="placeholder.flac" type='audio/flac' />
+          <p>Your user agent does not support the HTML5 Audio element.</p>
+        </audio>
+        <section id="main"></section>
+
+        <a-scene id="scene" embedded style="height:25%;width:25%;">
+        <!-- <a-scene id="scene" embedded style="height:1000px;width:1000px;"> -->
+
+            <!-- qwer  https://glitch.com/edit/#!/a-frame-mouse-click-example?path=index.html:25:6 -->
+            <!-- https://aframe.io/docs/0.8.0/components/cursor.html -->
+            <!-- https://aframe.io/docs/0.8.0/primitives/a-camera.html -->
+            <!-- <a-entity id="camera" camera look-controls="pointerLockEnabled: true" wasd-controls position="0 1.6 0"> -->
+            <a-entity position="1.5 0 -3.5">
+                <a-camera look-controls="pointerLockEnabled: true" near="0.001" wasd-controls>
+                    <a-cylinder id="fing-longer" position="0.2 -0.4 -0.9" radius="0.01" height= "1.0" rotation="90 0 0" color="beige" opacity="1.0"></a-cylinder>
+
+                    <!-- <a-box  position="0.2 -0.4 -0.9" height="0.2" width="0.2" depth="0.2"></a-box> -->
+
+                    <!-- https://stackoverflow.com/questions/50721192/a-frame-raycaster-not-working-need-intersection-point-with-a-sky -->
+                    <!-- important!! the aframe wiki could use an example of this -->
+                    <!-- https://aframe.io/docs/0.8.0/components/laser-controls.html -->
+                    <!-- https://aframe.io/docs/0.8.0/components/raycaster.html -->
+                    <!-- qwer this line might need cleaning -->
+                    <a-entity position="0.2 -0.4 -1.4" cursor="rayOrigin: entity; showLine: true;" raycaster="showLine: true; far: 16" line="color: white; opacity:0.5"></a-entity>
+                </a-camera>
+            </a-entity>
+
+            <!-- place these things first in HTML, for render order reasons -->
+            <a-image src="turtles-in-sink.jpg" position="0 -15 0" rotation="90 0 0" width="20.48" height="15.36"></a-image>
+            <a-image src="beach-on-cup.jpg" position="-10 2.15 0" rotation="0 90 0" width="5.76" height="10.24"></a-image>
+            <a-image src="mella.png" position="-10.01 -0.09 0" rotation="0 90 0" width="5.76" height="5.76"></a-image>
+
+            <!-- transparency fix, ensure the stranslucent floor tiles and stuff -->
+            <!-- are higher up in the html, for transparency reasons -->
+            <a-entity id="blob"></a-entity>
+
+            <a-assets>
+                <video id="video-asset" src="vid.mp4"></video>
+            </a-assets>
+
+            <a-box id="blue-cube" position="-3 0.5 -11" rotation="0 45 0" color="blue" opacity="0.3"></a-box>
+            <a-sphere id="red-sphere" position="0 0.5 -11" radius="0.5" color="red" opacity="0.3"></a-sphere>
+            <a-cylinder id='green-cyl' position="3 0.75 -11" radius="0.5" height="1.5" color="green" opacity="0.3"></a-cylinder>
+
+            <a-video id="video-clip" src="#video-asset" position="-3 2 -11" width="2.56" height="1.44" position="0 2 -5"></a-video>
+
+            <a-box id="clicker-game-banner" src="clicker-game.png" position="0.5 2.5 -7.5" color="white"></a-box>
+            <a-text value="Known bugs:\n- yellow button sometimes doesn't work for a few seconds\n- click events are laggy or defaulting to 'gaze based' on mobile" position="1.1 2.5 -8"></a-text>
+
+            <a-entity class='table' position='-4 0.01 -9'>
+                <a-entity class='grid-fitter' position='0.5 0 0.5'>
+
+                    <a-text  position='6 2.2 5' value='scanned\nhandwriting' align='center' src='chalk-effect.png' rotation='0 -90 0'></a-text>
+                    <a-image  position='6 1.5 5' src='chalk-effect.png' rotation='0 -90 0'></a-image>
+                    <a-entity position='5 0 3'>
+
+                        <!-- table base -->
+                        <a-cylinder color='saddlebrown' radius='0.25' height='0.7' position='0 0.35 0'></a-cylinder>
+
+                        <!-- table top -->
+                        <a-cylinder color='saddlebrown' radius='1' height='0.05' position='0 0.725 0'></a-cylinder>
+
+                        <!-- table surface -->
+                        <a-entity position='0 0.75 0'>
+
+                            <a-entity class='table-demo' position='0 0 0'>
+
+
+                                <a-entity id='clock-hrs'><a-sphere position='0 0 -0.35' radius='0.1'></a-sphere></a-entity>
+                                <a-entity id='clock-min'><a-sphere position='0 0 -0.60' radius='0.1'></a-sphere></a-entity>
+                                <a-entity id='clock-sec'><a-sphere position='0 0 -0.85' radius='0.1'></a-sphere></a-entity>
+
+                                <!-- <a-box id="clicker-button" depth= '0.52' width="0.52" height="0.16" position="0 0.08 0" color="yellow"></a-box>
+                                <a-text value="<- click" position="0.26 0 0" rotation="-90 0 0"></a-text>
+                                <a-text value="Score:" align="center" position="0 0 0.45" rotation="-90 0 0"></a-text>
+                                <a-text id="clicker-score" value="0" align="center" position="0 0 0.70" rotation="-90 0 0"></a-text> -->
+
+                            </a-entity>
+
+                            <a-entity class='table-demo' position='-2 0 0'>
+                                <a-box id="clicker-button" depth= '0.52' width="0.52" height="0.32" position="0 0.05 0" color="yellow"></a-box>
+                                <a-text value="<- click" position="0.26 0 0" rotation="-90 0 0"></a-text>
+                                <a-text value="Score:" align="center" position="0 0 0.45" rotation="-90 0 0"></a-text>
+                                <a-text id="clicker-score" value="0" align="center" position="0 0 0.70" rotation="-90 0 0"></a-text>
+                            </a-entity>
+
+
+                        </a-entity>
+
+                    </a-entity>
+
+                    <a-entity id='next-button'>
+                        <a-text position='7 1 3' value='next' align='center'></a-text> 
+                        <a-box src='next.png' position='7 0.7 3' height='0.25' width='0.25' depth='0.25'></a-box>
+                    </a-entity>
+
+                    
+
+                </a-entity>
+
+            </a-entity>
+
+            <a-entity id='20181201-dream' position='-4 0.01 -9'>
+                <a-entity class='grid-fitter' position='0.5 0 0.5'>
+
+                    <a-circle radius='0.25' position='0 0 1' rotation='-90 0 0' opacity='0.2'></a-circle>
+                    <a-circle radius='0.25' position='1 0 0' rotation='-90 0 0' opacity='0.2'></a-circle>
+                    <a-circle radius='0.25' position='2 0 0' rotation='-90 0 0' opacity='0.2'></a-circle>
+                    <a-circle radius='0.25' position='2 0 1' rotation='-90 0 0' opacity='0.2'></a-circle>
+                    <a-circle radius='0.25' position='2 0 2' rotation='-90 0 0' opacity='0.2'></a-circle>
+
+                    <a-circle radius='1.5' position='3 0 6' rotation='-90 0 0' color='green' opacity='0.5'></a-circle>
+                    <a-image src='lamb.png' position='3 0.5 6'></a-image>
+                </a-entity>
+            </a-entity>
+
+            <!-- place these things last in HTML, for render order reasons -->
+            <!-- <a-image src="abstract.png" position="10 2 0" rotation="0 -90 0" width="6" height="6"></a-image> -->
+
+        </a-scene>
+        <div id="0Panel">
+            <br>
+            <p>TODAY'S MENU</p>
+            <br>
+            <ul><span class="red">►</span> WebVR Video Player <a href="demo/player">[open]</a></li></ul>
+            <br>
+            <br>
+            <p>20181228</p>
+            <p>I will comment on the creation of this project, and also random subjects.</p>
+            <br>
+            <p>20190105</p>
+            <p>Making a Clicker game. For now it's a button that increases your score. (bug: randomly doesn't work, probably a raycaster issue)</p>
+            <br>
+            <p>20190107</p>
+            <p>And to our side we have a scene powered by the A-Frame WebVR framework, written in HTML and JavaScript.</p>
+            <br>
+            <p>20190110</p>
+            <p>Added laser pointer to stick. Should be possible to add cardboard controls.</p>
+            <br>
+            <p>20190201</p>
+            <p>Imagine a table where everyone in the would could sit at, at the same time.</p>
+            <br>
+            <!-- <p>20190116</p> -->
+            <!-- <p>Cardboard controls live!</p> -->
+            <!--123456789 123456789 1234567894444444444 123456789 123456789 1234567898888888888 123456789 123456789 123456789 123456789 123456789 123456789 -->
+            <br>
+            <h1>A place for stuff</h1>
+            <br>
+            <p>I don't want to keep creating new repos for new stuff. I'll put stuff here instead.</p>
+            <p>"Remember kids, the only difference between screwing around and science is writing it down" - Alex Jason (balistics expert)</p>
+            <p>=====</p>
+            <p>Oh, hi there! For now please enjoy this simple scene.</p>
+            <p>=====</p>
+            <p>For now, this app is meant to be opened using a WASD+mouse configuration.</p>
+            <p>This is mostly a test, but functionalities should greatly increase once when I eventually get to hooking this up to a database.</p>
+            <p>For now, I'm also working on a robot that I want to control via this interface, in VR, so it feels like I'm piloting a Mech.</p>
+            <p>=====</p>
+            <p>You start out in a <span class="red">MYSTERIOUS VOID</span>.</p>
+            <p>Your eyes grate on the GREAT WALL OF TEXT.</p>
+            <p>You hold a stick in your right hand, in a crude geometric landscape.</p>
+            <br>
+            <p>Use your W/A/S/D keys to move around</p>
+            <p>Click the green cylinder to play audio</p>
+            <p>Click the blue cube to play video</p>
+            <p>Click the red sphere to generate a tone</p>
+            <p>Click/Touch-drag screen to rotate view</p>
+            <br>
+            <p>Josh the Goat: "All the cool kids brush their teeth, stop being a loser!"</p>
+            <br>
+            <p>Videogame: "Don't hit Josh"</p>
+            <p>Rules:<br>You loose one point each time you hit Josh with the stick<br>Keep track of the score yourself for now<br>I just got a score of -12, try beating it!</p>
+            <br>
+            <p>Homework, make one of these:</p>
+            <p>- An AI than can play Don't hit Josh</p>
+            <p>- An AI that can recognize numbers</p>
+            <br>
+            <p>Press "F", or the "Goggles" icon to go to full-screen mode.</p>
+            <p>For now, mouse and keyboard constrols only. <span class="gre">#SorryNotSorry</span></p>
+            <br>
+            <footer>
+                <br>
+                <p>123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</p>
+                <br>
+                <p style="text-align: right; padding-right: 8px">~ <a href="https://github.com/jedpimentel/stuff" class="blu">[Click here to go to repo]</a></p>
+            </footer>
+        </div>
+
+        <script src="main.js"></script>
+    </body>
+</html>
