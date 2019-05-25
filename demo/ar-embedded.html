@@ -1,0 +1,112 @@
+
+<!DOCTYPE html> 
+<html>
+    <head>
+        <title>Embedded AR</title>
+        <script src="https://aframe.io/releases/0.9.0/aframe.min.js"></script>
+        <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.6.2/aframe/build/aframe-ar.js"></script>
+        <meta charset="UTF-8">
+    </head>
+
+    <body style="margin : 0px; overflow: hidden; font-family:courier; color:white; background-color: black">
+        <!-- <section id="main"></section> -->
+
+        <div style="position: fixed; bottom:10px; height: 100px; width:100%; background-color: red; z-index: 2">
+            <a href="#" onClick="(function(){
+                alert('Hey i am calling');
+                return false;
+            })();return false;">click here</a>
+        </div>
+        <section id="main">this is a test</section>
+        <a-scene arjs="patternRatio: 0.89">
+        <!-- <a-scene arjs="patternRatio: 0.89" embedded style="height:25%;width:25%;"> -->
+        <!-- <a-scene arjs> -->
+
+
+            <a-assets>
+                <img id="my-image" src="lamb.png">
+            </a-assets>
+
+            <a-camera position="0 0 0" look-controls="enabled: false; pointerLockEnabled: true" near="0.001" wasd-controls>
+                <a-cylinder id="fing-longer" position="0.2 -0.4 -0.9" radius="0.01" height= "1.0" rotation="90 0 0" color="beige" opacity="1.0"></a-cylinder>
+                <a-entity position="0.2 -0.4 -1.4" cursor="rayOrigin: entity; showLine: true;" raycaster="showLine: true; far: 16" line="color: white; opacity:0.5">
+                    <!-- <a-image src="lamb.png" rotation="-90 0 0"></a-image> -->
+                </a-entity>
+            </a-camera>
+
+            <!-- works with [Hiro] cards -->
+            <a-anchor>
+                <!-- <a-box id="marker-test" position='0 0.375 0' height="0.75" width="0.75" depth="0.75" color='green' opacity='0.5'>
+                    <a-text value='test' align='center' rotation="-45 0 0"></a-text>
+                </a-box> -->
+                <!-- <a-plane color="green" height="0.75" width="0.75" position="0 0 0" rotation="-90 0 0"></a-plane> -->
+                <!-- <a-plane color="green" height="0.75" width="0.75" position="0 0 0" rotation="-90 0 0"></a-plane> -->
+                <a-image src="#my-image" rotation="-90 0 0"></a-image>
+            </a-anchor>
+
+            <a-marker type='barcode' value='5'></a-marker>
+
+            <!-- nacho marker test -->
+            <a-marker type='pattern' url='nacho.patt'>
+                <a-text value='NACHO MARKER' align='center' rotation="-45 0 0"></a-text>
+            </a-marker>
+
+            <!-- rc marker test -->
+            <a-marker type='pattern' url='rc-logo.patt'>
+                <a-text value='RC MARKER' align='center' rotation="-45 0 0"></a-text>
+            </a-marker>
+            <!-- thin rc marker test -->
+            <a-marker type='pattern' url='rc-xray.patt'>
+                <a-text value='RC XRay MARKER' align='center' rotation="-45 0 0"></a-text>
+            </a-marker>
+
+            <a-marker type='barcode' value='5'></a-marker>
+
+            <!-- here is a hiro preset -->
+            <!-- <a-marker preset='hiro'></a-marker> -->
+            <!-- it is the same as the marker below -->
+            <a-marker type='pattern' url='pattern-marker.patt'>
+                <a-box id="marker-test" position='0 0.375 0' height="0.75" width="0.75" depth="0.75" color='green' opacity='0.5'>
+                    <a-text value='Boston' align='center' rotation="-45 0 0"></a-text>
+                </a-box>
+                <a-plane color="green" height="0.75" width="0.75" position="0 0 0" rotation="-90 0 0"></a-plane>
+            </a-marker>
+
+        </a-scene>
+
+        <script type="text/javascript">
+            {
+                let ball = document.querySelector('#marker-test')
+                
+                let tone = document.createElement('audio')
+                tone.src = '../sine-432hz-pluck.flac'
+
+                let playing_opacity = 0.8;
+                let paused_opacity = ball.getAttribute('opacity');
+
+                // https://aframe.io/docs/0.8.0/core/animations.html
+                // I think I remember reading that these animations would be phased out, which could be why they're not working
+                let fade_animation = document.createElement('a-animation')
+                fade_animation.setAttribute('attribute', 'material.opacity')
+                fade_animation.setAttribute('begin', 'fade')
+                fade_animation.setAttribute('end', 'end-fade')
+                fade_animation.setAttribute('from', playing_opacity)
+                fade_animation.setAttribute('to', paused_opacity)
+                fade_animation.setAttribute('dur', 1000)
+                fade_animation.setAttribute('easing', 'linear')
+                ball.appendChild(fade_animation)
+                ball.emit('fade')
+
+                ball.addEventListener('click', function(evt) {
+                    ball.emit('end-fade')
+                    ball.emit('fade')
+                    if (tone.paused) {
+                        tone.play();
+                    } else {
+                        tone.currentTime = 0;
+                    }
+                })
+            }
+        </script>
+    </body>
+</html>
