@@ -7,57 +7,37 @@
         <meta charset="UTF-8">
     </head>
     <body style="font-family:courier; color:white; background-color: black">
-        <section id="main"></section>
-        <a-scene ar id="scene">
+        <h1>Random Demos</h1>
 
-            <a-assets>
-                <video id="video-asset" autoplay loop="true" src="video.mp4"></video>
-            </a-assets>
+        <p>Some demos might not work well (or at all) on your current device. I have a backlog of experiments I need to polish or un-break before adding here. Eventually I'd like a Portfolio Scene for these.</p>  
+        <p>tldr: here be dragons</p>
 
-            <a-light type='ambient' color='white'></a-light>
+        <!-- <h3><a href="ar.html">ar</a></h3>
+        <p>Fullscreen AR</p>
 
-            <a-entity position="0 0 0">
-                <a-camera look-controls="pointerLockEnabled: true" wasd-controls>
-                    <a-cylinder id="fing-longer" position="0.2 -0.2 -0.2" radius="0.01" height= "1.0" rotation="90 0 0" color="beige" opacity="1.0"></a-cylinder>
-                    <a-entity position="0.2 -0.2 -0.7" cursor="rayOrigin: entity; showLine: true;" raycaster="showLine: true; far: 16" line="color: white; opacity:0.5"></a-entity>
-                </a-camera>
-            </a-entity>
-            
-            <!-- base platform -->
-            <a-circle radius='1' position='0 0 0' rotation='-90 0 0' color='gray'></a-circle>
+        <h3><a href="ar-embedded.html">ar-embedded</a></h3>
+        <p>AR, embedded into a regular HTML layout.</p> -->
 
-            <!-- standing "television" -->
-            <a-entity position='0 1.6 0'>
+        <h3><a href="audio.html">Positional Audio</a></h3>
+        <p>A-Frame supports positional audio out of the box</p>
 
-                <!-- frame -->
-                <a-box color='gray' width='1' height='1' depth='0.3'  position='0 0 -0.91'></a-box>
-                <a-box color='#666' width='0.3' height='1.1' depth='0.15'  position='0 -1.05 -0.91'></a-box>
+        <h3><a href="bench.html">Pointy Line Ball Thing</a></h3>
+        <p>A bunch of spheres, laid out in a sphere, with lines pointing out from them.</p>
 
-                <!-- screen -->
-                <a-video id='video-element' src='#video-asset' autoplay loop="true" position='0 0 -0.75' width='0.5' height='0.5'></a-video>
-                
-                <!-- labels -->
-                <a-image src='title.png' width='0.54' height='0.2' rotate='0 180 0' position='0 0.35 -0.75'></a-image>
-                <a-entity id='icon-strip' position='0 -0.35 -0.75'>
-                    <!-- <a-image src='icon-rw.png'    height='0.1' width='0.1' position='-0.2 0 0'></a-image> -->
-                    <a-image src='icon-play.png'  id='play' height='0.1' width='0.1' position='-0.1 0 0'></a-image>
-                    <a-image src='icon-pause.png' id='pause' height='0.1' width='0.1' position='0 0 0'></a-image>
-                    <!-- <a-image src='icon-ff.png'    height='0.1' width='0.1' position='0.1 0 0'></a-image> -->
-                    <!-- <a-image src='icon-exit.png'  height='0.1' width='0.1' position='0.2 0 0'></a-image> -->
-                </a-entity>
+        <h3><a href="thing.html">NumBall</a></h3>
+        <p>White circle with "000" in it in black text. It's closer to the camera than the background. On 2D-displays the ball looks bigger than it is because of perspective, on 3D-displays you can tell it's just being rendered closer o your face.</p>
 
-            </a-entity>
-        </a-scene>
+        <h3><a href="touch-controls.html">touch-controls</a></h3>
+        <p>Move around a 3D scene using an touchscreen joystick. Part of my effort to make VR scenes accessible on 2D-touchscreens as a 3D environment.</p>
 
-        <script type="text/javascript">
-            {
-                const play = document.querySelector('#play');
-                const pause = document.querySelector('#pause');
-                const vid = document.querySelector('#video-asset');
+        <h3><a href="webcam.html">webcam</a></h3>
+        <p>Webcam passthrough stuff. Originally meant to try out what passthrough would look like on a cardboard-class headset.</p>
 
-                play.addEventListener('click', () => vid.play());
-                pause.addEventListener('click', () => vid.pause());           
-            }
-        </script>
+        <h3><a href="shaggy-rogers/index.html">Shaggy from Scooby Doo, with a bigger Shaggy in the background</a></h3>
+        <p>I made this, no use not making it available. #SorryNotSorry</p>
+
+        <h3><a href="player/index.html">Video Player</a></h3>
+        <p>An attempt at a WebVR video player. Only has play/pause for now.</p>
+
     </body>
 </html>
