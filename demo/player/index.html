@@ -44,8 +44,10 @@
                     <a-image src='icon-pause.png' id='pause' height='0.1' width='0.1' position='0 0 0'></a-image>
                     <!-- <a-image src='icon-ff.png'    height='0.1' width='0.1' position='0.1 0 0'></a-image> -->
                     <!-- <a-image src='icon-exit.png'  height='0.1' width='0.1' position='0.2 0 0'></a-image> -->
-                </a-entity>
 
+                    <a-text id="status" position='0.2 -0.2 0'></a-text>
+
+                </a-entity>
             </a-entity>
         </a-scene>
 
@@ -54,6 +56,7 @@
                 const play = document.querySelector('#play');
                 const pause = document.querySelector('#pause');
                 const vid = document.querySelector('#video-asset');
+                const status = document.querySelector('#status')
 
                 // this is meant to be a general media player for VR
 
@@ -61,8 +64,14 @@
                 // - ability to play only a certain hour off a playlist
                 // - pre-set custom transitions between clips, default intro/outro styles that are inter-compatable?
 
-                play.addEventListener('click', () => vid.play());
-                pause.addEventListener('click', () => vid.pause());           
+                play.addEventListener('click', () => {
+                    status.setAttribute('value', 'you last clicked play');
+                    vid.play();
+                });
+                pause.addEventListener('click', () => {
+                    status.setAttribute('value', 'you last clicked pause');
+                    vid.pause();
+                });           
             }
         </script>
     </body>
