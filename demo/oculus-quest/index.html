@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="eng">
+
+<head>
+  <title>Jose Quest</title>
+  <script src="https://aframe.io/releases/0.9.0/aframe.min.js"></script>
+  <meta charset="utf-8">
+</head>
+
+<body style="font-family:courier; color:white; background-color: black">
+
+  <audio id='audio-clip'>
+    <source src="../../placeholder.flac" type='audio/flac' />
+  </audio>
+  <script type="text/javascript">
+  	AFRAME.registerComponent('debug-menu', {
+  		init: function() {
+  			console.log('initting...', this)
+  			this.line_y = 0
+  			this.log = function(val) {
+	  			console.log(val)
+	  			const text = document.createElement('a-text')
+	  			text.setAttribute('value', val)
+	  			this.line_y -= 0.2
+	  			text.setAttribute('position', `0 ${this.line_y} 0`)
+	  			this.el.appendChild(text)
+	  		}
+	  		// this.log('test')
+
+        // const debug_menu = this
+        document.addEventListener('debug-menu-log', (e) => {
+          // this.log(e.detail.text)
+          this.log('space')
+          this.log(JSON.stringify(e.detail))
+        })
+
+	  	}
+  	})
+
+    AFRAME.registerComponent('hand-controller', {
+      schema: {
+        side: {type: 'string', default: 'left'},
+      },
+      init: function() {
+
+        // anchor position gets dropped when movement mode is activated
+        this.anchor = new THREE.Vector3()
+        this.moving = false
+
+        this.log = function(a) {
+
+          let evt = new CustomEvent('debug-menu-log', {
+            detail: {
+              // text: e.detail
+              text: a
+            }
+          })
+          document.dispatchEvent(evt)
+        }
+
+        console.log(this)
+
+        // function log(val) {
+
+        // }
+
+        // use this to print the event details, with analog data
+        // this.el.addEventListener('gripchanged', function(a) {
+        //   let evt = new CustomEvent('debug-menu-log', {
+        //     detail: {
+        //       text: a.detail
+        //     }
+        //   })
+        //   document.dispatchEvent(evt)
+        // })
+
+        document.addEventListener('gripdown', (e) => {
+          // let evt = new CustomEvent('debug-menu-log', {
+          //   detail: {
+          //     // text: e.detail
+          //     text: this.el.object3D.position
+          //   }
+          // })
+          // document.dispatchEvent(evt)
+          this.log(this.el.object3D.position)
+
+          let comparator = document.querySelector('#comparator')
+          this.anchor.x = comparator.object3D.position.x = this.el.object3D.position.x
+          this.anchor.y = comparator.object3D.position.y = this.el.object3D.position.y
+          this.anchor.z = comparator.object3D.position.z = this.el.object3D.position.z
+
+          this.moving = true
+        })
+
+        document.addEventListener('gripup', (e) => {
+          this.moving = false
+        })
+
+      },
+      tick: function() {
+        if(this.moving) {
+
+          camera_wrapper = document.getElementById("camera-wrapper");
+          camera_wrapper.object3D.position.x += this.el.object3D.position.x - this.anchor.x;
+          // camera_wrapper.object3D.position.y += this.el.object3D.position.y - this.anchor.y;
+          camera_wrapper.object3D.position.z += this.el.object3D.position.z - this.anchor.z;
+        }
+
+      }
+    });
+  </script>
+
+
+	<a-scene loading-screen="dotsColor: white; backgroundColor: black">
+
+    <a-entity id="camera-wrapper">
+      <a-camera look-controls="pointerLockEnabled: true" near="0.001">
+          <a-cylinder id="fing-longer" position="0.2 -0.4 -0.9" radius="0.01" height= "1.0" rotation="90 0 0" color="beige" opacity="1.0"></a-cylinder>
+          <!-- <a-box  position="0.2 -0.4 -0.9" height="0.2" width="0.2" depth="0.2"></a-box> -->
+          <a-entity position="0.2 -0.4 -1.4" cursor="rayOrigin: entity; showLine: true;" raycaster="showLine: true; far: 16" line="color: white; opacity:0.5"></a-entity>
+      </a-camera>
+
+
+    <a-entity oculus-touch-controls="hand: left" hand-controller>
+      <a-box  height="0.1" width="0.1" depth="0.1" opacity="0.2"></a-box>
+    </a-entity>
+
+
+    <a-entity oculus-touch-controls="hand: right">
+      <a-box  height="0.1" width="0.1" depth="0.1" opacity="0.2"></a-box>
+    </a-entity>
+
+    <a-sphere id="comparator" radius="0.05" color="red"></a-sphere>
+    
+    </a-entity>
+    
+
+		<a-cylinder id='green-cyl' position="5 0.75 -8" radius="0.5" color="green" opacity="0.3"></a-cylinder>
+		<a-entity	debug-menu position="-4 8 -9.5">
+			<a-text value="DEBUG MENU"></a-text>
+		</a-entity>
+    <a-text position="-4 3 -7" font='monoid' width="8" side="double" wrap-count="80" wi value="
+
+#                              ----JOSE-QUEST----                              #
+
+Welcome traveler.
+
+For moving, I've attached a movement apparatus to your left grip button.
+Grab the air to set a movement anchor in space, drag your gripped hand to move.
+
+For interacting, I've attached a laser clicker to your head.
+Hover the laser pointer at an object, and wait for it to click.
+This clicking device was originally meant for 3DOF cardboard headsets.
+Better clicking controls are in the pipeline, along with more clickworthy stuff."
+    ></a-text>
+		<a-entity id="blob"></a-entity>
+
+	</a-scene>
+
+
+	<script type="text/javascript">{
+		// play audio on cylinder click
+		{
+			let cyl = document.querySelector('#green-cyl');
+			let audio = document.querySelector('#audio-clip');
+
+			let paused_opacity = cyl.getAttribute('opacity');
+			let playing_opacity = 0.4;
+
+			cyl.addEventListener('click', function (evt) {
+				cyl.setAttribute('opacity', playing_opacity)
+				audio.currentTime = 0;
+				audio.play();
+			});
+			audio.addEventListener('ended', () => {
+				cyl.setAttribute('opacity', paused_opacity)
+			});
+		}
+
+    // make a floor and a wall
+    {
+
+      const BLOB = document.querySelector('#blob');
+      class Sphere {
+        constructor(config={}) {
+          this.element = document.createElement(config.element || 'a-sphere')
+          this.element.setAttribute('color', config.color || 'white');
+          this.element.setAttribute('radius', '0.01');
+          this.element.setAttribute('material', "shader: flat")
+          this.element.setAttribute('type', "point")
+
+          this.element.setAttribute('position', `${config.pos_x} ${config.pos_y} ${config.pos_z}`);
+          BLOB.appendChild(this.element)
+        }
+      }
+      class Marker extends Sphere {
+        // this is just a convenience thing
+        constructor(x, y, z) {
+          super({pos_x:x, pos_y:y, pos_z:z})
+        }
+      }
+      // floor
+      for (let i = -10; i <= 10; i++) {
+        // for (let j = -10; j <= 10; j++) {
+          for (let k = -10; k <= 10; k++) {
+            new Marker(i, 0, k)
+          }
+        // }
+      }
+      // wall
+      for (let i = -4; i <= 4; i++) {
+        for (let j = 1; j <= 8; j++) {
+          // for (let k = -10; k <= 10; k++) {
+            new Marker(i, j, -10)
+          // }
+        }
+      }
+    }
+	}</script>
+</body>
+
+</html>
