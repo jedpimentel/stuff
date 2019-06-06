@@ -70,7 +70,6 @@
         document.addEventListener('gripdown', (e) => {
           this.log(this.el.object3D.position)
 
-          let comparator = document.querySelector('#comparator')
           this._movement_anchor.object3D.position.x = this.el.object3D.position.x
           this._movement_anchor.object3D.position.y = this.el.object3D.position.y
           this._movement_anchor.object3D.position.z = this.el.object3D.position.z
@@ -117,9 +116,12 @@
           <!-- <a-entity cursor-debug id="cursor" position="0.2 -0.4 -1.4" cursor raycaster="objects:.clickable; showLine: true; far: 16" line="color: white; opacity:0.5"></a-entity> -->
       </a-camera>
 
-      <a-entity laser-controls="hand: left" hand-controller raycaster="objects:.clickable; far:4">
+      <a-entity laser-controls="hand: left" grip-to-move="targetID: camera-wrapper" raycaster="objects:.clickable; far:4">
         <a-box  height="0.1" width="0.1" depth="0.1" opacity="0.2"></a-box>
       </a-entity>
+      <!-- <a-entity laser-controls="hand: left" hand-controller raycaster="objects:.clickable; far:4">
+        <a-box  height="0.1" width="0.1" depth="0.1" opacity="0.2"></a-box>
+      </a-entity> -->
 
       <a-entity laser-controls="hand: right" hand-controller raycaster="objects:.clickable; far:4">
         <a-box  height="0.1" width="0.1" depth="0.1" opacity="0.2"></a-box>
@@ -135,6 +137,8 @@
 
 
     <a-text position="8 4 -8" value="Click on these link to go to other sites. 'Stuff' is a room with a few things to click on. 'A-Painter' is a drawing appp by Mozilla. 'Baltri' is a weird art thing I'm doing with some friends from DR."></a-text>
+
+    <a-link class="clickable" position="5 1 -8" href="#" title="refresh" image="#lamb"></a-link>
 
     <a-link class="clickable" position="8 1 -8" href="../../" title="Stuff" image="#lamb"></a-link>
     <!-- <a-link class="clickable" position="8 1 -8" href="../../" title="Stuff" image="#lamb" border-color="blue"></a-link> -->
