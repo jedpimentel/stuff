@@ -164,6 +164,57 @@
 	  <!-- Dynamic box -->
 	  <a-box dynamic-body click-test color="green" position="5 0.5 0" width="1" height="1" depth="1"></a-box>
 
+	  <a-box static-body id="floating-box" position="-2 2.5 -2"></a-box>
+
+	  <a-box 
+	  	dynamic-body="
+	  		linearDamping: 0.99;
+	  		angularDamping: 0.99;
+	  	" 
+	  	constraint="
+	  		type: hinge;
+	  		target: #floating-box;
+	  		axis: 0 1 0;
+	  		targetAxis: 0 1 0;
+	  		pivot: 0 0.75 0;
+	  		targetPivot: 0 -1 0;
+	  	" 
+	  	position="-2 1.25 -2" 
+	  	height="0.5" 
+	  	color="blue"
+	  ></a-box>
+
+	  <a-box 
+	  	id="snek-0"
+	  	static-body
+	  	position="2 0.25 -2"
+	  	height="0.5"
+	  	width="0.2"
+	  	depth="0.2"
+	  ></a-box>
+	  
+	  <a-box 
+	  	id="snek-1"
+	  	dynamic-body
+	  	constraint="target: #snek-0"
+	  	position="2 0.85 -2"
+	  	height="0.5"
+	  	width="0.2"
+	  	depth="0.2"
+	  ></a-box>
+
+	  <a-box
+	  	id="snek-2"
+	  	dynamic-body
+	  	constraint="target: #snek-1"
+	  	position="2 1.45 -2"
+	  	height="0.5"
+	  	width="0.2"
+	  	depth="0.2"
+	  ></a-box>
+
+	  <!-- <a-torus dynamic-body="shape: hull" position="0 0.5 -1.5" radius="0.5" radius-tubular="0.1"></a-torus>	 -->
+
 	  <!-- <a-box grabbable click-test color="green" position="5 0.5 0" width="1" height="1" depth="1"></a-box> -->
 
 
