@@ -28,7 +28,7 @@
                 <a-camera look-controls="pointerLockEnabled: true" near="0.001" wasd-controls>
                     <a-cylinder id="fing-longer" position="0.2 -0.4 -0.9" radius="0.01" height= "1.0" rotation="90 0 0" color="beige" opacity="1.0"></a-cylinder>
 
-                    <a-entity pos-trail-line position="0.2 -0.4 -2"></a-entity>
+                    <a-entity pos-trail-line="segments: 10000" position="0.2 -0.4 -2"></a-entity>
                     <!-- <a-box  position="0.2 -0.4 -0.9" height="0.2" width="0.2" depth="0.2"></a-box> -->
 
                     <!-- https://stackoverflow.com/questions/50721192/a-frame-raycaster-not-working-need-intersection-point-with-a-sky -->
