@@ -13,89 +13,6 @@
   <audio id='audio-clip'>
     <source src="../../placeholder.flac" type='audio/flac' />
   </audio>
-  <script type="text/javascript">
-  	AFRAME.registerComponent('debug-menu', {
-  		init: function() {
-  			console.log('initting...', this)
-  			this.line_y = 0
-  			this.log = function(val) {
-	  			console.log(val)
-	  			const text = document.createElement('a-text')
-	  			text.setAttribute('value', val)
-	  			this.line_y -= 0.2
-	  			text.setAttribute('position', `0 ${this.line_y} 0`)
-	  			this.el.appendChild(text)
-	  		}
-	  		// this.log('test')
-
-
-        // const debug_menu = this
-        document.addEventListener('debug-menu-log', (e) => {
-          // this.log(e.detail.text)
-          this.log('space')
-          this.log(JSON.stringify(e.detail))
-        })
-
-	  	}
-  	})
-
-    AFRAME.registerComponent('hand-controller', {
-      schema: {
-        side: {type: 'string', default: 'left'},
-      },
-      init: function() {
-        // anchor position gets dropped when movement mode is activated
-
-        this._movement_anchor = document.createElement('a-sphere');
-        this._movement_anchor.setAttribute('color', 'white');
-        this._movement_anchor.setAttribute('radius', '0.05');
-        this.el.parentEl.appendChild(this._movement_anchor)
-        // console.log('this is', this)
-
-
-        // this.anchor = new THREE.Vector3()
-        this.anchor = this._movement_anchor.object3D.position;
-        this.moving = false;
-
-        this.log = function(a) {
-          let evt = new CustomEvent('debug-menu-log', {
-            detail: {
-              // text: e.detail
-              text: a
-            }
-          })
-          document.dispatchEvent(evt)
-        }
-
-        document.addEventListener('gripdown', (e) => {
-          this.log(this.el.object3D.position)
-
-          this._movement_anchor.object3D.position.x = this.el.object3D.position.x
-          this._movement_anchor.object3D.position.y = this.el.object3D.position.y
-          this._movement_anchor.object3D.position.z = this.el.object3D.position.z
-
-          this.moving = this._movement_anchor.object3D.visible = true
-        })
-
-        document.addEventListener('gripup', (e) => {
-          this.moving = this._movement_anchor.object3D.visible = false
-        })
-
-      },
-      tick: function() {
-        if(this.moving) {
-
-          camera_wrapper = document.getElementById("camera-wrapper");
-          camera_wrapper.object3D.position.x += this.el.object3D.position.x - this.anchor.x;
-          // camera_wrapper.object3D.position.y += this.el.object3D.position.y - this.anchor.y;
-          camera_wrapper.object3D.position.z += this.el.object3D.position.z - this.anchor.z;
-        }
-
-      }
-    });
-    
-  </script>
-
 
 	<a-scene loading-screen="dotsColor: white; backgroundColor: black">
 
@@ -110,47 +27,30 @@
           <a-text opacity="0.1" fps-counter position="0.2 -0.4 -0.9"></a-text>
 
           <a-cylinder id="fing-longer" position="0.2 -0.4 -0.9" radius="0.01" height= "1.0" rotation="90 0 0" color="beige" opacity="1.0"></a-cylinder>
-          <!-- <a-box  position="0.2 -0.4 -0.9" height="0.2" width="0.2" depth="0.2"></a-box> -->
-          <!-- <a-entity position="0.2 -0.4 -1.4" cursor="rayOrigin: entity; showLine: true;" raycaster="showLine: true; far: 16" line="color: white; opacity:0.5"></a-entity> -->
-
-          <!-- <a-entity cursor-debug id="cursor" position="0.2 -0.4 -1.4" cursor raycaster="objects:.clickable; showLine: true; far: 16" line="color: white; opacity:0.5"></a-entity> -->
       </a-camera>
 
       <a-entity pos-trail-line laser-controls="hand: left" grip-to-move="targetID: camera-wrapper" raycaster="objects:.clickable; far:4">
         <a-box  height="0.1" width="0.1" depth="0.1" opacity="0.2"></a-box>
       </a-entity>
-      <!-- <a-entity laser-controls="hand: left" hand-controller raycaster="objects:.clickable; far:4">
-        <a-box  height="0.1" width="0.1" depth="0.1" opacity="0.2"></a-box>
-      </a-entity> -->
 
-      <a-entity pos-trail-line laser-controls="hand: right" hand-controller raycaster="objects:.clickable; far:4">
+      <a-entity pos-trail-line laser-controls="hand: right" grip-to-move="targetID: camera-wrapper" raycaster="objects:.clickable; far:4">
         <a-box  height="0.1" width="0.1" depth="0.1" opacity="0.2"></a-box>
       </a-entity>
 
     </a-entity>
 
 
-    
-
-		<a-cylinder id='green-cyl' position="5 0.75 -8" radius="0.5" color="green" opacity="0.3"></a-cylinder>
-    <a-cylinder id='click-ball' position="6.5 .75 -8" radius="0.5" color="green" opacity="0.3"></a-cylinder>
+    <a-cylinder id='green-cyl' class="clickable" position="6.5 .75 -8" radius="0.5" color="green" opacity="0.3"></a-cylinder>
 
 
-    <a-text position="8 4 -8" value="Click on these link to go to other sites. 'Stuff' is a room with a few things to click on. 'A-Painter' is a drawing appp by Mozilla. 'Baltri' is a weird art thing I'm doing with some friends from DR."></a-text>
+    <a-text position="8 4 -8" value="Click on these link to go to other sites. 'Stuff' is a room with a few things to click on (move controls pending). 'A-Painter' is a drawing appp by Mozilla. 'Baltri' is a weird art thing I'm doing with some friends from DR (click+move controls pending)."></a-text>
 
     <a-link class="clickable" position="5 1 -8" href="#" title="refresh" image="#lamb"></a-link>
-
     <a-link class="clickable" position="8 1 -8" href="../../" title="Stuff" image="#lamb"></a-link>
-    <!-- <a-link class="clickable" position="8 1 -8" href="../../" title="Stuff" image="#lamb" border-color="blue"></a-link> -->
-
     <a-link class="clickable" position="11 1 -8" href="https://aframe.io/a-painter/" title="A Painter\n" image="#lamb"></a-link>
-
     <a-link link-controls id="baltri" title-color="red" class="clickable" position="14 1 -8" href="http://baltri.com" title="Baltri" image="#lamb"></a-link>
-
     <a-text position="-10 4 -6" value="Placed like this, you can literally walk into a 360 image. (note to self: find a 360 image worth showing off)"></a-text>
     <a-sky src="#lamb" radius="2" position="-7.5 1 -6"></a-sky>
-
-
 
 		<a-entity	debug-menu position="-4 8 -9.5">
 			<a-text value="DEBUG MENU"></a-text>
@@ -160,16 +60,11 @@
 #                              ----JOSE-QUEST----                              #
 
 Welcome traveler.
+
 "
     ></a-text>
 
 		<a-entity id="blob"></a-entity>
-
-    <!-- auto-go thing is a pretty bad bug -->
-    <!-- <a-entity> -->
-    <!-- <a-box></a-box> -->
-    <!-- </a-entity> -->
-    <!-- <a-entity position="8 1 -8" link="href: https://jedpimentel.github.io/stuff/; title: Main; image: #lamb"></a-entity> -->
 	</a-scene>
 
 
@@ -231,15 +126,6 @@ Welcome traveler.
         }
       }
     }
-
-
-            
-    // document.addEventListener('load', function(){ 
-    //   console.log('aaaaaaaaa')
-    //   let a = document.querySelector('#cursor')
-    //   console.log(a)
-    // }, false);
 	}</script>
 </body>
-
 </html>
