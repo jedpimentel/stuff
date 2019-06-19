@@ -114,7 +114,7 @@
         constructor(config={}) {
           this.element = document.createElement(config.element || 'a-sphere')
           this.element.setAttribute('color', config.color || `#${mango_rgb_hex_generator()}`);
-          this.element.setAttribute('radius', mangoRadius);
+          this.element.setAttribute('radius', mangoRadius*(0.8 +0.4*Math.random()));
           this.element.setAttribute('material', "shader: flat")
           this.element.setAttribute('type', "point")
 
@@ -188,7 +188,7 @@
             new Marker(
                 i + Math.random()-0.5,
                 j + Math.random()-0.5,
-                -10
+                -10 + Math.random()-0.5
             )
           // }
         }
