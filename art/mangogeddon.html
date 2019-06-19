@@ -18,11 +18,11 @@
             <a-entity position="0 0 0">
                 <a-camera look-controls="pointerLockEnabled: false" wasd-controls></a-camera>
                 <!-- <a-camera look-controls="pointerLockEnabled: true" wasd-controls></a-camera> -->
-                <a-entity cursor="rayOrigin: mouse"></a-entity>
+                <a-entity cursor="rayOrigin: mouse" raycaster="objects:.clickable"></a-entity>
             </a-entity>
 
 
-            <a-cylinder id='green-cyl' position="2 0.75 -6" radius="0.5" height="1.5" color="green" opacity="0.8">
+            <a-cylinder id='green-cyl' class="clickable" position="2 0.75 -6" radius="0.5" height="1.5" color="green" opacity="0.8">
                 <a-text value="(click)" align="center" side="double"></a-text>
             </a-cylinder>
 
