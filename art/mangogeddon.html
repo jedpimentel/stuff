@@ -15,7 +15,7 @@
         <section id="main"></section>
         <a-scene ar id="scene">
 
-            <a-entity position="0 0 0">
+            <a-entity position="8.2 0 4.9" rotation="0 48 0">
                 <a-camera look-controls="pointerLockEnabled: false" wasd-controls></a-camera>
                 <!-- <a-camera look-controls="pointerLockEnabled: true" wasd-controls></a-camera> -->
                 <a-entity cursor="rayOrigin: mouse" raycaster="objects:.clickable"></a-entity>
@@ -128,7 +128,7 @@
         constructor(config={}) {
           this.element = document.createElement(config.element || 'a-sphere')
           this.element.setAttribute('color', config.color || `#${cloud_rgb_hex_generator()}`);
-          this.element.setAttribute('radius', '1.2');
+          this.element.setAttribute('radius', 1 + Math.random()*0.4);
           // this.element.setAttribute('opacity', '0.8');
 
           this.element.setAttribute('material', "shader: flat")
@@ -188,19 +188,19 @@
             new Marker(
                 i + Math.random()-0.5,
                 j + Math.random()-0.5,
-                -10 + Math.random()-0.5
+                -10 + Math.random()-0.5,
             )
           // }
         }
       }
       // clouds
-      for (let i = -4; i <= 4; i+=0.5) {
+      for (let i = -4.5; i <= 4.5; i+=0.5) {
         // for (let j = 1; j <= 8; j++) {
           // for (let k = -10; k <= 10; k++) {
             new CloudWithPosThing(
                 i + Math.random()-0.5,
                 YROOF + Math.random()-0.5,
-                -10 + Math.random()-0.5
+                -10 + Math.random()-0.5,
             )
           // }
         // }
