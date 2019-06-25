@@ -131,6 +131,112 @@ Welcome traveler.
         }
       }
     }
+
+    // WEBSOCKET STUFFFF
+    window.onload = function() {
+      return//<-- disable for now
+
+      // Get references to elements on the page.
+      var messageField = document.getElementById('message');
+      var messagesList = document.getElementById('messages');
+      var socketStatus = document.getElementById('status');
+      var closeBtn = document.getElementById('close');
+
+
+      // Create a new WebSocket.
+      // var socket = new WebSocket('wss://echo.websocket.org');
+      var socket = new WebSocket('ws://127.0.0.1:8080/');
+      // var socket = new WebSocket('ws://192.168.1.7:8080/');
+      // http://192.168.1.7:8081
+
+
+
+      // Handle any errors that occur.
+      socket.onerror = function(error) {
+        console.log('WebSocket Error: ' + error);
+      };
+
+
+      // Show a connected message when the WebSocket is opened.
+      socket.onopen = function(event) {
+        socketStatus.innerHTML = 'Connected to: ' + event.currentTarget.url;
+        socketStatus.className = 'open';
+
+        var last = 0;
+        var direction = 1;
+        function action_loop(delay) {
+          last += direction;
+          if(last >= 100) {
+            direction = -1;
+          } else if (last <= 0) {
+            direction = +1;
+          }
+          // console.log(last);
+          socket.send(last);
+          setTimeout(() => action_loop(delay), delay);
+        }
+        var x, y, last_x, last_y;
+        function action_loop_2(delay) {
+          // console.log('loop')
+          let val = window.FaceVal 
+          // let val = window.XYVal 
+          if(val) {
+            
+            // console.log(val)
+            x = val.x
+            y = val.y
+
+            if(x !== last_x) {
+              last_x = x;
+              socket.send(x);
+            }
+            if(y !== last_y) {
+              last_y = y;
+              socket.send(y);
+            }
+
+            // socket.send(window.XYVal.x);
+            // socket.send(window.XYVal.y);//pre-formatted
+          }
+
+
+          // socket.send(last);
+          setTimeout(() => action_loop_2(delay), delay);
+        }
+
+
+        // action_loop(100);
+        action_loop_2(1000 / 60);
+
+      };
+
+
+      // Handle messages sent by the server.
+      socket.onmessage = function(event) {
+        var message = event.data;
+        messagesList.innerHTML += '<li class="received"><span>Received:</span>' + message + '</li>';
+      };
+
+
+      // Show a disconnected message when the WebSocket is closed.
+      socket.onclose = function(event) {
+        socketStatus.innerHTML = 'Disconnected from WebSocket.';
+        socketStatus.className = 'closed';
+      };
+
+
+
+      // Close the WebSocket connection when the close button is clicked.
+      closeBtn.onclick = function(e) {
+        e.preventDefault();
+
+        // Close the WebSocket.
+        socket.close();
+
+        return false;
+      };
+
+    };
 	}</script>
 </body>
 </html>
