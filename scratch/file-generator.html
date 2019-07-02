@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://aframe.io/releases/0.9.2/aframe.min.js"></script>
+    <!-- todo: find a publicly hosted instance of GLTFExporter -->
+    <script src="../lib/GLTFExporter.js"></script>
+	<title></title>
+</head>
+<body>
+	<h1>File Generator</h1>
+	<ul>
+		<ul><a href="file-generator.html" download>Download this file generator!</a>
+			(href="file-generator.html")
+		</ul>
+		<ul><a href="file-generator.html" download id="down-2">Secondary download</a>
+
+		</ul>
+		<ul><a id="down-3">glTF download</a>
+			this is a test
+		</ul>
+	</ul>
+	<!-- <a-scene embedded background="color: blue;" light="defaultLightsEnabled: false"> -->
+	<a-scene embedded background="color: blue;">
+
+		<!-- exporter didn't support ambient light -->
+		<!-- <a-light color="red" position="-1 1 0" target="directionTarget">
+			https://riptutorial.com/aframe/example/30925/directional
+			<a-entity id="directionTarget" position="0 0 -1"></a-entity>
+		</a-light> -->
+
+		<!-- <a-text value="esto es una prueba" position="-1 2 -2"></a-text> -->
+		<a-box color="gray" position="0 1 -2" rotation="0 30 0"></a-box>
+	</a-scene>
+	<script type="text/javascript">
+		// make a file
+		var file = new File(["#YOLO"], "placeholder.txt", {
+			type: "text/plain",
+		});
+
+		// https://developer.mozilla.org/en-US/docs/Web/API/File
+		// https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL
+		// get DOMString containing URL representing the file object
+		let file_obj_url = URL.createObjectURL(file)
+
+		let down2 = document.querySelector("#down-2");
+		down2.setAttribute("href", file_obj_url)
+		console.log(file)
+		console.log(file.name)
+		down2.setAttribute("download", file.name)
+		console.log(down2)
+
+		let scene = document.querySelector("a-scene")
+
+		let exporter = new THREE.GLTFExporter();
+		var options = undefined;
+		options = {
+			// trs: document.getElementById( 'option_trs' ).checked,
+			onlyVisible: true,
+			truncateDrawRange: true,
+
+			// glTF export was compaining about THREE.ShaderMaterial not being supported
+			binary: true,
+
+			// forceIndices: document.getElementById( 'option_forceindices' ).checked,
+			// forcePowerOfTwoTextures: document.getElementById( 'option_forcepot' ).checked
+		};
+
+		let gltf = undefined
+
+		// let callback = thing => console.log('exporter callback', thing);
+		let callback = function(result) {
+			console.log('exporter callback', result);
+
+			let down3 = document.querySelector("#down-3");
+
+
+			if(result instanceof ArrayBuffer) {
+				// saveArrayBuffer( result, 'scene.glb' );
+				// throw "wasn't expecting that"
+
+				let buffer = result;
+				let blob = new Blob( [ buffer ], { type: 'application/octet-stream' } )
+				let blob_url = URL.createObjectURL(blob)
+
+
+				down3.href = blob_url
+				down3.download = 'scene.glb'
+
+
+
+				// bglb is binary form of glTF, and includes textures and stuff
+				// https://en.wikipedia.org/wiki/Facebook_3D_Posts
+				// https://github.com/mrdoob/three.js/blob/master/examples/misc_exporter_gltf.html
+			} else {
+				var output = JSON.stringify( result, null, 2 );
+
+				let blob = new Blob( [ output ], { type: 'text/plain' } )
+				let blob_url = URL.createObjectURL(blob)
+
+				down3.href = blob_url
+				down3.download = 'scene.gltf'
+
+
+				// console.log( output );
+				// saveString( output, 'scene.gltf' );
+			}
+			// if(!URL) { return; }
+			// let URL = URL.createObjectURL(thing)
+			// down2.setAttribute("href", URL)
+			// down2.setAttribute("download", "test.gltf")
+		}
+
+
+		// setTimeout(() => {
+		// 	exporter.parse(scene.object3D, callback, options)
+		// }, 0000);
+
+
+		// here be dragons
+		function exportGLTF( input ) {
+			var gltfExporter = new THREE.GLTFExporter();
+			// var options = {
+			// 	trs: document.getElementById( 'option_trs' ).checked,
+			// 	onlyVisible: document.getElementById( 'option_visible' ).checked,
+			// 	truncateDrawRange: document.getElementById( 'option_drawrange' ).checked,
+			// 	binary: document.getElementById( 'option_binary' ).checked,
+			// 	forceIndices: document.getElementById( 'option_forceindices' ).checked,
+			// 	forcePowerOfTwoTextures: document.getElementById( 'option_forcepot' ).checked
+			// };
+			gltfExporter.parse( input, function ( result ) {
+				if ( result instanceof ArrayBuffer ) {
+					saveArrayBuffer( result, 'scene.glb' );
+				} else {
+					var output = JSON.stringify( result, null, 2 );
+					console.log( output );
+					saveString( output, 'scene.gltf' );
+				}
+			}, options );
+		}
+
+
+		var link = document.createElement( 'a' );
+		link.style.display = 'none';
+		document.body.appendChild( link ); // Firefox workaround, see #6594
+		function save( blob, filename ) {
+			link.href = URL.createObjectURL( blob );
+			link.download = filename;
+			link.click();
+			// URL.revokeObjectURL( url ); breaks Firefox...
+		}
+		function saveString( text, filename ) {
+			save( new Blob( [ text ], { type: 'text/plain' } ), filename );
+		}
+		function saveArrayBuffer( buffer, filename ) {
+			save( new Blob( [ buffer ], { type: 'application/octet-stream' } ), filename );
+		}
+
+
+		setTimeout(() => {
+			exportGLTF(scene.object3D, callback, options)
+		}, 2000);
+
+// +    var exporter = new THREE.GLTFExporter();
+// +    var options = undefined
+// +
+// +    let callback = thing => window.z = thing
+// +    // Parse the input and generate the glTF output
+// +    exporter.parse( wut, callback, options );
+// +    // exporter.parse( wut, function ( gltf ) {
+// +    //   console.log( gltf );
+// +    //   console.log('parse that thins!')
+// +    //   downloadJSON( gltf );
+// +    // }, options );
+	</script>
+	<style type="text/css">
+		a-scene {
+			height: 256px;
+			width: 256px;
+		}
+	</style>
+</body>
+</html>
