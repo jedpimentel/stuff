@@ -1,0 +1,29 @@
+
+<!DOCTYPE html> 
+<html>
+    <head>
+        <title>TEST</title>
+        <script src="https://aframe.io/releases/0.9.2/aframe.min.js"></script>
+        <script src="../../lib/jose-components.js"></script>
+    </head>
+    <body style="font-family:courier; color:white; background-color: black">
+        <section id="main"></section>
+        <a-scene id="scene" >
+
+            <a-assets>
+                <a-asset-item id="rum-file" src="test.rum"></a-asset-item>
+            </a-assets>
+
+            <a-entity position="0 0 0">
+                <a-camera look-controls="pointerLockEnabled: true" wasd-controls></a-camera>
+            </a-entity>
+        </a-scene>
+        <script type="text/javascript">
+            var loader = new THREE.FileLoader();
+            loader.load('test.rum', data => {
+                bot.parsedFiles = JSON.parse(data)
+                bot.renderParsedFiles()
+            })
+        </script>
+    </body>
+</html>
