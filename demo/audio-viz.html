@@ -1,0 +1,77 @@
+
+<!DOCTYPE html> 
+<html>
+    <head>
+        <title>Player</title>
+        <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
+        <meta charset="UTF-8">
+    </head>
+    <body style="font-family:courier; color:white; background-color: black">
+        <section id="main"></section>
+        <a-scene ar id="scene">
+
+            <a-assets>
+                <!-- <audio id="transit" autoplay loop="true" src="transit.mp3"></audio> -->
+                <!-- <audio id="audio-test" autoplay loop="true" src="test.mp3"></audio> -->
+            </a-assets>
+
+<!-- 
+
+TODO: move this writup some sort of landing page
+
+Hello! After cutting a finger with a broken plate earlier this year I bought a cheap. I bought a hobbyist arduino-based robotic arm and developed a system for 
+sending Servo.writeMicroseconds(val) updates directly from a front end client (websocket + serial connection). I wrote code to move the servo motors with HTML sliders, and WebVR interfaces for
+the Oculus Quest, and the Leap Motion. The control interface is 
+
+I've spent most of this year studying and working on personal projects.
+
+-->
+
+
+            <a-light type='ambient' color='white'></a-light>
+
+            <a-entity position="0 0 0">
+                <a-camera look-controls="pointerLockEnabled: true" wasd-controls>
+                    <a-cylinder id="fing-longer" position="0.2 -0.2 -0.2" radius="0.01" height= "1.0" rotation="90 0 0" color="beige" opacity="1.0"></a-cylinder>
+                    <a-entity position="0.2 -0.2 -0.7" cursor="rayOrigin: entity; showLine: true;" raycaster="showLine: true; far: 16" line="color: white; opacity:0.5"></a-entity>
+                </a-camera>
+            </a-entity>
+            
+            <!-- floor -->
+            <a-circle radius='1' position='0 0 0' rotation='-90 0 0' color='gray'></a-circle>
+
+            <!-- surface -->
+            <a-entity position='0 0 -0.91'>
+                <a-entity id='surface' position='0 1.101 0'>
+
+                    <!-- surface -->
+                    <a-plane color='gray' width='1' height='1' rotation='-90 0 0'></a-plane>
+
+                    <a-entity id='rotating-stuff'>
+                        <a-text value='moving text' align='center' rotation='-90 0 0'></a-text>
+                        <a-sphere radius='0.025' position='0 0 -0.475' sound='src: url(test.mp3); positional: true; autoplay: true; loop: true'></a-sphere>
+
+                    </a-entity>
+
+                    <a-ring id='ring-thing-for-test' radius-inner='0.0095' radius-outer='0.0105'></a-ring>
+                    <a-entity id='clock-thing' position='0 0.5 0'></a-entity>
+                    
+                </a-entity>
+
+                <a-box color='#666' width='0.3' height='1.1' depth='0.15'  position='0 0.55 0'></a-box>  
+            </a-entity>
+
+        </a-scene>
+
+        <script type="text/javascript">
+            {
+                const surface = document.querySelector('#surface');
+                const pause = document.querySelector('#pause');
+                const vid = document.querySelector('#video-asset');
+
+                const ring_thing = document.querySelector('ring-thing-for-test');
+
+            }
+        </script>
+    </body>
+</html>
