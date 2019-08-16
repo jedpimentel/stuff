@@ -4,7 +4,7 @@
     <head>
         <title>Jose's Stuff</title>
         <script src="https://aframe.io/releases/0.9.2/aframe.min.js"></script>
-        <script src="../../lib/GLTFExporter.js"></script>
+        <!-- <script src="../../lib/GLTFExporter.js"></script> -->
         <script src="lib/jose-components.js"></script>
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
         <meta charset="UTF-8">
@@ -18,7 +18,8 @@
         </audio>
         <section id="main"></section>
 
-        <a-scene id="scene" embedded style="height:25%;width:25%;">
+        <!-- <a-scene id="scene" embedded style="height:25%;width:25%;"> -->
+        <a-scene id="scene" embedded>
         <!-- <a-scene id="scene" embedded style="height:1000px;width:1000px;"> -->
 
             <a-entity position="1.5 0 -3.5">
@@ -130,6 +131,11 @@
                 .quote {
                     color: gray;
                 }
+                .chunky-green {
+                    color: #550000;
+                    font-weight: 900;
+                    background-color: #AAFFFF;
+                }
             </style>
 
             <h1>A place for stuff</h1>
@@ -138,11 +144,13 @@
             <br>
             <p>This is a personal sandbox site for testing WebVR/Aframe components. My focus so far has been more on creating re-usable reference code than making a consumer-ish website.</p>
             <br>
+            <p><span class="red">NOTE: </span>"VR mode" freezes some phones, I'm looking into it.</p>
+            <br>
             <p>Most of my demos are targetted for Mouse+Keyboard, if you are on a VR-Headset please try out my <a href="demo/oculus-quest/index.html">Oculus Quest Demo</a>. If you are on a cell phone, you can at least move around inside my <a href="demo/touch-controls.html">Touchscreen Joystick Test<a>.</p>
             <br>
             <p>"Stuff" main page (you are here): click blue cube to play video, red sphere to move it around, green cylinder to play an audio file. Yellow box has a click counter. The paper cup image is just something I drew on (blue marker, black pen, pink powerade and coffee for the sand), the glithy image it sometimes shows is an example of <a href="https://en.wikipedia.org/wiki/Z-fighting">z-fighting<a>. The lamb is a PNG cutout. The handwriting is my actual handwriting, blown-up.</p>
             <br>
-            <p>I apologize by how spartan this mess might look. My R&D focus has been mostly on interactivity and getting the basics down. It took me long enough to get where I am, and my ThreeJS skills are enough to control a <a href="https://youtu.be/glcCmk9Whik">robotic arm<a> in real-time (from the frontend, via WebSockets). As a consolation prize, please have this <a href="demo/bench.html">pointy ball thing</a> as proof that I can programmatically place lines and spheres in space and/or create somewhat aesthetically pleasing compositions.</p>
+            <p>I apologize by how spartan this mess might look. My R&D focus has been mostly on interactivity and getting the basics down. It took me long enough to get where I am, and my ThreeJS skills are enough to control a <a class="chunky-green" href="https://www.youtube.com/watch?v=MWjKUd7x7O4&list=PLp1h6x4FOZbD1WFxB6FbCl7TboPiQIAH8&index=6&t=0s">ROBOTIC ARM<a> in real-time (from the frontend, via WebSockets). As an "aesthetic" consolation prize, please have this <a href="demo/bench.html">pointy ball thing</a> as proof that I can programmatically place lines and spheres in space and/or create somewhat aesthetically pleasing compositions. Consumer-ish landing page TBA.</p>
             <br>
             <p class="quote">"Remember kids, the only difference between screwing around and science is writing it down"<br>&nbsp;&nbsp;&nbsp;&nbsp; - Alex Jason (balistics expert)</p>
             <br>
@@ -190,7 +198,7 @@
             <br>
             <footer>
                 <br>
-                <p>123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</p>
+                <!-- <p>123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</p> -->
                 <br>
                 <p style="text-align: right; padding-right: 8px">~ <a href="https://github.com/jedpimentel/stuff" class="blu">[Click here to go to repo]</a></p>
             </footer>
