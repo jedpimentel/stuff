@@ -3,19 +3,38 @@
 <html>
     <head>
         <title>Player</title>
-        <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
+        <script src="https://aframe.io/releases/0.9.2/aframe.min.js"></script>
         <meta charset="UTF-8">
     </head>
     <body style="font-family:courier; color:white; background-color: black">
         <section id="main"></section>
-        <a-scene ar id="scene">
+
+        <!-- putting this outside the scene first, since accessing the audioContext within aframe  :'v -->
+
+        <div style="background-color: blue">
+            
+            <audio id="test2" controls>
+                <source src="transit.mp3" type="audio/mpeg">
+            </audio> 
+
+            <script type="text/javascript">
+                // https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Visualizations_with_Web_Audio_API
+                let audioCon = new (window.audioContext || window.webkitAudioContext)();
+                let analyzer = audioCon.createAnalyzer();
+            </script>
+        </div>
+
+        <a-scene id="scene" embedded style="height: 200px; width: 100%">
 
             <a-assets>
-                <!-- <audio id="transit" autoplay loop="true" src="transit.mp3"></audio> -->
-                <!-- <audio id="audio-test" autoplay loop="true" src="test.mp3"></audio> -->
+                <audio id="test" src="transit.mp3"></audio>
             </a-assets>
 
 <!-- 
+
+audio viz thing, might be cool to have a video that starts at a specific datetime and then repeats itself
+quiting and going back to page, asset checks current system time and sets start-time accordingly
+good enough to single users, prob not good enough to have multiple people in same room with page.
 
 TODO: move this writup some sort of landing page
 
@@ -31,7 +50,7 @@ I've spent most of this year studying and working on personal projects.
             <a-light type='ambient' color='white'></a-light>
 
             <a-entity position="0 0 0">
-                <a-camera look-controls="pointerLockEnabled: true" wasd-controls>
+                <a-camera look-controls="pointerLockEnabled: false" wasd-controls>
                     <a-cylinder id="fing-longer" position="0.2 -0.2 -0.2" radius="0.01" height= "1.0" rotation="90 0 0" color="beige" opacity="1.0"></a-cylinder>
                     <a-entity position="0.2 -0.2 -0.7" cursor="rayOrigin: entity; showLine: true;" raycaster="showLine: true; far: 16" line="color: white; opacity:0.5"></a-entity>
                 </a-camera>
@@ -48,14 +67,12 @@ I've spent most of this year studying and working on personal projects.
                     <a-plane color='gray' width='1' height='1' rotation='-90 0 0'></a-plane>
 
                     <a-entity id='rotating-stuff'>
-                        <a-text value='moving text' align='center' rotation='-90 0 0'></a-text>
-                        <a-sphere radius='0.025' position='0 0 -0.475' sound='src: url(test.mp3); positional: true; autoplay: true; loop: true'></a-sphere>
-
+                        <a-text value='audio' align='center' rotation='-90 0 0'></a-text>
+                        <a-sphere radius='0.025' position='0 0 -0.475' color="yellow">
+                            <a-sound id="sound" src="#test" autoplay="true" loop="true"></a-sound>
+                        </a-sphere>
                     </a-entity>
 
-                    <a-ring id='ring-thing-for-test' radius-inner='0.0095' radius-outer='0.0105'></a-ring>
-                    <a-entity id='clock-thing' position='0 0.5 0'></a-entity>
-                    
                 </a-entity>
 
                 <a-box color='#666' width='0.3' height='1.1' depth='0.15'  position='0 0.55 0'></a-box>  
@@ -70,6 +87,11 @@ I've spent most of this year studying and working on personal projects.
                 const vid = document.querySelector('#video-asset');
 
                 const ring_thing = document.querySelector('ring-thing-for-test');
+
+
+                // https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Visualizations_with_Web_Audio_API
+                const audioCon = new (window.AudioContext || window.webkitAudioContext)();
+                const analyzer = audioCon.createAnalyzer();
 
             }
         </script>
