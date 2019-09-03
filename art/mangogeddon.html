@@ -4,25 +4,52 @@
     <head>
         <title>Mangogeddon</title>
         <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
+        <script src="/lib/jose-components.js"></script>
     </head>
     <body style="font-family:courier; color:white; background-color: black">
 
-        <audio id='audio-clip'>
+
+        <!-- <audio id='audio-clip'>
           <source src="mangogeddon.ogg" type='audio/flac' />
           <p>Your user agent does not support the HTML5 Audio element.</p>
-        </audio>
+        </audio> -->
 
         <section id="main"></section>
+
+        <script type="text/javascript">
+          AFRAME.registerComponent('mango', {
+            schema: {
+              yRoof: {type: 'number', default: 8},
+              tickDropMeters: {type: 'number', default: 0.005},
+              mangoRadius: {type: 'number', default: 0.1},
+            },
+            init: function() {
+                this.pos = this.el.object3D.position;
+            },
+            tick: function() {
+                if(this.pos.y < 0-this.data.mangoRadius) {
+                    this.el.object3D.position.y += this.data.yRoof;
+                } else {
+                    this.el.object3D.position.y -= this.data.tickDropMeters;
+                }
+            }
+          });
+        </script>
+
         <a-scene id="scene">
 
-            <a-entity position="8.2 0 4.9" rotation="0 48 0">
+            <a-entity joses-default-interface position="8.2 0 4.9" rotation="0 48 0"></a-entity>
+
+            <!-- <a-entity joses-default-interface></a-entity> -->
+
+
+<!--             <a-entity position="8.2 0 4.9" rotation="0 48 0">
                 <a-camera look-controls="pointerLockEnabled: false" wasd-controls></a-camera>
-                <!-- <a-camera look-controls="pointerLockEnabled: true" wasd-controls></a-camera> -->
                 <a-entity cursor="rayOrigin: mouse" raycaster="objects:.clickable"></a-entity>
-            </a-entity>
+            </a-entity> -->
 
 
-            <a-cylinder id='green-cyl' class="clickable" position="2 0.75 -6" radius="0.5" height="1.5" color="green" opacity="0.8">
+            <a-cylinder id='green-cyl' class="clickable" sound="src: url(mangogeddon.ogg); on: click" position="2 0.75 -6" radius="0.5" height="1.5" color="green" opacity="0.8">
                 <a-text value="(click)" align="center" side="double"></a-text>
             </a-cylinder>
 
@@ -37,28 +64,37 @@
         // play audio on cylinder click 
         {
             let cyl = document.querySelector('#green-cyl');
-            let audio = document.querySelector('#audio-clip');
+            window.cyl = cyl
+            // let audio = document.querySelector('#audio-clip');
+            let audio = cyl.components.sound;
 
             let paused_opacity = cyl.getAttribute('opacity');
             let playing_opacity = 0.4;
 
             cyl.addEventListener('click', function (evt) {
-                console.log('click')
+                // console.log('click')
                 cyl.setAttribute('opacity', playing_opacity)
-                audio.currentTime = 0;
-                audio.play();
+                // audio.currentTime = 0;
+                audio.playSound();
             });
-            audio.addEventListener('ended', () => {
+            cyl.addEventListener('sound-ended', function(evt) {
                 cyl.setAttribute('opacity', paused_opacity)
-            });
+            })
+            // audio.addEventListener('ended', () => {
+            //     cyl.setAttribute('opacity', paused_opacity)
+            // });
         }
 
     // make a floor and a wall
     {
 
       const BLOB = document.querySelector('#blob');
-      const YROOF = 8;
-      const TICK_DROP_METERS = 0.005
+
+      const YROOF = 8;// same value hard-coded onto "mango" component
+      const TICK_DROP_METERS = 0.005// same value hard-coded onto "mango" component
+      const mangoRadius = 0.1;// same value hard-coded onto "mango" component
+      const heightSlack = 0 + mangoRadius;
+
       class Sphere {
         constructor(config={}) {
           this.element = document.createElement(config.element || 'a-sphere')
@@ -72,20 +108,22 @@
         }
       }
 
-      const mangoRadius = 0.1;
-      const heightSlack = 0 + mangoRadius;
-      AFRAME.registerComponent('mango', {
-        init: function() {
-            this.pos = this.el.object3D.position;
-        },
-        tick: function() {
-            if(this.pos.y < 0-heightSlack) {
-                this.el.object3D.position.y += YROOF;
-            } else {
-                this.el.object3D.position.y -= TICK_DROP_METERS;
-            }
-        }
-      });
+      // AFRAME.registerComponent('mango', {
+      //   schema: {
+      //     yRoof: {type: 'number', default: '8'},
+      //     tickDropMeters: {type: 'number', default: '0.005'}
+      //   },
+      //   init: function() {
+      //       this.pos = this.el.object3D.position;
+      //   },
+      //   tick: function() {
+      //       if(this.pos.y < 0-heightSlack) {
+      //           this.el.object3D.position.y += this.data.yRoof;
+      //       } else {
+      //           this.el.object3D.position.y -= this.data.tickDropMeters;
+      //       }
+      //   }
+      // });
 
 
       let grass_rgb_hex_generator = () => {
@@ -118,7 +156,7 @@
           this.element.setAttribute('material', "shader: flat")
           this.element.setAttribute('type', "point")
 
-          this.element.setAttribute('mango', "point")
+          this.element.setAttribute('mango', '')
 
           this.element.setAttribute('position', `${config.pos_x} ${config.pos_y} ${config.pos_z}`);
           BLOB.appendChild(this.element)
