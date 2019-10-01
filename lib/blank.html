@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="eng">
+
+<head>
+  <title>Jose Quest</title>
+  <!-- in-vr links break upgrading 8.2 to 9.2 -->
+  <!-- <script src="https://aframe.io/releases/0.9.2/aframe.min.js"></script> -->
+  <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
+
+
+  <script src="../../lib/jose-components.js"></script>
+  <meta charset="utf-8">
+</head>
+
+<body style="font-family:courier; color:white; background-color: black">
+
+	<a-scene loading-screen="dotsColor: white; backgroundColor: black">
+
+    <a-assets>
+      <img id="lamb" src="../../lamb.png">
+    </a-assets>
+
+    <a-entity joses-default-interface></a-entity>
+
+    <!-- <a-cylinder id='green-cyl' class="clickable" position="6.5 .75 -8" radius="0.5" color="green" opacity="0.3"></a-cylinder> -->
+
+    <!-- <a-box class="clickable" click-to-reposition position="0 1 -4" color="red" opacity="0.2">
+      <a-text value="movable" align="center" side="double"></a-text>
+    </a-box> -->
+
+	</a-scene>
+</body>
+</html>
