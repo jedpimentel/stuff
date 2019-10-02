@@ -21,19 +21,29 @@
 				// hover logic might not be stable, I'm somehow afraid of s
 				// omething triggering a mouseenter without a mouseleave
 				this.being_hovered = false;
+				this.initial_position = (new THREE.Vector3( )).copy(this.el.object3D.position);
 
-				this.el.addEventListener('click', function (evt) {
-					console.log('click')
-				});	
-
+				this.tone = document.createElement('audio')
+				this.tone.src = '../sine-432hz-pluck.flac'
+	
+				this.el.addEventListener('click', () => this.click());// works as expected
+				// this.el.addEventListener('click', this.ding);// this.tone is undefined... wth?
 				// 'fusing'
 				// 'mousedown'
-				this.el.addEventListener('mouseenter', this.mouseenter)  
-				this.el.addEventListener('mouseleave', this.mouseleave)  
+				// this.el.addEventListener('mouseenter', this.mouseenter)  
+				// this.el.addEventListener('mouseleave', this.mouseleave)  
 				// 'mouseup'
-			}
-
-			mouse
+			},
+			click: function () {
+				this.el.setAttribute('visible', false);
+				// setTimeout(() => this.el.setAttribute('visible', true), 5000 + 1000*Math.random);
+				// const t = 5000 + (1000*Math.random)
+				setTimeout(() => this.el.setAttribute('visible', true), 500 + (1000*Math.random()));
+				this.el.object3D.position.x = this.initial_position.x - 2 + 4*Math.random();
+				this.el.object3D.position.y = this.initial_position.y - 1 + 2*Math.random();
+				this.tone.currentTime = 0;
+				this.tone.play();
+			},
 
 		})
 		// AFRAME.registerPrimitive('a-ocean', {
