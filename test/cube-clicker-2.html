@@ -6,6 +6,7 @@
   <!-- in-vr links break upgrading 8.2 to 9.2 -->
   <!-- <script src="https://aframe.io/releases/0.9.2/aframe.min.js"></script> -->
   <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
+  <script src="../lib/leap.min.js"></script>
 
 
   <script src="../lib/jose-components.js"></script>
@@ -53,6 +54,11 @@
 				// this.origin = document.querySelector('#clickcaster-origin').object3D.position;
 				this.origin = document.querySelector('#clickcaster-origin');
 				this.flatty = document.querySelector('#flatty');
+				this.disty = document.querySelector('#disty');
+
+				this.toody = document.querySelector('#toody')
+				this.toody.style.top = '50px';
+				this.toody.style.left = '50px';
 				// console.log(this.origin.object3D)
 				// console.log(this.origin.el.object3D)
 				this.el.addEventListener('raycaster-intersection', function (evt) {
@@ -63,31 +69,236 @@
 			},
 
 			tick: function () {
-				const Z = -5
-				// console.log('tick', this.el.object3D.position)
-				// console.log('tick', this.origin.object3D.position)
-				this.origin.object3D.getWorldPosition(this.el.object3D.position)
-				const dist = this.el.object3D.position.z - Z;
-				this.el.object3D.position.z = Z;//derp
-				// console.log(this.origin.object3D.position);//derp
 
-				const dist_factor = 2 / Math.max(dist, 2)
+				if (window.leap_controller) {
+					// leap motion  stuff
 
-				this.el.setAttribute('opacity', dist_factor)
-				this.el.setAttribute('radius', 1 - dist_factor)
+					const frame = window.leap_controller.frame()
+					this.handle_leap_frame(frame)
+
+				} else {
+
+					// "regular" stuff
+					console.log('aaaa')
 
 
-				const x = this.el.object3D.position.x;
-				const y = 2 - this.el.object3D.position.y;
+					const Z = -5
+					// console.log('tick', this.el.object3D.position)
+					// console.log('tick', this.origin.object3D.position)
+					this.origin.object3D.getWorldPosition(this.el.object3D.position)
+					const dist = this.el.object3D.position.z - Z;
+					this.el.object3D.position.z = Z;//derp
+					// console.log(this.origin.object3D.position);//derp
 
-				const PPM = 1000
+					const dist_factor = 2 / Math.max(dist, 2)
 
-				// this.flatty.setAttribute('top', )
-				// this.flatty.setAttribute('left', `${x}px`)
-				// this.flatty.setAttribute('left', `50px`)
-				this.flatty.style.left = `${x*PPM}px`
-				this.flatty.style.top = `${y*PPM}px`
-				// top: 40px; left: 40px;
+					this.el.setAttribute('opacity', dist_factor)
+					this.el.setAttribute('radius', 1 - dist_factor)
+
+
+					const x = this.el.object3D.position.x;
+					const y = 2 - this.el.object3D.position.y;
+
+					const PPM = 1000
+
+					// this.flatty.setAttribute('top', )
+					// this.flatty.setAttribute('left', `${x}px`)
+					// this.flatty.setAttribute('left', `50px`)
+					this.flatty.style.left = `${x*PPM}px`
+					this.flatty.style.top = `${y*PPM}px`
+					// top: 40px; left: 40px;
+
+
+				}
+			},
+
+			handle_leap_frame: function (frame) {
+				// leap data replaces this.origin
+
+	          // #YOLO
+	          for(let i = 0; i < frame.hands.length; i++) {
+	            if(frame.hands[i].type === "right") {
+	              // use stabilizedPalmPosition, sphereCenter?
+	              // element.object3D.position.x = frame.hands[i].palmPosition[0] / 1000;
+	              // element.object3D.position.y = frame.hands[i].palmPosition[1] / 1000;
+	              // element.object3D.position.z = frame.hands[i].palmPosition[2] / 1000;
+
+	              const leap_height_offset = 0.15
+
+	              const leap_x = frame.hands[i].palmPosition[0] / 1000;
+	              const leap_y = frame.hands[i].palmPosition[1] / 1000 - leap_height_offset;
+	              const leap_z = frame.hands[i].palmPosition[2] / 1000;
+
+	              const screen_width = 0.343
+	              const screen_height = 0.195
+
+	              // console.log(leap_x + screen_width/2)
+	              // console.log(leap_y + screen_height/2)
+	              let sanitized_y = (leap_y ) / screen_height
+	              if (sanitized_y > 1) sanitized_y = 1;
+	              else if (sanitized_y < 0) sanitized_y = 0;
+
+	              let sanitized_x = (leap_x + screen_width/2) / screen_width
+	              if (sanitized_x > 1) sanitized_x = 1;
+	              if (sanitized_x < 0) sanitized_x = 0;
+
+	              // const screen_x_px
+	              // console.log(leap_y, (leap_y ) / screen_height)
+	              // console.log(sanitized_y)
+	              // console.log(sanitized_x)
+
+	              // console.log(leap_x, screen_width/2, leap_x + screen_width/2)
+
+	              this.origin.object3D.position.x = leap_x
+	              this.origin.object3D.position.y = leap_y //zoidberg WHYYYYYYYY!?!?!?!?! :'('
+	              this.origin.object3D.position.z = leap_z
+
+	              // console.log(leap_x)
+
+
+					this.flatty.style.left = `${sanitized_x*100}vw`
+					this.flatty.style.top = `${100 - sanitized_y*100}vh`
+
+					if (leap_z < 0) {
+						// console.log('click')
+						const x_px = Math.round(sanitized_x*window.innerWidth)
+						const y_px = Math.round((1-sanitized_y)*window.innerHeight)
+
+						// console.log('click', x_px, y_px)
+						// console.log('tood', this.toody.style.top)
+						const tood_x = parseInt(this.toody.style.left)
+						const tood_y = parseInt(this.toody.style.top)
+
+						// console.log('tood', tood_x, this.toody.style.top)
+						console.log(sanitized_y)
+						if (tood_x <= x_px && x_px <= tood_x + 100) {
+							if (tood_y <= y_px && y_px <= tood_y + 100) {
+								this.toody.click()
+							} else {
+								console.log(tood_y, y_px)
+							}
+						}
+						// this.click_at(x_px, y_px);
+					} else {
+						let z_pixels = Math.floor(Math.min(leap_z*100/0.2, 100))	
+
+						// console.log(leap_z, z_pixels)
+						this.disty.style.width = `${z_pixels}px`
+						this.disty.style.height = `${z_pixels}px`
+						// this.disty.style.width = `${100}px`
+						// this.disty.style.height = `${100}px`
+						this.disty.style.marginLeft = `${-z_pixels/2 + 5}px`
+						this.disty.style.marginTop = `${-z_pixels/2 + 5}px`
+
+						this.disty.style.opacity = (120-z_pixels)/120 
+					}
+		            
+		            return
+
+	              // element.object3D.rotation.x = frame.hands[i].pitch();
+	              // element.object3D.rotation.y = -frame.hands[i].yaw();
+	              // element.object3D.rotation.z = frame.hands[i].roll();
+
+
+	              const scale_factor = 0.25 + 0.75*(
+	                1 - frame.hands[i].grabStrength*0.75 - frame.hands[i].pinchStrength*0.25
+	              );
+
+	              if(side==='left') {
+
+	                if(scale_factor === 1) {
+
+	                  if(!active) {
+	                    // runs once, right when movement is activated
+	                    active = true
+	                    anchor.object3D.position.x = frame.hands[i].palmPosition[0] / 1000;
+	                    anchor.object3D.position.y = frame.hands[i].palmPosition[1] / 1000;
+	                    anchor.object3D.position.z = frame.hands[i].palmPosition[2] / 1000;
+	                    anchor.object3D.visible = true
+
+	                  } else {
+	                    // unperformant?
+	                    contlr_abs_pos.copy(element.object3D.getWorldPosition(world_position))
+	                    anchor_abs_pos.copy(anchor.object3D.getWorldPosition(world_position))
+	                    // runs every subsequent frame during the movement gesture
+	                    camera_wrapper.object3D.position.x += contlr_abs_pos.x - anchor_abs_pos.x;
+	                    if(window.allow_y_translation) {
+	                        camera_wrapper.object3D.position.y += contlr_abs_pos.y - anchor_abs_pos.y;
+	                    } else {
+	                      // move to ground level?
+	                    }
+	                    camera_wrapper.object3D.position.z += contlr_abs_pos.z - anchor_abs_pos.z;
+	                  }
+
+	                } else {
+	                  active = false;
+	                  anchor.object3D.visible = false;
+	                }
+
+	                element.object3D.scale.x = scale_factor;
+	                element.object3D.scale.y = scale_factor;
+	                element.object3D.scale.z = scale_factor;
+
+	              } else if(side==='right') {
+	                canary.object3D.position.x = frame.hands[i].palmPosition[0] / 100;
+	                canary.object3D.position.y = frame.hands[i].palmPosition[1] / 100 - 2;
+	                canary.object3D.position.z = frame.hands[i].palmPosition[2] / 100;
+
+	                if(scale_factor === 1) {
+	                  if(!active) {
+	                    active = true
+	                    rotation_anchor.object3D.position.x = canary.object3D.position.x
+	                    rotation_anchor.object3D.position.y = canary.object3D.position.y
+	                    rotation_anchor.object3D.position.z = canary.object3D.position.z
+	                    rotation_anchor.object3D.visible = true
+	                    canary.setAttribute('color', 'red')
+
+	                    camera_tilt_wrapper.__initial__tilt__ = camera_tilt_wrapper.object3D.rotation.x
+
+	                  } else {
+	                    let x_dist = rotation_anchor.object3D.position.x - canary.object3D.position.x;
+	                    let y_dist = rotation_anchor.object3D.position.y - canary.object3D.position.y;
+
+	                    camera_wrapper.object3D.rotation.y = camera_wrapper.object3D.rotation.y + x_dist/50
+	                    // camera_wrapper.object3D.rotation.x = camera_wrapper.object3D.rotation.x - y_dist/50
+	                    camera_tilt_wrapper.object3D.rotation.x = camera_tilt_wrapper.__initial__tilt__ - y_dist/5
+	                    // camera_itself.object3D.rotation.x = camera_itself.object3D.rotation.x - y_dist/50
+	                    // camera_tilt_wrapper
+
+	                    // console.log(camera_itself.object3D.rotation)
+	                  }
+
+	                } else {
+	                  if(active) {
+	                    active = rotation_anchor.object3D.visible = false; 
+	                    canary.setAttribute('color', canary_initial_color) 
+	                  }
+	                  // active = rotation_anchor.object3D.visible = false;
+
+	                }
+	              }
+
+	              return
+	            }
+	          }
+			},
+
+			click_at: function (x, y) {
+			    var ev = new MouseEvent('click', {
+			        'view': window,
+			        'bubbles': true,
+			        'cancelable': true,
+			        'screenX': x,
+			        'screenY': y
+			    });
+
+			    var el = document.elementFromPoint(x, y);
+
+			    // document.dispatchEvent(ev);
+			    if (el) {
+			    	console.log(el)
+			    	el.dispatchEvent(ev);
+			    }
 			}
 
 		});
@@ -131,6 +342,249 @@
 		//     opacity: 'ocean.opacity'
 		//   }
 		// });
+
+
+
+    // ripped from robot/web/leap-motion.html,
+    // had a sphere collider implementation for 3D scenes
+    // converted to "icepick" UI element for increased accuracy and usability with flat interfaces
+
+    {
+      function leap_init() {
+        const ws = new WebSocket("ws://localhost:6437/v7.json");
+        var focusListener;
+        var blurListener;
+
+        // Support both the WebSocket and MozWebSocket objects
+        if ((typeof(WebSocket) == 'undefined') &&
+          (typeof(MozWebSocket) != 'undefined')) {
+          WebSocket = MozWebSocket;
+        }
+
+        ws.onopen = function(event) {
+          ws.send(JSON.stringify({focused: true}));//claim focus
+
+          focusListener = window.addEventListener('focus', function(e) {
+            ws.send(JSON.stringify({focused: true}));//claim focus
+          });
+          blurListener = window.addEventListener('blur', function(e) {
+            ws.send(JSON.stringify({focused: false}));//release focus
+          });
+
+        }
+
+        // var textElement = document.getElementById("text-terminal");
+
+        window.leap_controller = new Leap.Controller({
+          frameEventName: 'animationFrame',
+          // frameEventName: 'deviceFrame',
+        });
+        leap_controller.connect();
+
+        var left, right, i;
+        leap_controller.on('frame', function(frame) {
+
+          left  = frame.hands.find(h => h.type === 'left' );
+          right = frame.hands.find(h => h.type === 'right');
+          
+          // Leap Motion framerate, not website
+          // textElement.setAttribute('text', `value: 
+          //   ____HAND_TRACKER_DATA____\n
+          //   Framerate: ${frame.currentFrameRate}\n
+          //   Pich Strength: (${left ? left.pinchStrength.toFixed(2) : 'N/A'}, ${right ? right.pinchStrength.toFixed(2) : 'N/A'})\n
+          //   Grab Strength: (${left ? left.grabStrength.toFixed(2) : 'N/A'}, ${right ? right.grabStrength.toFixed(2) : 'N/A'})\n
+          //   Left Palm X Position: ${left ? (left.palmPosition[0]/1000).toFixed(3) : 'N/A'}\n
+          //   Left Palm Y Position: ${left ? (left.palmPosition[1]/1000).toFixed(3) : 'N/A'}\n
+          //   Left Palm Z Position: ${left ? (left.palmPosition[2]/1000).toFixed(3) : 'N/A'}\n
+          //   Y axis translation: ${window.allow_y_translation ? 'true' : 'false'}\n
+          // `);
+
+
+          // Leap Motion framerate, not website
+          // textElement.setAttribute('text', `value: 
+          //   ____HAND_TRACKER_DATA____\n
+          //   Framerate: ${frame.currentFrameRate}\n
+          //   Pich Strength: ${frame.hands[0] ? frame.hands[0].pinchStrength : 'N/A'}\n
+          //   Grab Strength: ${frame.hands[0] ? frame.hands[0].grabStrength : 'N/A'}\n
+          //   Palm X Position: ${frame.hands[0] ? (frame.hands[0].palmPosition[0]/1000).toFixed(3) : 'N/A'}\n
+          //   Palm Y Position: ${frame.hands[0] ? (frame.hands[0].palmPosition[1]/1000).toFixed(3) : 'N/A'}\n
+          //   Palm Z Position: ${frame.hands[0] ? (frame.hands[0].palmPosition[2]/1000).toFixed(3) : 'N/A'}\n
+          //   Y axis translation: ${window.allow_y_translation ? 'true' : 'false'}\n
+          // `);
+
+        })
+
+        // press 'y' to allow Y axis movement, would be nice to have a nice way to snap people back to ground level
+        document.addEventListener("keypress", evt => {
+          if(evt.code === 'KeyY') {
+            window.allow_y_translation = !window.allow_y_translation
+          }
+        });
+      }
+
+      // leap();//put this in a handler
+      window.addEventListener('DOMContentLoaded', leap_init);
+    }
+
+    AFRAME.registerComponent('leap-motion-thing', {
+      schema: {
+        side: {type: 'string', default: 'right'},
+      },
+      init: function() {
+        const element = this.el;
+        const side = this.data.side;//left/right
+        const axis = {
+          x: new THREE.Vector3( 1, 0, 0 ),
+          y: new THREE.Vector3( 0, 1, 0 ),
+          z: new THREE.Vector3( 0, 0, 1 ),
+        }
+
+        const camera_wrapper = document.querySelector("#camera-wrapper")
+        const camera_tilt_wrapper = document.querySelector('#tilt-rig')
+        const camera_itself = document.querySelector("#camera-itself")
+
+        var active = false
+        const anchor = document.querySelector('#movement-anchor')
+        const rotation_anchor = document.querySelector('#rotation-anchor')
+        anchor.object3D.visible = rotation_anchor.object3D.visible = false 
+
+        const world_position = new THREE.Vector3()
+        const contlr_abs_pos = new THREE.Vector3()
+        const anchor_abs_pos = new THREE.Vector3()
+
+        // TODO: un-hardcode this
+        const canary = document.querySelector('#canary')
+        const canary_initial_color = canary.getAttribute('color')
+
+        // Leap.loop({enableGestures: false}, function(frame) {
+        this.handle_frame = function(frame) {
+          // #YOLO
+          for(let i = 0; i < frame.hands.length; i++) {
+            if(frame.hands[i].type === side) {
+              // use stabilizedPalmPosition, sphereCenter?
+              element.object3D.position.x = frame.hands[i].palmPosition[0] / 1000;
+              element.object3D.position.y = frame.hands[i].palmPosition[1] / 1000;
+              element.object3D.position.z = frame.hands[i].palmPosition[2] / 1000;
+
+              element.object3D.rotation.x = frame.hands[i].pitch();
+              element.object3D.rotation.y = -frame.hands[i].yaw();
+              element.object3D.rotation.z = frame.hands[i].roll();
+
+
+              let scale_factor = 0.25 + 0.75*(
+                1 - frame.hands[i].grabStrength*0.75 - frame.hands[i].pinchStrength*0.25
+              );
+
+              if(side==='left') {
+
+                if(scale_factor === 1) {
+
+                  if(!active) {
+                    // runs once, right when movement is activated
+                    active = true
+                    anchor.object3D.position.x = frame.hands[i].palmPosition[0] / 1000;
+                    anchor.object3D.position.y = frame.hands[i].palmPosition[1] / 1000;
+                    anchor.object3D.position.z = frame.hands[i].palmPosition[2] / 1000;
+                    anchor.object3D.visible = true
+
+                  } else {
+                    // unperformant?
+                    contlr_abs_pos.copy(element.object3D.getWorldPosition(world_position))
+                    anchor_abs_pos.copy(anchor.object3D.getWorldPosition(world_position))
+                    // runs every subsequent frame during the movement gesture
+                    camera_wrapper.object3D.position.x += contlr_abs_pos.x - anchor_abs_pos.x;
+                    if(window.allow_y_translation) {
+                        camera_wrapper.object3D.position.y += contlr_abs_pos.y - anchor_abs_pos.y;
+                    } else {
+                      // move to ground level?
+                    }
+                    camera_wrapper.object3D.position.z += contlr_abs_pos.z - anchor_abs_pos.z;
+                  }
+
+                } else {
+                  active = false;
+                  anchor.object3D.visible = false;
+                }
+
+                element.object3D.scale.x = scale_factor;
+                element.object3D.scale.y = scale_factor;
+                element.object3D.scale.z = scale_factor;
+
+              } else if(side==='right') {
+                canary.object3D.position.x = frame.hands[i].palmPosition[0] / 100;
+                canary.object3D.position.y = frame.hands[i].palmPosition[1] / 100 - 2;
+                canary.object3D.position.z = frame.hands[i].palmPosition[2] / 100;
+
+                if(scale_factor === 1) {
+                  if(!active) {
+                    active = true
+                    rotation_anchor.object3D.position.x = canary.object3D.position.x
+                    rotation_anchor.object3D.position.y = canary.object3D.position.y
+                    rotation_anchor.object3D.position.z = canary.object3D.position.z
+                    rotation_anchor.object3D.visible = true
+                    canary.setAttribute('color', 'red')
+
+                    camera_tilt_wrapper.__initial__tilt__ = camera_tilt_wrapper.object3D.rotation.x
+
+                  } else {
+                    let x_dist = rotation_anchor.object3D.position.x - canary.object3D.position.x;
+                    let y_dist = rotation_anchor.object3D.position.y - canary.object3D.position.y;
+
+                    camera_wrapper.object3D.rotation.y = camera_wrapper.object3D.rotation.y + x_dist/50
+                    // camera_wrapper.object3D.rotation.x = camera_wrapper.object3D.rotation.x - y_dist/50
+                    camera_tilt_wrapper.object3D.rotation.x = camera_tilt_wrapper.__initial__tilt__ - y_dist/5
+                    // camera_itself.object3D.rotation.x = camera_itself.object3D.rotation.x - y_dist/50
+                    // camera_tilt_wrapper
+
+                    // console.log(camera_itself.object3D.rotation)
+                  }
+
+                } else {
+                  if(active) {
+                    active = rotation_anchor.object3D.visible = false; 
+                    canary.setAttribute('color', canary_initial_color) 
+                  }
+                  // active = rotation_anchor.object3D.visible = false;
+
+                }
+              }
+
+              return
+            }
+          }
+          
+          {
+            // hand not found, maybe hide it from view or something else?
+            return;
+          }
+
+        };
+      },
+      tick: function() {
+        // most of the geometry stuff already handled in the leap loop
+        // zoidberg
+
+        // YOLASO 
+        if(isNaN(window.counter)) {
+          window.counter = 0
+        }
+
+        if(window.leap_controller) {
+
+          // const frame = window.leap_controller.connection.frame
+          const frame = window.leap_controller.frame()
+          this.handle_frame(frame)
+          // console.log('yup')
+          if(window.counter++ > 100) {
+
+            // console.log('yup', frame)
+            window.counter = 0;
+            // console.log(window.leap_controller)
+          }
+        }
+        ;
+      }
+    });
 	</script>
 
 
@@ -141,12 +595,69 @@
     			border-radius: 50%;
     			height: 10px;
     			width: 10px;
+    			/*margin-left: -5px;*/
+    			/*margin-top: -5px;*/
+    			/*padding:;*/
     			position: fixed;
     			/*left: 50px;*/
+
+    			/*border-color: green;*/
+    			/*border-radius: 100px;*/
+    			z-index: 1;
+    		}
+    		#disty {
+    			background-color: green;
+    			border-radius: 50%;
+    			height: 10px;
+    			width: 10px;
+    			position: fixed;
+    			padding: 0;
+    			z-index: -1;
+    		}
+    		#toody {
+    			z-index: 10000000	;
+    			/*color: white;*/
+    			height: 100px;
+    			width: 100px;
+    			top: 2px;
+    			left: 2px;
+    			position: fixed;
+
     		}
     	</style>
-    	<div id="flatty"></div>
+
+    	<button id="toody">CLICK ME</button>
+    	<script type="text/javascript">
+    		const toody = document.querySelector('#toody')
+    		toody.onclick = () => {
+    			console.log('click')
+    			// toody.style.top = `${Math.random()*100 - 5}vh`
+    			// toody.style.left = `${Math.random()*100 - 5}vw`
+
+
+				const x_px = Math.round(Math.random() * window.innerWidth)
+				const y_px = Math.round(Math.random() * window.innerHeight)
+
+    			toody.style.top = `${y_px}px`
+    			toody.style.left = `${x_px}px`
+    		}
+    	</script>
+
+    	<div id="flatty">
+    		<dir id="disty"></dir>
+    	</div>
     </section>
+    <style type="text/css">
+    	#scene-wrapper {
+    		z-index: -100;
+    	}
+    	.a-scene {
+    		/*width: 1000px;*/
+    		/*height: 1000px;*/
+    	}
+    </style>
+
+
 	<a-scene loading-screen="dotsColor: white; backgroundColor: black">
 
     <a-assets>
@@ -156,9 +667,11 @@
 	<a-entity id="camera-wrapper">
 
 
-        <a-camera look-controls="pointerLockEnabled: true" near="0.001" wasd-controls>
+        <!-- <a-camera look-controls="pointerLockEnabled: true" near="0.001" wasd-controls> -->
+        <a-camera look-controls="pointerLockEnabled: false" near="0.001" wasd-controls>
             <!-- <a-cylinder id="fing-longer" position="0.2 -0.4 -0.9" radius="0.01" height= "1.0" rotation="90 0 0" color="beige" opacity="1.0"></a-cylinder> -->
             <a-entity id="clickcaster-origin" position="0.2 -0.4 -1.4"></a-entity>
+            <!-- <a-entity id="clickcaster-origin" position="0.2 -0.4 -1.4"></a-entity> -->
         </a-camera>
 
 	    <!-- <a-camera cursor="rayOrigin: mouse" look-controls="pointerLockEnabled: false" near="0.001">
