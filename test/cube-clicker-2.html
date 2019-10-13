@@ -2,7 +2,7 @@
 <html lang="eng">
 
 <head>
-  <title>CUBE CLICKER</title>
+  <title>AIR UI</title>
   <!-- in-vr links break upgrading 8.2 to 9.2 -->
   <!-- <script src="https://aframe.io/releases/0.9.2/aframe.min.js"></script> -->
   <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
@@ -615,7 +615,7 @@
     			z-index: -1;
     		}
     		#toody {
-    			z-index: 10000000	;
+    			z-index: /*10000000*/	;
     			/*color: white;*/
     			height: 100px;
     			width: 100px;
@@ -626,7 +626,7 @@
     		}
     	</style>
 
-    	<button id="toody">CLICK ME</button>
+    	<button id="toody">CLICK THIS</button>
     	<script type="text/javascript">
     		const toody = document.querySelector('#toody')
     		toody.onclick = () => {
@@ -635,8 +635,8 @@
     			// toody.style.left = `${Math.random()*100 - 5}vw`
 
 
-				const x_px = Math.round(Math.random() * window.innerWidth)
-				const y_px = Math.round(Math.random() * window.innerHeight)
+				const x_px = Math.round(Math.random() * window.innerWidth - 100)
+				const y_px = Math.round(Math.random() * window.innerHeight - 100)
 
     			toody.style.top = `${y_px}px`
     			toody.style.left = `${x_px}px`
@@ -715,7 +715,7 @@
     <!-- <a-cylinder id='green-cyl' class="clickable" position="6.5 .75 -8" radius="0.5" color="green" opacity="0.3"></a-cylinder> -->
 
     <a-box class="clickable" click-me position="0 1 -4" color="red" opacity="0.2">
-      <a-text value="CLICK ME" align="center" side="double"></a-text>
+      <a-text value="Touchless Interface Thing" align="center" side="double"></a-text>
     </a-box>
 
 	</a-scene>
