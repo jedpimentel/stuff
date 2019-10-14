@@ -2,343 +2,57 @@
 <html lang="eng">
 
 <head>
-  <title>Jose Quest</title>
+  <title>CUBE CLICKER</title>
   <!-- in-vr links break upgrading 8.2 to 9.2 -->
   <!-- <script src="https://aframe.io/releases/0.9.2/aframe.min.js"></script> -->
   <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
 
-  <script src="../../lib/jose-components.js"></script>
+
+  <script src="../lib/jose-components.js"></script>
   <meta charset="utf-8">
 </head>
 
 <body style="font-family:courier; color:white; background-color: black">
 
-  <audio id='audio-clip'>
-    <source src="../../placeholder.flac" type='audio/flac' />
-  </audio>
+  <script type="text/javascript">
+    AFRAME.registerComponent('click-me', {
+      init: function () {
+        // hover logic might not be stable, I'm somehow afraid of s
+        // omething triggering a mouseenter without a mouseleave
+        this.being_hovered = false;
+        this.initial_position = (new THREE.Vector3( )).copy(this.el.object3D.position);
 
-	<a-scene loading-screen="dotsColor: white; backgroundColor: black">
+        this.tone = document.createElement('audio')
+        this.tone.src = '../sine-432hz-pluck.flac'
+  
+        this.el.addEventListener('click', () => this.click());// works as expected
+      },
+      click: function () {
+        this.el.setAttribute('visible', false);
+        setTimeout(() => this.el.setAttribute('visible', true), 500 + (1000*Math.random()));
+        this.el.object3D.position.x = this.initial_position.x - 2 + 4*Math.random();
+        this.el.object3D.position.y = this.initial_position.y - 1 + 2*Math.random();
+        this.tone.currentTime = 0;
+        this.tone.play();
+      },
+
+    })
+  </script>
+
+  <a-scene loading-screen="dotsColor: white; backgroundColor: black">
 
     <a-assets>
       <img id="lamb" src="../../lamb.png">
     </a-assets>
 
-    <!-- REPLACE WITH VOODOO -->
-    <!-- 
-    <a-entity id="camera-wrapper">
-      <a-camera look-controls="pointerLockEnabled: true" near="0.001">
-
-          <a-text opacity="0.1" value="frames-per-second" width="0.8" position="0.2 -0.3 -0.9"></a-text>
-          <a-text opacity="0.1" fps-counter position="0.2 -0.4 -0.9"></a-text>
-
-          <a-cylinder id="fing-longer" position="0.2 -0.4 -0.9" radius="0.01" height= "1.0" rotation="90 0 0" color="beige" opacity="1.0"></a-cylinder>
-      </a-camera>
-
-      <a-entity pos-trail-line laser-controls="hand: left" grip-to-move="targetID: camera-wrapper" raycaster="objects:.clickable; far:4">
-        <a-box  height="0.1" width="0.1" depth="0.1" opacity="0.2"></a-box>
-      </a-entity>
-
-      <a-entity pos-trail-line laser-controls="hand: right" grip-to-move="targetID: camera-wrapper" raycaster="objects:.clickable; far:4">
-        <a-sphere line-drawer particle-applicator radius="0.0005" position="-0.05 -0.05 -0.05"></a-sphere>
-        <a-box  height="0.1" width="0.1" depth="0.1" opacity="0.2"></a-box>
-      </a-entity>
-
-    </a-entity>
-    -->
-    <!-- REPLACE WITH VOODOO: contains a camera rig and Laser Controls targetting Oculus Quest -->
     <a-entity joses-default-interface></a-entity>
 
-    <a-cylinder id='green-cyl' class="clickable" position="6.5 .75 -8" radius="0.5" color="green" opacity="0.3"></a-cylinder>
+    <!-- <a-cylinder id='green-cyl' class="clickable" position="6.5 .75 -8" radius="0.5" color="green" opacity="0.3"></a-cylinder> -->
 
-    <a-box class="clickable" click-to-reposition position="0 1 -4" color="red" opacity="0.2">
-      <a-text value="movable" align="center" side="double"></a-text>
+    <a-box class="clickable" click-me position="0 1 -4" color="red" opacity="0.2">
+      <a-text value="CLICK ME" align="center" side="double"></a-text>
     </a-box>
 
-    <a-text position="8 4 -8" value="MANGOGEDDON (warning: doesn't have a link back to here)"></a-text>
-    <!-- <a-text position="8 4 -8" value="Click on these link to go to other sites. 'Stuff' is a room with a few things to click on (move controls pending). 'A-Painter' is a drawing appp by Mozilla. 'Baltri' is a weird art thing I'm doing with some friends from DR (click+move controls pending)."></a-text> -->
-
-    <a-link class="clickable" position="5 1 -8" href="../../art/mangogeddon.html" title="MANGOGEDDON" image="#lamb"></a-link>
-    <a-link class="clickable" position="8 1 -8" href="../../" title="Stuff" image="#lamb"></a-link>
-    <!-- <a-link class="clickable" position="11 1 -8" href="https://aframe.io/a-painter/" title="A Painter\n" image="#lamb"></a-link> -->
-    <!-- <a-link link-controls id="baltri" title-color="red" class="clickable" position="14 1 -8" href="http://baltri.com" title="Baltri" image="#lamb"></a-link> -->
-    <a-text position="-10 4 -6" value="Placed like this, you can literally walk into a 360 image. (note to self: find a 360 image worth showing off)"></a-text>
-    <a-sky src="#lamb" radius="2" position="-7.5 1 -6"></a-sky>
-
-		<a-entity	debug-menu position="-4 8 -9.5">
-			<a-text value="DEBUG MENU"></a-text>
-		</a-entity>
-    <a-text position="-4 3 -7" font='monoid' width="8" side="double" wrap-count="80" value="
-
-#                              ----JOSE-QUEST----                              #
-
-Welcome traveler.
-
-"
-    ></a-text>
-
-		<a-entity id="blob"></a-entity>
-	</a-scene>
-
-
-	<script type="text/javascript">{
-		// play audio on cylinder click 
-		{
-			let cyl = document.querySelector('#green-cyl');
-			let audio = document.querySelector('#audio-clip');
-
-			let paused_opacity = cyl.getAttribute('opacity');
-			let playing_opacity = 0.4;
-
-			cyl.addEventListener('click', function (evt) {
-				cyl.setAttribute('opacity', playing_opacity)
-				audio.currentTime = 0;
-				audio.play();
-			});
-			audio.addEventListener('ended', () => {
-				cyl.setAttribute('opacity', paused_opacity)
-			});
-		}
-
-    // make a floor and a wall
-    {
-
-      const BLOB = document.querySelector('#blob');
-      class Sphere {
-        constructor(config={}) {
-          this.element = document.createElement(config.element || 'a-sphere')
-          this.element.setAttribute('color', config.color || 'white');
-          this.element.setAttribute('radius', '0.01');
-          this.element.setAttribute('material', "shader: flat")
-          this.element.setAttribute('type', "point")
-
-          this.element.setAttribute('position', `${config.pos_x} ${config.pos_y} ${config.pos_z}`);
-          BLOB.appendChild(this.element)
-        }
-      }
-      class Marker extends Sphere {
-        // this is just a convenience thing
-        constructor(x, y, z) {
-          super({pos_x:x, pos_y:y, pos_z:z})
-        }
-      }
-      // floor
-      for (let i = -10; i <= 10; i++) {
-        // for (let j = -10; j <= 10; j++) {
-          for (let k = -10; k <= 10; k++) {
-            new Marker(i, 0, k)
-          }
-        // }
-      }
-      // wall
-      for (let i = -4; i <= 4; i++) {
-        for (let j = 1; j <= 8; j++) {
-          // for (let k = -10; k <= 10; k++) {
-            new Marker(i, j, -10)
-          // }
-        }
-      }
-    }
-
-    // WEBSOCKET STUFFFF
-    window.onload = function() {
-      return//<-- disable for now
-
-      // Get references to elements on the page.
-      var messageField = document.getElementById('message');
-      var messagesList = document.getElementById('messages');
-      var socketStatus = document.getElementById('status');
-      var closeBtn = document.getElementById('close');
-
-
-      // Create a new WebSocket.
-      // var socket = new WebSocket('wss://echo.websocket.org');
-      var socket = new WebSocket('ws://127.0.0.1:8080/');
-      // var socket = new WebSocket('ws://192.168.1.7:8080/');
-      // http://192.168.1.7:8081
-
-
-
-      // Handle any errors that occur.
-      socket.onerror = function(error) {
-        console.log('WebSocket Error: ' + error);
-      };
-
-
-      // Show a connected message when the WebSocket is opened.
-      socket.onopen = function(event) {
-        socketStatus.innerHTML = 'Connected to: ' + event.currentTarget.url;
-        socketStatus.className = 'open';
-
-        var last = 0;
-        var direction = 1;
-        function action_loop(delay) {
-          last += direction;
-          if(last >= 100) {
-            direction = -1;
-          } else if (last <= 0) {
-            direction = +1;
-          }
-          // console.log(last);
-          socket.send(last);
-          setTimeout(() => action_loop(delay), delay);
-        }
-        var x, y, last_x, last_y;
-        function action_loop_2(delay) {
-          // console.log('loop')
-          let val = window.FaceVal 
-          // let val = window.XYVal 
-          if(val) {
-            
-            // console.log(val)
-            x = val.x
-            y = val.y
-
-            if(x !== last_x) {
-              last_x = x;
-              socket.send(x);
-            }
-            if(y !== last_y) {
-              last_y = y;
-              socket.send(y);
-            }
-
-            // socket.send(window.XYVal.x);
-            // socket.send(window.XYVal.y);//pre-formatted
-          }
-
-
-          // socket.send(last);
-          setTimeout(() => action_loop_2(delay), delay);
-        }
-
-
-        // action_loop(100);
-        action_loop_2(1000 / 60);
-
-      };
-
-
-      // Handle messages sent by the server.
-      socket.onmessage = function(event) {
-        var message = event.data;
-        messagesList.innerHTML += '<li class="received"><span>Received:</span>' + message + '</li>';
-      };
-
-
-      // Show a disconnected message when the WebSocket is closed.
-      socket.onclose = function(event) {
-        socketStatus.innerHTML = 'Disconnected from WebSocket.';
-        socketStatus.className = 'closed';
-      };
-
-
-
-      // Close the WebSocket connection when the close button is clicked.
-      closeBtn.onclick = function(e) {
-        e.preventDefault();
-
-        // Close the WebSocket.
-        socket.close();
-
-        return false;
-      };
-
-
-
-
-      // PARTICAL STUFF
-
-      // https://aerotwist.com/tutorials/creating-particles-with-three-js/
-      // ^ above article is waaaay outdated but has some good styling pointers
-      // https://threejs.org/docs/#api/en/objects/Points
-      // 1800 20m particles over a 500m cube looks glitchy in a good way
-      let particleCount = 1800;
-      let particles = new THREE.Geometry();
-      let pMaterial = new THREE.ParticleBasicMaterial({
-        color: 0xFFFFFF,
-        // color: 0x666666,
-        size: 0.001,
-        // blending: THREE.AdditiveBlending,
-        // blending: THREE.NormalBlending,
-        transparent: true
-      });
-
-      for (var p = 0; p < particleCount; p++) {
-        // var pX = Math.random() * 500 - 250,
-        //     pY = Math.random() * 500 - 250,
-        //     pZ = Math.random() * 500 - 250,
-        //     particle = new THREE.Vertex(
-        //       new THREE.Vector3(pX, pY, pZ)
-        //     );
-        let x = Math.random() - 0.5 - 2;
-        let y = Math.random() - 0.5 + 1;
-        let z = Math.random() - 0.5;
-        let v = new THREE.Vector3(x, y, z);
-
-        particles.vertices.push(v);
-      }
-
-      // create the particle system
-      // var particleSystem = new THREE.ParticleSystem(
-      var particleSystem = new THREE.Points(particles, pMaterial);
-
-      // add it to the scene
-
-
-      // PARTICLE CLOUD
-      // FROM POSITION ARRAY
-      //   - takes an array of [x, y, z] positions
-      //   - particle count taken from array length
-      // TO POSITION ARRAY
-        
-
-      // DYNAMIC LENGTH
-      //   - replace with a larger geometry as needed,
-      //   - 
-      function drawParticleCloud(XYZArray) {
-        let total = XYZArray.length;
-        let particles = new THREE.Geometry();
-        let pMaterial = new THREE.ParticleBasicMaterial({
-          color: 0xFFFFFF,
-          size: 0.1,
-        });
-        for(let i = 0; i < XYZArray.length; i++) {
-          let v = new THREE.Vector3(XYZArray[i][0], XYZArray[i][1], XYZArray[i][2]);
-          particles.vertices.push(v);
-        }
-        let particleSystem = new THREE.Points(particles, pMaterial);
-        const scene = document.querySelector('a-scene')
-        window.addEventListener('DOMContentLoaded', e => {
-          document.querySelector('a-scene').object3D.add(particleSystem)
-        })
-      }
-
-      function randInRange(from, to) {
-        let diff = to - from;
-        return from + diff*Math.random()
-      }
-
-      // moved to oculus-quest-test
-      let thang = [
-        [0, 0, 0],
-        [0.5, Math.sqrt(2)/2, 0],
-        [1, 0, 0],
-        [0, 0, 0],
-      ]
-      drawParticleCloud(thang)
-
-
-
-
-      window.addEventListener('DOMContentLoaded', (event) => {
-        // console.log('yolo')
-        // const scene = document.querySelector('a-scene');
-        // console.log(scene.object3D)
-        // scene.appendChild(particleSystem);
-        document.querySelector('a-scene').object3D.add(particleSystem);
-      });
-
-    };
-	}</script>
+  </a-scene>
 </body>
 </html>
