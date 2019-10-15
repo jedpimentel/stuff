@@ -15,6 +15,41 @@
 <body style="font-family:courier; color:white; background-color: black">
 
   <script type="text/javascript">
+
+    AFRAME.registerComponent('cubeez', {
+      schema: {
+        step: {type: 'number', default: 0.01},
+        size: {type: 'number', default: 5},// 5x5x5 cubes
+        // anchor: {type: 'object'},// position of seed cube
+
+      },
+      init: function () {
+        // if this doesn't have root, this is root, adjust world position to nearest cm
+        // and make this.root = this
+        // and make a this.expanding Set that other nodes can acces via this, their root
+        // and make a this.nodes array just in case
+
+        if (!this.data.anchor) {
+          this.anchor = this;
+
+          // placeholder
+          const el = document.createElement('a-sphere');
+          el.setAttribute('color', 'red');
+          el.setAttribute('radius', this.data.step / 2);
+          this.el.appendChild(el)
+
+        }
+      },
+      // place_a_at_b: function (a, )
+    })
+    document.addEventListener('DOMContentLoaded', () => {
+      // let times = 1
+      // document.querySelector('a-scene').addEventListener('click', evt => {
+      //   if
+      //   console.log(evt)
+      // });
+    })
+
     // first pass, might not yet support adding/removing items
     // entity-list cycles through its children by only making one visible at a time
     // pass children in as VISIBLE, component will handle making them invisible by default
@@ -92,6 +127,11 @@
     <a-box id="next" class="clickable" position="1.5 1 -4" color="green" opacity="0.2">
       <a-text value="NEXT" align="center" side="double"></a-text>
     </a-box>
+
+    <!-- <a-box id="next" class="clickable" position="1.5 1 -4" color="green" opacity="0.2">
+      <a-text value="NEXT" align="center" side="double"></a-text>
+    </a-box> -->
+    <a-entity cubeez position="-1.5 1 -4"></a-entity>
 
 
 
