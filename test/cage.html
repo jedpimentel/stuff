@@ -24,22 +24,82 @@
     });
 
     AFRAME.registerComponent('voxel-board', {
+
+      // README:
+      //
+      // target is to work with single ray for now multi-ray could be
+      // supported by tracking them all together in an array/set
+
       init: function () {
-        this.voxels = [[[]]];// 3D map should be more efficient
+        // this.voxels is a 3d object, keyed on x, y, and z 
+        this.voxels = {};// 3D map should be better?
         // this.el.addEventListener('click', evt => this.click(evt))
-        this.el.addEventListener('mousedown', evt => this.click(evt))
+        // this.el.addEventListener('mousedown', evt => this.click(evt))
+        this.el.addEventListener('mousedown', evt => {
+          this.raycaster = evt.detail.cursorEl.components.raycaster;
+        });
+        this.el.addEventListener('mouseup', evt => this.raycaster = null);
+
+        window.b = this
+        // this.el.addEventListener('cursor-hovered', evt => this.click(evt))
+        // this.el.addEventListener('raycaster-intersected', evt => this.click(evt))
       },
       click: function (evt) {
-        console.log(evt)
+        // console.log(evt)
 
-        const point = evt.detail.intersection.point
+        // const raycaster = 
+        const cursor = evt.detail.cursorEl
+        window.c = cursor
+        window.e = evt.detail
+
+        const raycaster = cursor.components.raycaster
+        this.raycaster = raycaster
+
+        this.draw_at(evt.detail.intersection)
+      },
+      voxel: function (x, y, z) {
+        if (this.voxels[x] && this.voxels[x][y]) return this.voxels[x][y][z]
+        else return undefined;
+        // yes, I'm optimizing for readability on my personal code, DO YOU HAVE A PROBLEM WITH THAT?
+      },
+      tick: function () {
+        // if ("cursor-hovered" in this.el.states) console.log(this.el.states)
+        if (this.raycaster) {
+          const intersection = this.raycaster.getIntersection(this.el)
+          // console.log(intersection)
+
+          // if (intersection) this.draw_at(intersection)
+          // else throw "no intersection"
+
+          // try {
+          //   this.draw_at(intersection)
+          // } catch(e) {
+          //   console.log(e)
+          // }
+          if (intersection) this.draw_at(intersection);
+
+          // console.log(this.el, rcr.intersectedEls)
+
+          // if (this.el in rcr.intersectedEls) {
+
+          //   console.log("hahahahah")
+          //   ; 
+          // }
+        }
+      },
+      draw_at: function (intersection) {
+
+        const point = intersection.point
         point.x = round(point.x)
         point.y = round(point.y)
         point.z = round(point.z)
-        console.log(point)
+        // console.log(point)
         function round(i) { 
           return Math.round(i*10)/10
         }
+
+        // don't add if voxel already exists
+        if (this.voxel(point.x, point.y, point.z)) return;
 
         const voxel = document.createElement('a-box')
         voxel.setAttribute('color', 'red')
@@ -48,16 +108,16 @@
         voxel.setAttribute('depth', '0.1')
         voxel.setAttribute('position', `${point.x} ${point.y} ${point.z}`)
 
+        if (!(point.x in this.voxels))
+          this.voxels[point.x] = {};
+        if (!(point.y in this.voxels[point.x]))
+          this.voxels[point.x][point.y] = {};
+        this.voxels[point.x][point.y][point.z] = voxel;
+
         // todo: include logic so voxel part of this container instead of added on scene
         // this.el.appendChild(voxel)
         const sceneEl = document.querySelector('a-scene');
         sceneEl.appendChild(voxel)
-
-      },
-      voxel: function (x, y, z) {
-        if (this.voxels[x] && this.voxels[x][y]) return this.voxels[x][y][z]
-        else return undefined;
-        // yes, I'm optimizing for readability on my personal code, DO YOU HAVE A PROBLEM WITH THAT?
 
       }
     });
@@ -104,7 +164,7 @@
       <img id="lamb" src="../../lamb.png">
     </a-assets>
 
-    <a-entity joses-default-interface></a-entity>
+    <a-entity joses-default-interface="mode: wasd"></a-entity>
 
 
     <a-plane voxel-board class="clickable" color="gray" position="0 0 -4" height="8" width="8"></a-plane>
