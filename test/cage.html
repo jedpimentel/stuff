@@ -16,6 +16,52 @@
 
   <script type="text/javascript">
 
+    AFRAME.registerComponent('voxel', {
+      init: function () {
+        // for now, no use using a voxel class since we could just place boxes for now
+        //
+      }
+    });
+
+    AFRAME.registerComponent('voxel-board', {
+      init: function () {
+        this.voxels = [[[]]];// 3D map should be more efficient
+        // this.el.addEventListener('click', evt => this.click(evt))
+        this.el.addEventListener('mousedown', evt => this.click(evt))
+      },
+      click: function (evt) {
+        console.log(evt)
+
+        const point = evt.detail.intersection.point
+        point.x = round(point.x)
+        point.y = round(point.y)
+        point.z = round(point.z)
+        console.log(point)
+        function round(i) { 
+          return Math.round(i*10)/10
+        }
+
+        const voxel = document.createElement('a-box')
+        voxel.setAttribute('color', 'red')
+        voxel.setAttribute('height', '0.1')
+        voxel.setAttribute('width', '0.1')
+        voxel.setAttribute('depth', '0.1')
+        voxel.setAttribute('position', `${point.x} ${point.y} ${point.z}`)
+
+        // todo: include logic so voxel part of this container instead of added on scene
+        // this.el.appendChild(voxel)
+        const sceneEl = document.querySelector('a-scene');
+        sceneEl.appendChild(voxel)
+
+      },
+      voxel: function (x, y, z) {
+        if (this.voxels[x] && this.voxels[x][y]) return this.voxels[x][y][z]
+        else return undefined;
+        // yes, I'm optimizing for readability on my personal code, DO YOU HAVE A PROBLEM WITH THAT?
+
+      }
+    });
+
     AFRAME.registerComponent('cubeez', {
       schema: {
         step: {type: 'number', default: 0.01},
@@ -50,65 +96,6 @@
       // });
     })
 
-    // first pass, might not yet support adding/removing items
-    // entity-list cycles through its children by only making one visible at a time
-    // pass children in as VISIBLE, component will handle making them invisible by default
-    AFRAME.registerComponent('entity-list', {
-      init: function () {
-        console.log(this.el.children);
-        this.index = 0;// start at zero
-        this.allow_wrap = true;// we'd need to style the "next" button as disabled if we're at end
-
-        for (let i = 1; i < this.el.children.length; i++) {
-          // invisibilize everything after the first index
-          console.log(this.el.children[i].object3D)
-          this.el.children[i].object3D.visible = false;
-          // todo: also .pause() them? they'll need to be unpaused, traversal logic needs extending
-        }
-
-        document.querySelector('#next').addEventListener('click', () => this.next())
-
-      },
-      next: function () {
-        console.log('next!')
-        // todo: test on lists of zero and one elements
-
-        this.el.children[this.index].object3D.visible = false;
-
-        this.index++;
-        if (this.index === this.el.children.length) this.index = 0;
-
-        this.el.children[this.index].object3D.visible = true;
-
-        // if (this.index < this.el.children.length - 1) {
-        //   this.el.children[this.index].object3D.visible = false;
-        //   this.index++;
-        //   this.el.children[this.index].object3D.visible = true;          
-        // }
-      }
-    })
-    AFRAME.registerComponent('click-me', {
-      init: function () {
-        // hover logic might not be stable, I'm somehow afraid of s
-        // omething triggering a mouseenter without a mouseleave
-        this.being_hovered = false;
-        this.initial_position = (new THREE.Vector3( )).copy(this.el.object3D.position);
-
-        this.tone = document.createElement('audio')
-        this.tone.src = '../sine-432hz-pluck.flac'
-  
-        this.el.addEventListener('click', () => this.click());// works as expected
-      },
-      click: function () {
-        this.el.setAttribute('visible', false);
-        setTimeout(() => this.el.setAttribute('visible', true), 500 + (1000*Math.random()));
-        this.el.object3D.position.x = this.initial_position.x - 2 + 4*Math.random();
-        this.el.object3D.position.y = this.initial_position.y - 1 + 2*Math.random();
-        this.tone.currentTime = 0;
-        this.tone.play();
-      },
-
-    })
   </script>
 
   <a-scene loading-screen="dotsColor: white; backgroundColor: black">
@@ -119,14 +106,9 @@
 
     <a-entity joses-default-interface></a-entity>
 
-    <a-entity entity-list>
-      <a-box position="0.2 1 -3" color="blue" opacity="0.2"></a-box>
-      <a-box position="-0.2 1 -3" color="green" opacity="0.2"></a-box>
-    </a-entity>
 
-    <a-box id="next" class="clickable" position="1.5 1 -4" color="green" opacity="0.2">
-      <a-text value="NEXT" align="center" side="double"></a-text>
-    </a-box>
+    <a-plane voxel-board class="clickable" color="gray" position="0 0 -4" height="8" width="8"></a-plane>
+    <!-- <a-plane voxel-board class="clickable" color="white" position="0 0 -4" rotation="-90 0 0" height="8" width="8"></a-plane> -->
 
     <!-- <a-box id="next" class="clickable" position="1.5 1 -4" color="green" opacity="0.2">
       <a-text value="NEXT" align="center" side="double"></a-text>
@@ -136,10 +118,6 @@
 
 
     <!-- <a-cylinder id='green-cyl' class="clickable" position="6.5 .75 -8" radius="0.5" color="green" opacity="0.3"></a-cylinder> -->
-
-    <a-box class="clickable" click-me position="0 1 -4" color="red" opacity="0.2">
-      <a-text value="CLICK ME" align="center" side="double"></a-text>
-    </a-box>
 
   </a-scene>
 </body>
