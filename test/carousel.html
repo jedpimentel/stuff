@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="eng">
+
+<head>
+  <title>CUBE CLICKER</title>
+  <!-- in-vr links break upgrading 8.2 to 9.2 -->
+  <!-- <script src="https://aframe.io/releases/0.9.2/aframe.min.js"></script> -->
+  <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
+
+
+  <script src="../lib/jose-components.js"></script>
+  <meta charset="utf-8">
+</head>
+
+<body style="font-family:courier; color:white; background-color: black">
+
+  <script type="text/javascript">
+
+    AFRAME.registerComponent('cubeez', {
+      schema: {
+        step: {type: 'number', default: 0.01},
+        size: {type: 'number', default: 5},// 5x5x5 cubes
+        // anchor: {type: 'object'},// position of seed cube
+
+      },
+      init: function () {
+        // if this doesn't have root, this is root, adjust world position to nearest cm
+        // and make this.root = this
+        // and make a this.expanding Set that other nodes can acces via this, their root
+        // and make a this.nodes array just in case
+
+        if (!this.data.anchor) {
+          this.anchor = this;
+
+          // placeholder
+          const el = document.createElement('a-sphere');
+          el.setAttribute('color', 'red');
+          el.setAttribute('radius', this.data.step / 2);
+          this.el.appendChild(el)
+
+        }
+      },
+      // place_a_at_b: function (a, )
+    })
+    document.addEventListener('DOMContentLoaded', () => {
+      // let times = 1
+      // document.querySelector('a-scene').addEventListener('click', evt => {
+      //   if
+      //   console.log(evt)
+      // });
+    })
+
+    // first pass, might not yet support adding/removing items
+    // entity-list cycles through its children by only making one visible at a time
+    // pass children in as VISIBLE, component will handle making them invisible by default
+    AFRAME.registerComponent('entity-list', {
+      init: function () {
+        console.log(this.el.children);
+        this.index = 0;// start at zero
+        this.allow_wrap = true;// we'd need to style the "next" button as disabled if we're at end
+
+        for (let i = 1; i < this.el.children.length; i++) {
+          // invisibilize everything after the first index
+          console.log(this.el.children[i].object3D)
+          this.el.children[i].object3D.visible = false;
+          // todo: also .pause() them? they'll need to be unpaused, traversal logic needs extending
+        }
+
+        document.querySelector('#next').addEventListener('click', () => this.next())
+
+      },
+      next: function () {
+        console.log('next!')
+        // todo: test on lists of zero and one elements
+
+        this.el.children[this.index].object3D.visible = false;
+
+        this.index++;
+        if (this.index === this.el.children.length) this.index = 0;
+
+        this.el.children[this.index].object3D.visible = true;
+
+        // if (this.index < this.el.children.length - 1) {
+        //   this.el.children[this.index].object3D.visible = false;
+        //   this.index++;
+        //   this.el.children[this.index].object3D.visible = true;          
+        // }
+      }
+    })
+  </script>
+
+  <a-scene loading-screen="dotsColor: white; backgroundColor: black">
+
+    <a-assets>
+      <img id="lamb" src="../../lamb.png">
+    </a-assets>
+
+    <a-entity joses-default-interface></a-entity>
+
+    <a-entity entity-list>
+      <a-box position="0.2 1 -3" color="blue" opacity="0.2"></a-box>
+      <a-box position="-0.2 1 -3" color="green" opacity="0.2"></a-box>
+    </a-entity>
+
+    <a-box id="next" class="clickable" position="1.5 1 -4" color="green" opacity="0.2">
+      <a-text value="NEXT" align="center" side="double"></a-text>
+    </a-box>
+
+    <!-- <a-box id="next" class="clickable" position="1.5 1 -4" color="green" opacity="0.2">
+      <a-text value="NEXT" align="center" side="double"></a-text>
+    </a-box> -->
+    <a-entity cubeez position="-1.5 1 -4"></a-entity>
+
+
+
+    <!-- <a-cylinder id='green-cyl' class="clickable" position="6.5 .75 -8" radius="0.5" color="green" opacity="0.3"></a-cylinder> -->
+
+  </a-scene>
+</body>
+</html>
