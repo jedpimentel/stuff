@@ -170,6 +170,20 @@
     <a-plane voxel-board class="clickable" color="gray" position="0 0 4" rotation="0 180 0" height="8" width="8"></a-plane>
     <!-- <a-plane voxel-board class="clickable" color="white" position="0 0 -4" rotation="-90 0 0" height="8" width="8"></a-plane> -->
 
+
+    <a-box id="reset-button" class="clickable" position="4 0 0" rotation="0 -90 0" color="green" opacity="0.2">
+      <a-text value="RESET" align="center" side="double"></a-text>
+    </a-box>
+    <script type="text/javascript">
+      {
+        let button = document.querySelector("#reset-button")
+        button.addEventListener("click", () => {
+          // window.location.href = 'https://supermedium.com/supercraft/';
+          window.location.href = './cage.html';
+        }); 
+      }
+    </script>
+
     <!-- <a-box id="next" class="clickable" position="1.5 1 -4" color="green" opacity="0.2">
       <a-text value="NEXT" align="center" side="double"></a-text>
     </a-box> -->
