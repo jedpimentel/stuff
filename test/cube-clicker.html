@@ -73,11 +73,10 @@
 
     <a-entity joses-default-interface></a-entity>
 
-    <!-- <a-cylinder id='green-cyl' class="clickable" position="6.5 .75 -8" radius="0.5" color="green" opacity="0.3"></a-cylinder> -->
-
-    <a-box class="clickable" click-me position="0 1 -4" color="red" opacity="0.2">
-      <a-text value="CLICK ME" align="center" side="double"></a-text>
-    </a-box>
+    <a-entity click-me position="0 1 -4">
+		<a-text value="CLICK ME" align="center" side="double"></a-text>
+		<a-box class="clickable" color="red" opacity="0.2"></a-box>
+    </a-entity>
 
 	</a-scene>
 </body>
