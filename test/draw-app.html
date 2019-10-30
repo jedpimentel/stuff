@@ -16,45 +16,26 @@
 
   <script type="text/javascript">
 
-    AFRAME.registerComponent('voxel', {
-      init: function () {
-        // for now, no use using a voxel class since we could just place boxes for now
-        //
-      }
-    });
-
     AFRAME.registerComponent('voxel-board', {
-
-      // README:
-      //
       // target is to work with single ray for now multi-ray could be
-      // supported by tracking them all together in an array/set
+      // supported by tracking them all together in an array/set?
 
+      // remote debugging stuff
+      // https://developer.android.com/studio/run/device#setting-up
       init: function () {
-        // this.voxels is a 3d object, keyed on x, y, and z 
-        this.voxels = {};// 3D map should be better?
-        // this.el.addEventListener('click', evt => this.click(evt))
-        // this.el.addEventListener('mousedown', evt => this.click(evt))
+        this.voxels = {};
         this.el.addEventListener('mousedown', evt => {
           this.raycaster = evt.detail.cursorEl.components.raycaster;
         });
         this.el.addEventListener('mouseup', evt => this.raycaster = null);
-
         window.b = this
-        // this.el.addEventListener('cursor-hovered', evt => this.click(evt))
-        // this.el.addEventListener('raycaster-intersected', evt => this.click(evt))
       },
       click: function (evt) {
-        // console.log(evt)
-
-        // const raycaster = 
         const cursor = evt.detail.cursorEl
-        window.c = cursor
-        window.e = evt.detail
-
+        // window.c = cursor
+        // window.e = evt.detail
         const raycaster = cursor.components.raycaster
         this.raycaster = raycaster
-
         this.draw_at(evt.detail.intersection)
       },
       voxel: function (x, y, z) {
@@ -66,34 +47,14 @@
         // if ("cursor-hovered" in this.el.states) console.log(this.el.states)
         if (this.raycaster) {
           const intersection = this.raycaster.getIntersection(this.el)
-          // console.log(intersection)
-
-          // if (intersection) this.draw_at(intersection)
-          // else throw "no intersection"
-
-          // try {
-          //   this.draw_at(intersection)
-          // } catch(e) {
-          //   console.log(e)
-          // }
           if (intersection) this.draw_at(intersection);
-
-          // console.log(this.el, rcr.intersectedEls)
-
-          // if (this.el in rcr.intersectedEls) {
-
-          //   console.log("hahahahah")
-          //   ; 
-          // }
         }
       },
       draw_at: function (intersection) {
-
         const point = intersection.point
         point.x = round(point.x)
         point.y = round(point.y)
         point.z = round(point.z)
-        // console.log(point)
         function round(i) { 
           return Math.round(i*10)/10
         }
@@ -108,20 +69,22 @@
         voxel.setAttribute('depth', '0.1')
         voxel.setAttribute('position', `${point.x} ${point.y} ${point.z}`)
 
-        if (!(point.x in this.voxels))
-          this.voxels[point.x] = {};
-        if (!(point.y in this.voxels[point.x]))
-          this.voxels[point.x][point.y] = {};
+        if (!(point.x in this.voxels)) this.voxels[point.x] = {};
+        if (!(point.y in this.voxels[point.x])) this.voxels[point.x][point.y] = {};
         this.voxels[point.x][point.y][point.z] = voxel;
 
-        // todo: include logic so voxel part of this container instead of added on scene
-        // this.el.appendChild(voxel)
+        // TODO: include logic so voxel part of this container instead of added on scene
         const sceneEl = document.querySelector('a-scene');
         sceneEl.appendChild(voxel)
 
       }
     });
 
+    // UNFINISHED COMPONENT
+    // meant to create a voxel that "overflows" to neighboring cells like ink/paint would
+    // ex: hold on single spot to make a blob, or click a 5-group into existance
+    // "drip" (hold mouse down, at a time) vs "groups" (single click adds a 5-stack onto voxel)
+    // voxels that are more than a 1-stack need to overflow, or travers into non-voxeled space
     AFRAME.registerComponent('cubeez', {
       schema: {
         step: {type: 'number', default: 0.01},
@@ -146,14 +109,6 @@
 
         }
       },
-      // place_a_at_b: function (a, )
-    })
-    document.addEventListener('DOMContentLoaded', () => {
-      // let times = 1
-      // document.querySelector('a-scene').addEventListener('click', evt => {
-      //   if
-      //   console.log(evt)
-      // });
     })
 
   </script>
@@ -161,38 +116,51 @@
   <a-scene loading-screen="dotsColor: white; backgroundColor: black">
 
     <a-entity joses-default-interface="mode: wasd"></a-entity>
-
-
-    <a-plane voxel-board class="clickable" color="gray" position="0 0 -4" height="8" width="8"></a-plane>
-
     <!-- phone browser was starting looking backwards (rotated 180 dex on y-axis) -->
     <!-- was easier to just include another board than to find out why (for now) -->
+    <a-plane voxel-board class="clickable" color="gray" position="0 0 -4" height="8" width="8"></a-plane>
     <a-plane voxel-board class="clickable" color="gray" position="0 0 4" rotation="0 180 0" height="8" width="8"></a-plane>
-    <!-- <a-plane voxel-board class="clickable" color="white" position="0 0 -4" rotation="-90 0 0" height="8" width="8"></a-plane> -->
 
 
-    <a-box id="reset-button" class="clickable" position="4 0 0" rotation="0 -90 0" color="green" opacity="0.2">
+    <a-entity id="reset-button" position="4 0 0" rotation="0 -90 0">
       <a-text value="RESET" align="center" side="double"></a-text>
-    </a-box>
+      <a-box class="clickable" color="green" opacity="0.4">
+      </a-box>
+    </a-entity>
+
+    <a-entity id="confirm-reset-button" visible="false" position="4 1 0" rotation="0 -90 0">
+      <a-text value="CONFIRM" align="center" side="double"></a-text>
+      <a-box color="red" opacity="0.4"></a-box>
+    </a-entity>
+
     <script type="text/javascript">
       {
-        let button = document.querySelector("#reset-button")
-        button.addEventListener("click", () => {
-          // window.location.href = 'https://supermedium.com/supercraft/';
-          window.location.href = './cage.html';
-        }); 
+        const reset_button = document.querySelector("#reset-button")
+        const confirm_button = document.querySelector('#confirm-reset-button')
+        const confirm_ray_target = confirm_button.querySelector('a-box') 
+
+        reset_button.addEventListener("click", () => {
+          confirm_button.object3D.visible = true
+          confirm_ray_target.classList.add('clickable')
+          confirm_ray_target.setAttribute('opacity', '0.4')
+          setTimeout(() => confirm_ray_target.setAttribute('opacity', '0.3'), 1000)
+          setTimeout(() => confirm_ray_target.setAttribute('opacity', '0.2'), 2000)
+          setTimeout(() => {
+            confirm_button.object3D.visible = false
+            confirm_ray_target.classList.remove('clickable')
+          }, 3000)
+        });
+
+        confirm_button.addEventListener("click", () => {
+          window.location.reload();
+          // window.location.href = './cage.html';
+        });
+        // also try supercraft
+        // window.location.href = 'https://supermedium.com/supercraft/';
       }
     </script>
 
-    <!-- <a-box id="next" class="clickable" position="1.5 1 -4" color="green" opacity="0.2">
-      <a-text value="NEXT" align="center" side="double"></a-text>
-    </a-box> -->
-    <a-entity cubeez position="-1.5 1 -4"></a-entity>
-
-
-
-    <!-- <a-cylinder id='green-cyl' class="clickable" position="6.5 .75 -8" radius="0.5" color="green" opacity="0.3"></a-cylinder> -->
-
+    <!-- <a-entity cubeez position="-1.5 1 -4"></a-entity> -->
   </a-scene>
 </body>
 </html>
