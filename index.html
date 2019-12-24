@@ -6,6 +6,7 @@
         <!-- in-vr links break upgrading 8.2 to 9.2 -->
         <!-- <script src="https://aframe.io/releases/0.9.2/aframe.min.js"></script> -->
         <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
+        <!-- <script src="https://aframe.io/releases/1.0.1/aframe.min.js"></script> -->
 
         <!-- <script src="../../lib/GLTFExporter.js"></script> -->
         <script src="lib/jose-components.js"></script>
@@ -57,7 +58,15 @@
             <a-video id="video-clip" src="#video-asset" position="-3 2 -11" width="2.56" height="1.44" position="0 2 -5"></a-video>
 
             <a-box id="clicker-game-banner" src="clicker-game.png" position="0.5 2.5 -7.5" color="white"></a-box>
-            <a-text value="Known bugs:\n- yellow button sometimes doesn't work for a few seconds\n- dual-raycaster/clicker is glitchy\n- Updating to Aframe 0.9.2 from 0.8.2 would break link traversal" position="1.1 2.5 -8"></a-text>
+
+            <!-- 20191224-note-to-self: Make an AFrame component with multiple instances (a-button, b-button, ..., n-button ?), that takes a function, action, tool, or some sort of whatever as an argument/parameter that does an action. Startup script checks scene for component and registers it with an ActionHandler.\n\nEx: &lt;a-key&gt; exists in a scene as a cube that goes "ding" if the "a" key is pressed. Keys/buttons defined inside the a-unified-ui component need to be moved around before the component's innerHTML gets set, allowing easier camera-anchored stuff. Attaching them to Quest/Etc controller could be a flag. If a-unified-ui component already has something for that key, maybe have a menu/wizard to sort things out when entering scene. Basic: press "f" to ding. Extra: UI-attached line-drawing button that attaches self to mouse, touchscreen, tracked-gamepad, etc. -->
+            <a-text value="20191224-note-to-self: Make an AFrame component with multiple instances (a-button, b-button, ..., n-button ?), that takes a function, action, tool, or some sort of whatever as an argument/parameter that does an action. Startup script checks scene for component and registers it with an ActionHandler.\n\nEx: &lt;A-KEY&gt; exists in a scene as a cube that goes &ldquo;DING&rdquo; if the &ldquo;A&rdquo;key is pressed. Keys/buttons defined inside the a-unified-ui component need to be moved around before the component's innerHTML gets set, allowing easier camera-anchored stuff. Attaching them to Quest/Etc controller could be a flag. If a-unified-ui component already has something for that key, maybe have a menu/wizard to sort things out when entering scene. Basic: press&ldquo;f&rdquo;to ding. Extra: UI-attached line-drawing button that attaches self to mouse, touchscreen, tracked-gamepad, etc." 
+                width='4'
+                wrap-count='82'
+                position='-0.5 1.2 -6.5'></a-text>
+            <!-- wrapCount not working? -->
+
+            <a-text value="[Sticking to 0.8.2 for now] - Known bugs:\n- yellow button sometimes doesn't work???\n- dual-raycaster/clicker is glitchy\n- Updating to Aframe 0.9.2 from 0.8.2 would break link traversal. 1.0.1 was unsafe (VR button broke my mouse+keyboard implementation, phone camera was looking straight down)" position="1.1 2.5 -8"></a-text>
 
             <a-entity class='table' position='-4 0.01 -9'>
                 <a-entity class='grid-fitter' position='0.5 0 0.5'>
@@ -155,7 +164,7 @@
             <br>
             <p>This is a personal sandbox site for testing WebVR/Aframe components. My focus so far has been more on creating re-usable reference code than making a consumer-ish website.</p>
             <br>
-            <p><span class="red">NOTE: </span>"VR mode" freezes some phones, I'm looking into it.</p>
+            <p><span class="red">NOTE: </span>"VR mode" freezes some phones, I'm looking into it. I'm on Android. #SORRYNOTSORRY</p>
             <br>
             <p>Most of my demos are targetted for Mouse+Keyboard, if you are on a VR-Headset please try out my <a href="demo/oculus-quest/index.html">Oculus Quest Demo</a>. If you are on a cell phone, you can at least move around inside my <a href="demo/touch-controls.html">Touchscreen Joystick Test<a>.</p>
             <br>
