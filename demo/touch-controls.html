@@ -32,7 +32,7 @@
             <a-entity id="camera-wrapper" position="0 1.6 0">
                 <!-- it seems disabling look controls leaves camera on floor -->
                 <!-- <a-camera look-controls="enabled: false; pointerLockEnabled: false" near="0.001" wasd-controls> -->
-                <a-camera near="0.001" >
+                <a-camera id="camera-actual" near="0.001" >
                     <a-cylinder id="fing-longer" position="0.2 -0.4 -0.9" radius="0.01" height= "1.0" rotation="90 0 0" color="beige" opacity="1.0"></a-cylinder>
                     <a-entity position="0.2 -0.4 -1.4" cursor="rayOrigin: entity; showLine: true;" raycaster="showLine: true; far: 16" line="color: white; opacity:0.5">
                         <!-- <a-image src="lamb.png" rotation="-90 0 0"></a-image> -->
@@ -62,9 +62,9 @@
             // https://nunustudio.org/learn/basics/14_joystick/page.html
 
             // scene = window.getObjectByName("a-scene");
-            // camera = scene.getObjectByName("camera");
+            camera = document.getElementById("camera-actual");
             // cube = scene.getObjectByName("cube");
-            camera = document.getElementById("camera-wrapper");
+            cWrapper = document.getElementById("camera-wrapper");
             cube = document.getElementById("green-cyl");
             
             direction = new THREE.Vector2(0, 0);
@@ -79,12 +79,14 @@
             // speed = 0;
             setInterval(function(){
                 if(pressed) {
-                    // camera.object3D.position.set(1, 1, 1);
-                    let x = camera.object3D.position.x
-                    let y = camera.object3D.position.y
-                    let z = camera.object3D.position.z
+                    // cWrapper.object3D.position.set(1, 1, 1);
+                    let x = cWrapper.object3D.position.x
+                    let y = cWrapper.object3D.position.y
+                    let z = cWrapper.object3D.position.z
 
-                    camera.object3D.position.set(x + direction.x, y, z - direction.y);
+                    console.log(camera.object3D.getWorldDirection())
+
+                    cWrapper.object3D.position.set(x + direction.x, y, z - direction.y);
                 }
                 // console.log("Hello"); 
             }, 1000 / 90);
