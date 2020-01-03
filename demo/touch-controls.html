@@ -22,6 +22,68 @@
           <p>Your user agent does not support the HTML5 Audio element.</p>
         </audio>
 
+        <script type="text/javascript">
+            AFRAME.registerComponent('follow-camera', {
+                // wasd controls was making this move glitchily, but became smothe if tabbing out and in again
+                schema: {
+                    camID: {type: 'string'}
+                },
+                init: function() {
+
+                    this.camera = document.querySelector(`#${this.data.camID}`)
+                    if (!this.camera) throw `error, could not find "#${this.data.camID}"`
+
+                    // this.active = false;
+                    // this.pos = this.el.object3D.position;
+                    // this.pos_start = new THREE.Vector3();
+
+                    // this.clicker_start = new THREE.Vector3();
+                    // this.clicker_pos = new THREE.Vector3();
+                    // this.clickerEl = undefined;
+
+                },
+                tick: function() {
+                    this.el.object3D.position.copy(this.camera.object3D.position)
+                    this.el.object3D.rotation.y = this.camera.object3D.rotation.y
+                }
+            });
+
+            AFRAME.registerComponent('analog-input-handler-test', {
+                // HARD CODE EVERYTHING FOR INITIAL WORKING DRAFT
+                init: function() {
+                    
+                    this.chan_0 = null;//"forward"
+                    this.chan_1 = null;//"right"
+
+                    this.camera
+
+                    this.camwrapper = document.querySelector('#camera-wrapper')
+                    this.camera = document.querySelector('#camera-actual')
+
+                    this.front = document.querySelector('#front-marker') 
+                    this.right = document.querySelector('#right-marker')
+
+                    this.heading = new THREE.Vector3()
+                },
+                forward: function(value) {
+                    this.heading.copy(this.front.object3D.position).sub(this.camera.object3D.position)
+                    console.log(this.heading)
+                },
+                tick: function() {
+                    if (window.test) {
+                        this.forward(1)
+                        window.test = null
+                    }
+                    // if (this.chan_0) {
+                        
+                    // }
+                    // if (this.chan_1) {
+                        
+                    // }
+                }
+            })
+        </script>
+
         <a-scene>
 
 
@@ -38,6 +100,15 @@
                         <!-- <a-image src="lamb.png" rotation="-90 0 0"></a-image> -->
                     </a-entity>
                 </a-camera>
+
+                <a-entity follow-camera="camID: camera-actual" id="direction-helper"> 
+                    <!-- move to camera position on each frame -->
+                    <!-- <a-box position="0 0 -1"></a-box> -->
+                    <a-text id="front-marker" align="center" position="0 0 -1" value="front"></a-text>
+                    <a-text id="right-marker" align="center" position="1 0 0" rotation="0 -90 0" value="right"></a-text>
+                </a-entity>
+
+                <a-entity analog-input-handler-test id="zoidberg"></a-entity>
             </a-entity>
 
             <a-cylinder id='green-cyl' position="3 0.75 -11" radius="0.5" height="1.5" color="green" opacity="0.3"></a-cylinder>
@@ -66,6 +137,9 @@
             // cube = scene.getObjectByName("cube");
             cWrapper = document.getElementById("camera-wrapper");
             cube = document.getElementById("green-cyl");
+
+            inputHandler = document.querySelector('#zoidberg')
+            window.i = inputHandler
             
             direction = new THREE.Vector2(0, 0);
             pressed = false;
@@ -84,7 +158,7 @@
                     let y = cWrapper.object3D.position.y
                     let z = cWrapper.object3D.position.z
 
-                    console.log(camera.object3D.getWorldDirection())
+                    // console.log(camera.object3D.getWorldDirection())
 
                     cWrapper.object3D.position.set(x + direction.x, y, z - direction.y);
                 }
@@ -100,7 +174,7 @@
                         
                         direction.x = Math.cos(data.angle.radian) * force;
                         direction.y = Math.sin(data.angle.radian) * force;
-                        console.log('move', force, direction.x, direction.y)
+                        // console.log('move', force, direction.x, direction.y)
 
                     }
                     else if(event.type === "start") {
