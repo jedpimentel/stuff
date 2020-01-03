@@ -48,6 +48,50 @@
                 }
             });
 
+            // zoidberg zardbarg
+            AFRAME.registerSystem('analog-input-handler-test', {
+                schema: {},
+                foo: () => console.log('bar'),
+                init: function () {
+                    this.chan_0 = null;//"forward"
+                    this.chan_1 = null;//"right"
+
+                    this.camera
+
+                    this.camwrapper = document.querySelector('#camera-wrapper')
+                    this.camera = document.querySelector('#camera-actual')
+
+                    this.front = document.querySelector('#front-marker') 
+                    this.right = document.querySelector('#right-marker')
+
+                    this.heading = new THREE.Vector3()
+                },
+
+                forward: function(value) {
+                    // this.heading.copy(this.front.object3D.position).sub(this.camera.object3D.position)
+                    // console.log(this.heading)
+
+                    // this.camera.object3D.getWorldDirection()
+                    // The camera direction was showing backwards!!!?
+
+                    // https://threejs.org/docs/#api/en/math/Quaternion
+
+                    this.camera.object3D.getWorldDirection(this.heading);
+                    // console.log(quaternion)
+                    // console.log(a)
+
+                    const dx = this.heading.x
+                    const dz = this.heading.z
+
+                    this.camwrapper.object3D.position.x -= dx * value
+                    this.camwrapper.object3D.position.z -= dz * value
+                    // getWorldQuaternion
+                    // let b = this.camera.object3D..getWorldDirection
+                    // this.camwrapper.object3D.position.lerp(this.front.object3D.position, value)
+                },
+
+                tick: function () {},
+            })
             AFRAME.registerComponent('analog-input-handler-test', {
                 // HARD CODE EVERYTHING FOR INITIAL WORKING DRAFT
                 init: function() {
@@ -108,7 +152,7 @@
                     <a-text id="right-marker" align="center" position="1 0 0" rotation="0 -90 0" value="right"></a-text>
                 </a-entity>
 
-                <a-entity analog-input-handler-test id="zoidberg"></a-entity>
+                <!-- <a-entity analog-input-handler-test id="zoidberg"></a-entity> -->
             </a-entity>
 
             <a-cylinder id='green-cyl' position="3 0.75 -11" radius="0.5" height="1.5" color="green" opacity="0.3"></a-cylinder>
@@ -138,7 +182,9 @@
             cWrapper = document.getElementById("camera-wrapper");
             cube = document.getElementById("green-cyl");
 
-            inputHandler = document.querySelector('#zoidberg')
+            // inputHandler = document.querySelector('#zoidberg')
+            inputHandler = document.querySelector('a-scene').systems['analog-input-handler-test'];
+
             window.i = inputHandler
             
             direction = new THREE.Vector2(0, 0);
@@ -160,7 +206,9 @@
 
                     // console.log(camera.object3D.getWorldDirection())
 
-                    cWrapper.object3D.position.set(x + direction.x, y, z - direction.y);
+                    // cWrapper.object3D.position.set(x + direction.x, y, z - direction.y);
+                    // console.log(direction.x)
+                    inputHandler.forward(direction.y)
                 }
                 // console.log("Hello"); 
             }, 1000 / 90);
