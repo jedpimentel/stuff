@@ -24,6 +24,7 @@
 
         <script type="text/javascript">
             AFRAME.registerComponent('follow-camera', {
+                // attaches thing to camera position, but not rotation
                 // wasd controls was making this move glitchily, but became smothe if tabbing out and in again
                 schema: {
                     camID: {type: 'string'}
@@ -32,14 +33,6 @@
 
                     this.camera = document.querySelector(`#${this.data.camID}`)
                     if (!this.camera) throw `error, could not find "#${this.data.camID}"`
-
-                    // this.active = false;
-                    // this.pos = this.el.object3D.position;
-                    // this.pos_start = new THREE.Vector3();
-
-                    // this.clicker_start = new THREE.Vector3();
-                    // this.clicker_pos = new THREE.Vector3();
-                    // this.clickerEl = undefined;
 
                 },
                 tick: function() {
@@ -50,81 +43,44 @@
 
             // zoidberg zardbarg
             AFRAME.registerSystem('analog-input-handler-test', {
+                // STATE: keep internal to touch-controls.html, 
+                // resolve forward/flatForward naming convention, keep both modes under a flag?
+                // is it okay to move the camera itself instead of wrapper? (prob not)
+                // how about rotating the wrapper versus the camera itself?
                 schema: {},
                 foo: () => console.log('bar'),
                 init: function () {
-                    this.chan_0 = null;//"forward"
-                    this.chan_1 = null;//"right"
-
-                    this.camera
-
                     this.camwrapper = document.querySelector('#camera-wrapper')
                     this.camera = document.querySelector('#camera-actual')
+                    document.addEventListener('DOMContentLoaded', (event) => {
+                        // avoid accessing properties before initialized,
+                        // might be goood to have system methhoods/props check
+                        // if system has been fully initialized/loaded, defined
+                        // as having camwrapper and all dependencies already be initialized
+                        this.cWrapPos = this.camwrapper.object3D.position
+                    });
 
-                    this.front = document.querySelector('#front-marker') 
-                    this.right = document.querySelector('#right-marker')
-
-                    this.heading = new THREE.Vector3()
+                    // this.heading = new THREE.Vector3()
                 },
-
-                forward: function(value) {
-                    // this.heading.copy(this.front.object3D.position).sub(this.camera.object3D.position)
-                    // console.log(this.heading)
-
-                    // this.camera.object3D.getWorldDirection()
-                    // The camera direction was showing backwards!!!?
-
+                forward: function (value) {
+                    //!! maybe not stable, see: Quaternions
                     // https://threejs.org/docs/#api/en/math/Quaternion
-
-                    this.camera.object3D.getWorldDirection(this.heading);
-                    // console.log(quaternion)
-                    // console.log(a)
-
-                    const dx = this.heading.x
-                    const dz = this.heading.z
-
-                    this.camwrapper.object3D.position.x -= dx * value
-                    this.camwrapper.object3D.position.z -= dz * value
-                    // getWorldQuaternion
-                    // let b = this.camera.object3D..getWorldDirection
-                    // this.camwrapper.object3D.position.lerp(this.front.object3D.position, value)
-                },
-
-                tick: function () {},
-            })
-            AFRAME.registerComponent('analog-input-handler-test', {
-                // HARD CODE EVERYTHING FOR INITIAL WORKING DRAFT
-                init: function() {
+                    const yRot = this.camera.object3D.rotation.y 
+                    this.cWrapPos.z -= (value * Math.cos(yRot));
+                    this.cWrapPos.x -= (value * Math.sin(yRot));
                     
-                    this.chan_0 = null;//"forward"
-                    this.chan_1 = null;//"right"
-
-                    this.camera
-
-                    this.camwrapper = document.querySelector('#camera-wrapper')
-                    this.camera = document.querySelector('#camera-actual')
-
-                    this.front = document.querySelector('#front-marker') 
-                    this.right = document.querySelector('#right-marker')
-
-                    this.heading = new THREE.Vector3()
-                },
-                forward: function(value) {
-                    this.heading.copy(this.front.object3D.position).sub(this.camera.object3D.position)
-                    console.log(this.heading)
-                },
-                tick: function() {
-                    if (window.test) {
-                        this.forward(1)
-                        window.test = null
-                    }
-                    // if (this.chan_0) {
-                        
+                    // {// alt version, move slower if looking down
+                    //     this.camera.object3D.getWorldDirection(this.heading);
+                    //     this.camwrapper.object3D.position.x -= this.heading.x * value
+                    //     this.camwrapper.object3D.position.z -= this.heading.z * value
                     // }
-                    // if (this.chan_1) {
-                        
-                    // }
-                }
+                },
+                rightward: function (value) {
+                    const yRot = this.camera.object3D.rotation.y 
+                    this.cWrapPos.z += (value * Math.sin(yRot));
+                    this.cWrapPos.x += (value * Math.cos(yRot));
+                },
+                // tick: function () {},
             })
         </script>
 
@@ -148,11 +104,9 @@
                 <a-entity follow-camera="camID: camera-actual" id="direction-helper"> 
                     <!-- move to camera position on each frame -->
                     <!-- <a-box position="0 0 -1"></a-box> -->
-                    <a-text id="front-marker" align="center" position="0 0 -1" value="front"></a-text>
-                    <a-text id="right-marker" align="center" position="1 0 0" rotation="0 -90 0" value="right"></a-text>
+                    <!-- <a-text id="front-marker" align="center" position="0 0 -1" value="front"></a-text> -->
+                    <!-- <a-text id="right-marker" align="center" position="1 0 0" rotation="0 -90 0" value="right"></a-text> -->
                 </a-entity>
-
-                <!-- <a-entity analog-input-handler-test id="zoidberg"></a-entity> -->
             </a-entity>
 
             <a-cylinder id='green-cyl' position="3 0.75 -11" radius="0.5" height="1.5" color="green" opacity="0.3"></a-cylinder>
@@ -208,7 +162,11 @@
 
                     // cWrapper.object3D.position.set(x + direction.x, y, z - direction.y);
                     // console.log(direction.x)
+
+                    // TRYING OUT THESE TWO MOVEMENT FLAVORS
                     inputHandler.forward(direction.y)
+                    inputHandler.rightward(direction.x)
+                    // inputHandler.flatForward(direction.y)
                 }
                 // console.log("Hello"); 
             }, 1000 / 90);
