@@ -77,8 +77,8 @@
                 },
                 rightward: function (value) {
                     const yRot = this.camera.object3D.rotation.y 
-                    this.cWrapPos.z += (value * Math.sin(yRot));
-                    this.cWrapPos.x += (value * Math.cos(yRot));
+                    this.cWrapPos.z += (value * Math.sin(-yRot));
+                    this.cWrapPos.x += (value * Math.cos(-yRot));
                 },
                 // tick: function () {},
             })
