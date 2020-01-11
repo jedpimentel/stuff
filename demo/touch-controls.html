@@ -12,15 +12,7 @@
         <script src="../lib/jose-components.js"></script>
 
         <meta charset="UTF-8">
-    </head>
 
-    <body style="margin : 0px; overflow: hidden; font-family:courier; color:white; background-color: black">
-        <!-- <section id="main"></section> -->
-
-        <audio id='audio-clip'>
-          <source src="../placeholder.flac" type='audio/flac' />
-          <p>Your user agent does not support the HTML5 Audio element.</p>
-        </audio>
 
         <script type="text/javascript">
             AFRAME.registerComponent('follow-camera', {
@@ -62,27 +54,46 @@
 
                     // this.heading = new THREE.Vector3()
                 },
-                forward: function (value) {
-                    //!! maybe not stable, see: Quaternions
-                    // https://threejs.org/docs/#api/en/math/Quaternion
-                    const yRot = this.camera.object3D.rotation.y 
-                    this.cWrapPos.z -= (value * Math.cos(yRot));
-                    this.cWrapPos.x -= (value * Math.sin(yRot));
+
+                move: function (forward, rightward) {
+                    const yRot = this.camera.object3D.rotation.y;
+                    this.cWrapPos.z += rightward *  Math.sin(-yRot) - forward * Math.cos(yRot);
+                    this.cWrapPos.x += rightward *  Math.cos(-yRot) - forward * Math.sin(yRot);
+
+                },
+
+                // // TODO: Remove "forward" and "rightward" stuff, document "alt version" in a vlog post
+                // forward: function (value) {
+                //     //!! maybe not stable, see: Quaternions
+                //     // https://threejs.org/docs/#api/en/math/Quaternion
+                //     const yRot = this.camera.object3D.rotation.y 
+                //     this.cWrapPos.z -= (value * Math.cos(yRot));
+                //     this.cWrapPos.x -= (value * Math.sin(yRot));
                     
-                    // {// alt version, move slower if looking down
-                    //     this.camera.object3D.getWorldDirection(this.heading);
-                    //     this.camwrapper.object3D.position.x -= this.heading.x * value
-                    //     this.camwrapper.object3D.position.z -= this.heading.z * value
-                    // }
-                },
-                rightward: function (value) {
-                    const yRot = this.camera.object3D.rotation.y 
-                    this.cWrapPos.z += (value * Math.sin(-yRot));
-                    this.cWrapPos.x += (value * Math.cos(-yRot));
-                },
-                // tick: function () {},
+                //     // {// alt version, move slower if looking down
+                //     //     this.camera.object3D.getWorldDirection(this.heading);
+                //     //     this.camwrapper.object3D.position.x -= this.heading.x * value
+                //     //     this.camwrapper.object3D.position.z -= this.heading.z * value
+                //     // }
+                // },
+                // rightward: function (value) {
+                //     const yRot = this.camera.object3D.rotation.y 
+                //     this.cWrapPos.z += (value * Math.sin(-yRot));
+                //     this.cWrapPos.x += (value * Math.cos(-yRot));
+                // },
+                // // tick: function () {},
             })
         </script>
+    </head>
+
+    <body style="margin : 0px; overflow: hidden; font-family:courier; color:white; background-color: black">
+        <!-- <section id="main"></section> -->
+
+        <audio id='audio-clip'>
+          <source src="../placeholder.flac" type='audio/flac' />
+          <p>Your user agent does not support the HTML5 Audio element.</p>
+        </audio>
+
 
         <a-scene>
 
@@ -100,13 +111,6 @@
                         <!-- <a-image src="lamb.png" rotation="-90 0 0"></a-image> -->
                     </a-entity>
                 </a-camera>
-
-                <a-entity follow-camera="camID: camera-actual" id="direction-helper"> 
-                    <!-- move to camera position on each frame -->
-                    <!-- <a-box position="0 0 -1"></a-box> -->
-                    <!-- <a-text id="front-marker" align="center" position="0 0 -1" value="front"></a-text> -->
-                    <!-- <a-text id="right-marker" align="center" position="1 0 0" rotation="0 -90 0" value="right"></a-text> -->
-                </a-entity>
             </a-entity>
 
             <a-cylinder id='green-cyl' position="3 0.75 -11" radius="0.5" height="1.5" color="green" opacity="0.3"></a-cylinder>
@@ -129,74 +133,37 @@
         </style>
         <script type="text/javascript">
             // https://nunustudio.org/learn/basics/14_joystick/page.html
-
-            // scene = window.getObjectByName("a-scene");
-            camera = document.getElementById("camera-actual");
-            // cube = scene.getObjectByName("cube");
-            cWrapper = document.getElementById("camera-wrapper");
-            cube = document.getElementById("green-cyl");
-
-            // inputHandler = document.querySelector('#zoidberg')
             inputHandler = document.querySelector('a-scene').systems['analog-input-handler-test'];
-
-            window.i = inputHandler
             
             direction = new THREE.Vector2(0, 0);
             pressed = false;
 
-            var manager = nipplejs.create({
+            const manager = nipplejs.create({
                 zone: document.getElementById('overlay'),
                 color: 'blue'
             });
 
-            // camera movement loop
-            // speed = 0;
             setInterval(function(){
                 if(pressed) {
-                    // cWrapper.object3D.position.set(1, 1, 1);
-                    let x = cWrapper.object3D.position.x
-                    let y = cWrapper.object3D.position.y
-                    let z = cWrapper.object3D.position.z
-
-                    // console.log(camera.object3D.getWorldDirection())
-
-                    // cWrapper.object3D.position.set(x + direction.x, y, z - direction.y);
-                    // console.log(direction.x)
-
-                    // TRYING OUT THESE TWO MOVEMENT FLAVORS
-                    inputHandler.forward(direction.y)
-                    inputHandler.rightward(direction.x)
-                    // inputHandler.flatForward(direction.y)
+                    inputHandler.move(direction.y, direction.x)
                 }
-                // console.log("Hello"); 
             }, 1000 / 90);
 
-            manager.on("added", function(event, nipple)
-            {
-                nipple.on("move start end", function(event, data)
-                {
-                    if(event.type === "move") {
-                        var force = 0.08 * data.force;
-                        
-                        direction.x = Math.cos(data.angle.radian) * force;
-                        direction.y = Math.sin(data.angle.radian) * force;
-                        // console.log('move', force, direction.x, direction.y)
-
-                    }
-                    else if(event.type === "start") {
-                        console.log('start')
-                        pressed = true;
-                    }
-                    else if(event.type === "end") {
-                        console.log('end')
-                        speed = 0
-                        pressed = false;
-                    }
+            manager.on("added", function(event, nipple) {
+                nipple.on("start", (event, data) => {
+                    pressed = true;
+                });
+                nipple.on("move", (event, data) => {
+                    const force = 0.08 * data.force;
+                    direction.x = Math.cos(data.angle.radian) * force;
+                    direction.y = Math.sin(data.angle.radian) * force;
+                });
+                nipple.on("end", (event, data) => {
+                    speed = 0
+                    pressed = false;
                 });
             });
-
-            manager.on("removed", function(event, nipple)
-            {
+            manager.on("removed", function(event, nipple) {
                 nipple.off("move start end");
             });
         </script>
