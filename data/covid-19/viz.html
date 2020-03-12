@@ -76,6 +76,10 @@
 	    <a-asset-item id="xls" response-type="blob" src="COVID-19-geographic-disbtribution-worldwide-2020-03-10.xls"></a-asset-item>
 	  </a-assets>
 
+	  <a-entity id="rig">
+		  <a-camera id="camera"></a-camera>
+		</a-entity>
+
 	  <a-entity position="0 0 -4">
 	    <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
 	    <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
@@ -175,6 +179,9 @@
 					graph.appendChild(box);
 					graph.appendChild	(text);
   			}
+
+  			// finally, fix graph's z rotation to ensure mobile devizes are facing -Z
+  			graph.object3D.rotation.y = AFRAME.scenes[0].camera.el.object3D.rotation.y;
   		})
   		// sheet
   	});
