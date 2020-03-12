@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>COVID-19</title>
+
+  <!-- <script src="https://aframe.io/releases/1.0.3/aframe.min.js"></script> -->
+  <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
+
+
+  <!-- https://stackoverflow.com/questions/8238407/how-to-parse-excel-file-in-javascript-html5 -->
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
+	<script>
+	class ExcelToJSON {
+
+	  static parseExcel(file) {
+	    return new Promise((resolve, reject) => {
+		    var reader = new FileReader();
+
+		    reader.onload = function(e) {
+		      var data = e.target.result;
+		      var workbook = XLSX.read(data, {
+		        type: 'binary'
+		      });
+
+		      const chunks = [];
+		      workbook.SheetNames.forEach(function(sheetName) {
+		        // Here is your object
+		        var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+		        chunks.push(XL_row_object)
+		        // var json_object = JSON.stringify(XL_row_object);
+		        // chunks.push(json_object)
+		        // console.log(json_object);
+
+		      })
+		      resolve(chunks)
+		    };
+
+		    reader.onerror = function(ex) {
+		      console.log(ex);
+		    };
+
+		    reader.readAsBinaryString(file);
+	    });
+	  };
+	};
+	// ExcelToJSON()
+	// console.log('aaa')
+	// AFRAME.registerComponent('box-line', {
+	// AFRAME.registerPrimitive('box-line', {
+	// 	schema: {
+	// 		// inneficient for from/to to be strings?
+	// 		from: {type: 'string', default: '0 0 -1'},
+	// 		to: {type: 'string', default: '0 1 -1'},
+	// 		width: {type: 'number', default: 0.25 }
+	// 	}
+	// })
+
+	// conf => {
+	// 	from: THREE.Vector3
+	// 	to: THREE.Vector3
+	// 	width: number
+	// }
+	function boxLine(conf) {
+		return `<a-box></a-box>`
+	}
+	</script>
+</head>
+<body>
+
+  <a-scene>
+
+
+	  <a-assets>
+	    <a-asset-item id="xls" response-type="blob" src="COVID-19-geographic-disbtribution-worldwide-2020-03-10.xls"></a-asset-item>
+	  </a-assets>
+
+	  <a-entity position="0 0 -4">
+	    <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
+	    <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
+	    <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
+	    <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
+	    <a-sky color="#ECECEC"></a-sky>
+	  </a-entity>
+
+    <a-entity id="graph"></a-entity>
+  </a-scene>
+
+  <script type="text/javascript">
+
+  	document.querySelector('a-assets').addEventListener('loaded', e => {
+  		console.log('ding!', e)
+  		var sheet = e.target.querySelector('#xls')
+  		// window.sheet = sheet
+
+  		// ExcelToJSON.parseExcel(sheet.data).then(e => console.log('eee'));
+  		let reader = ExcelToJSON.parseExcel(sheet.data);
+  		console.log(reader)
+  		reader.then(sheets => {
+  			// console.log(typeof sheets, sheets.length, sheets)
+  			console.log(typeof sheets[0], sheets[0].length, sheets[0])
+  			// all the data is on the first sheet
+  			const sheet = sheets[0];
+  			// SHEET DATA FORMAT
+				// CountryExp: "Philippines"
+				// DateRep: "1/9/20"
+				// EU: "Non-EU/EEA"
+				// GeoId: "PH"
+				// NewConfCases: "0"
+				// NewDeaths: "0"
+				const confirmedCases = {};
+				const dat = {};
+				let times = 10;
+				// populate dat
+				class Country {
+					constructor(name) {
+						this.name = name;
+						this.confCases = 0;
+						this.deaths = 0;
+					}
+					addEntry(entry) {
+						this.confCases += Number(entry.NewConfCases);
+						this.deaths += Number(entry.NewDeaths);
+					}
+				}
+				// class DataSet {
+				// 	constructor
+				// }
+  			sheet.forEach((item, index, array) => {
+  				// console.log(item)
+  				// if (times-- <= 0) return;
+  				// console.log(item.CountryExp, item.NewConfCases)
+  				const country = item.CountryExp;
+  				const date = dateParser(item.DateRep);
+  				const newCases = Number(item.NewConfCases);
+  				if(confirmedCases.hasOwnProperty(country)) {
+  					confirmedCases[country] += newCases;
+  				} else {
+  					confirmedCases[country] = newCases;
+  				}
+
+  				if(!dat[country]) dat[country] = new Country(country);
+  				dat[country].addEntry(item);
+  			});
+  			// console.log(dat)
+  			const arr = [];
+  			for (const [key, country] of Object.entries(dat)) {
+  				// console.log(key, country)
+  				arr.push(country);
+  			}
+  			const sortKey = 'confCases';
+  			const maxHeight = 5;
+  			arr.sort((a, b) => b[sortKey] - a[sortKey]);
+  			console.log(arr[0]);
+  			const maxVal = arr[1].confCases
+  			const scale = maxHeight/maxVal
+  			const graph = document.querySelector('#graph');
+  			// the future has not been written, there is no fate but that which we make four ourselves
+  			for (let i = 0; i < 20; i++) {
+  				const val = arr[i][sortKey]*scale;
+  				const name = arr[i].name;
+					// graph.innerHTML += `<a-box position="${i-2} 0 -4" height="${val*scale}"></a-box>`
+
+					const box = document.createElement('a-box');
+					box.setAttribute('position', `${i-2} ${val/2} -4`);
+					box.setAttribute('height', val);
+					box.setAttribute('color', 'gray');
+
+					const text = document.createElement('a-text');
+					text.setAttribute('position', `${i-2} ${val/2} -3`)
+					text.setAttribute('align', 'center')
+					text.setAttribute('value', name)
+
+					graph.appendChild(box);
+					graph.appendChild	(text);
+  			}
+  		})
+  		// sheet
+  	});
+  	function dateParser(dateStr) {
+  		const mmddyy = dateStr.split('/')
+  		const d = new Date();
+  		d.setFullYear(mmddyy[2]);
+  		d.setMonth(mmddyy[1]);
+  		d.setDate(mmddyy[0]);
+  		return d;
+  	}
+  </script>
+</body>
+</html>
