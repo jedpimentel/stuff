@@ -157,8 +157,8 @@
   			const maxHeight = 5;
   			arr.sort((a, b) => b[sortKey] - a[sortKey]);
   			console.log(arr[0]);
-  			const maxVal = arr[1].confCases
-  			const scale = maxHeight/maxVal
+  			const maxVal = arr[1].confCases;
+  			const scale = maxHeight/maxVal;
   			const graph = document.querySelector('#graph');
   			// the future has not been written, there is no fate but that which we make four ourselves
   			for (let i = 0; i < 20; i++) {
@@ -169,14 +169,13 @@
 					const box = document.createElement('a-box');
 					box.setAttribute('position', `${i-2} ${val/2} -4`);
 					box.setAttribute('height', val);
-					box.setAttribute('color', 'gray');
+					box.setAttribute('color', i%2 ? '#777777' : '#999999');
+					graph.appendChild(box);
 
 					const text = document.createElement('a-text');
-					text.setAttribute('position', `${i-2} ${val/2} -3`)
-					text.setAttribute('align', 'center')
-					text.setAttribute('value', name)
-
-					graph.appendChild(box);
+					text.setAttribute('position', `${i-2} ${val/2} -3`);
+					text.setAttribute('align', 'center');
+					text.setAttribute('value', name);
 					graph.appendChild	(text);
   			}
 
@@ -186,7 +185,7 @@
   		// sheet
   	});
   	function dateParser(dateStr) {
-  		const mmddyy = dateStr.split('/')
+  		const mmddyy = dateStr.split('/');
   		const d = new Date();
   		d.setFullYear(mmddyy[2]);
   		d.setMonth(mmddyy[1]);
