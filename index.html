@@ -138,6 +138,22 @@
             <!-- <a-image src="abstract.png" position="10 2 0" rotation="0 -90 0" width="6" height="6"></a-image> -->
 
         </a-scene>
+        <script type="text/javascript">
+            
+            AFRAME.registerComponent('desktop', {
+                init: function () {
+                    console.log('boop')
+                    // const voxel = document.createElement('a-box')
+                    // voxel.setAttribute('color', 'red')
+                    // voxel.setAttribute('height', '0.1')
+                    // voxel.setAttribute('width', '0.1')
+                    // voxel.setAttribute('depth', '0.1')
+                    // voxel.setAttribute('position', '0 0.1 -1')
+                    // this.el.appendChild(voxel)
+                    // window.e = this
+                }
+            })
+        </script>
         <div id="0Panel">
             <style type="text/css">
                 h1{
@@ -159,11 +175,13 @@
             <br>
             <p>Sorry for the layout, this index page is meant to be seen on a 1200+ pixel wide monitor.</p>
             <br>
-            <p>Screen Share Test • <a href="demo/screen-share.html">[ demo/screen-share.html ]</a>: your screen</p>
             <p>COVID-19 CHART • <a href="data/covid-19/viz.html">[ covid-19/viz.html ]</a>: chart</p>
             <p>Drawing app test • <a href="test/draw-app.html">[ draw-app.html ]</a>: draw stuff</p>
             <p>Clicky game test • <a href="test/cube-clicker.html">[ cube-clicker.html ]</a>: click stuff</p>
             <p>Touchscreen test • <a href="demo/touch-controls.html">[ touch-controls.html ]</a>: on-screen joystick phone/tablet</p>
+            <br>
+            <p>Desktop Only:</p>
+            <p>Screen Share Test • <a href="demo/screen-share.html">[ demo/screen-share.html ]</a>: your screen</p>
             <br>
             <p><a href="/tools">[ RANDOM TOOLS ]</a></p>
             <br>
