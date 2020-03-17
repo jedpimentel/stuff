@@ -73,7 +73,9 @@
 
 
 	  <a-assets>
-	    <a-asset-item id="xls" response-type="blob" src="COVID-19-geographic-disbtribution-worldwide-2020-03-10.xls"></a-asset-item>
+	    <a-asset-item id="xls" response-type="blob" src="COVID-19-geographic-disbtribution-worldwide-2020-03-17.xlsx"></a-asset-item>
+	    <!-- <a-asset-item id="xls" response-type="blob" src="https://www.ecdc.europa.eu/sites/default/files/documents/COVID-19-geographic-disbtribution-worldwide-2020-03-17.xlsx"></a-asset-item> -->
+
 	  </a-assets>
 
 	  <a-entity id="rig">
@@ -88,7 +90,23 @@
 	    <a-sky color="#ECECEC"></a-sky>
 	  </a-entity>
 
-    <a-entity id="graph"></a-entity>
+
+    <a-entity id="graph">
+    	<!--
+    		graph entity is centered on user-start-position and gets rotated towards
+    		user's default angle. Some devices use magnetometer for resolving the
+    		camera's default angle
+    	-->
+    	<a-entity rotation="0 45 0">
+	    	<a-entity id="info-board" position="0 2 -3.6">
+	    		<a-box color="#444444" depth="0.1" width="2">
+	    			<a-text id="as-of-date" value="Work in progress,\ndata as of:\n" position="0 0 0.1" align="center"></a-text>
+	    		</a-box>
+
+	    		<a-text value="source: ecdc.europa.eu\n(parsed from an .xlsx file)" color="#444444" position="0 1 0" align="center"></a-text>
+	    	</a-entity>
+    	</a-entity>
+    </a-entity>
   </a-scene>
 
   <script type="text/javascript">
@@ -107,12 +125,12 @@
   			// all the data is on the first sheet
   			const sheet = sheets[0];
   			// SHEET DATA FORMAT
-				// CountryExp: "Philippines"
+				// Countries and territories: "Philippines"
 				// DateRep: "1/9/20"
 				// EU: "Non-EU/EEA"
 				// GeoId: "PH"
-				// NewConfCases: "0"
-				// NewDeaths: "0"
+				// Cases: "0"
+				// Deaths: "0"
 				const confirmedCases = {};
 				const dat = {};
 				let times = 10;
@@ -124,29 +142,42 @@
 						this.deaths = 0;
 					}
 					addEntry(entry) {
-						this.confCases += Number(entry.NewConfCases);
-						this.deaths += Number(entry.NewDeaths);
+						this.confCases += Number(entry.Cases);
+						this.deaths += Number(entry.Deaths);
 					}
 				}
 				// class DataSet {
 				// 	constructor
 				// }
+				let mostRecentDate = dateParser(sheet[0].Day, sheet[0].Month, sheet[0].Year);
   			sheet.forEach((item, index, array) => {
   				// console.log(item)
   				// if (times-- <= 0) return;
-  				// console.log(item.CountryExp, item.NewConfCases)
-  				const country = item.CountryExp;
-  				const date = dateParser(item.DateRep);
-  				const newCases = Number(item.NewConfCases);
-  				if(confirmedCases.hasOwnProperty(country)) {
+  				// console.log(item['Countries and territories'], item.Cases)
+  				const country = item['Countries and territories'];
+  				const date = dateParser(item.Day, item.Month, item.Year);
+
+  				const newCases = Number(item.Cases);
+  				if (confirmedCases.hasOwnProperty(country)) {
   					confirmedCases[country] += newCases;
   				} else {
   					confirmedCases[country] = newCases;
+  				}
+  				const Deaths = Number(item.Deaths);
+					// console.log(date)
+					// console.log(date.getTime())
+  				if ((newCases	|| Deaths) && date.getTime() > mostRecentDate.getTime()) {
+  					console.log(newCases, Deaths, date, item.DateRep)
+  					mostRecentDate = date;
   				}
 
   				if(!dat[country]) dat[country] = new Country(country);
   				dat[country].addEntry(item);
   			});
+  			const txt = document.querySelector('#info-board a-text');
+  			// const dateStr = mostRecentDate.
+  			txt.setAttribute('value', txt.getAttribute('value') + mostRecentDate.toDateString())
+  			console.log(txt)
   			// console.log(dat)
   			const arr = [];
   			for (const [key, country] of Object.entries(dat)) {
@@ -184,12 +215,11 @@
   		})
   		// sheet
   	});
-  	function dateParser(dateStr) {
-  		const mmddyy = dateStr.split('/');
+  	function dateParser(dd, mm, yyyy) {
   		const d = new Date();
-  		d.setFullYear(mmddyy[2]);
-  		d.setMonth(mmddyy[1]);
-  		d.setDate(mmddyy[0]);
+  		d.setFullYear(yyyy);
+  		d.setMonth(mm);
+  		d.setDate(dd);
   		return d;
   	}
   </script>
