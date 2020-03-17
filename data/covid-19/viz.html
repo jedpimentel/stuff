@@ -174,8 +174,9 @@
   				if(!dat[country]) dat[country] = new Country(country);
   				dat[country].addEntry(item);
   			});
-  			const txt = document.querySelector('#info-board a-text');
+  			const txt = document.querySelector('#as-of-date');
   			// const dateStr = mostRecentDate.
+  			console.log(mostRecentDate)
   			txt.setAttribute('value', txt.getAttribute('value') + mostRecentDate.toDateString())
   			// console.log(txt)
   			// console.log(dat)
@@ -222,7 +223,7 @@
   	function dateParser(dd, mm, yyyy) {
   		const d = new Date();
   		d.setFullYear(yyyy);
-  		d.setMonth(mm);
+  		d.setMonth(mm - 1);
   		d.setDate(dd);
   		return d;
   	}
