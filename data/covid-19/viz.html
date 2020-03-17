@@ -87,7 +87,7 @@
 	    <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
 	    <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
 	    <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
-	    <a-sky color="#ECECEC"></a-sky>
+	    <a-sky color="#AAAAEC"></a-sky>
 	  </a-entity>
 
 
@@ -103,7 +103,7 @@
 	    			<a-text id="as-of-date" value="Work in progress,\ndata as of:\n" position="0 0 0.1" align="center"></a-text>
 	    		</a-box>
 
-	    		<a-text value="source: ecdc.europa.eu\n(parsed from an .xlsx file)" color="#444444" position="0 1 0" align="center"></a-text>
+	    		<a-text value="Confirmed Cases\nsource: ecdc.europa.eu\n(parsed from an .xlsx file)" color="#444444" position="0 1 0" align="center"></a-text>
 	    	</a-entity>
     	</a-entity>
     </a-entity>
@@ -112,16 +112,16 @@
   <script type="text/javascript">
 
   	document.querySelector('a-assets').addEventListener('loaded', e => {
-  		console.log('ding!', e)
+  		// console.log('ding!', e)
   		var sheet = e.target.querySelector('#xls')
   		// window.sheet = sheet
 
   		// ExcelToJSON.parseExcel(sheet.data).then(e => console.log('eee'));
   		let reader = ExcelToJSON.parseExcel(sheet.data);
-  		console.log(reader)
+  		// console.log(reader)
   		reader.then(sheets => {
   			// console.log(typeof sheets, sheets.length, sheets)
-  			console.log(typeof sheets[0], sheets[0].length, sheets[0])
+  			// console.log(typeof sheets[0], sheets[0].length, sheets[0])
   			// all the data is on the first sheet
   			const sheet = sheets[0];
   			// SHEET DATA FORMAT
@@ -167,7 +167,7 @@
 					// console.log(date)
 					// console.log(date.getTime())
   				if ((newCases	|| Deaths) && date.getTime() > mostRecentDate.getTime()) {
-  					console.log(newCases, Deaths, date, item.DateRep)
+  					// console.log(newCases, Deaths, date, item.DateRep)
   					mostRecentDate = date;
   				}
 
@@ -177,7 +177,7 @@
   			const txt = document.querySelector('#info-board a-text');
   			// const dateStr = mostRecentDate.
   			txt.setAttribute('value', txt.getAttribute('value') + mostRecentDate.toDateString())
-  			console.log(txt)
+  			// console.log(txt)
   			// console.log(dat)
   			const arr = [];
   			for (const [key, country] of Object.entries(dat)) {
@@ -187,27 +187,31 @@
   			const sortKey = 'confCases';
   			const maxHeight = 5;
   			arr.sort((a, b) => b[sortKey] - a[sortKey]);
-  			console.log(arr[0]);
+  			// console.log(arr[0]);
   			const maxVal = arr[1].confCases;
   			const scale = maxHeight/maxVal;
   			const graph = document.querySelector('#graph');
   			// the future has not been written, there is no fate but that which we make four ourselves
-  			for (let i = 0; i < 20; i++) {
+  			for (let i = 0; i < arr.length; i++) {
   				const val = arr[i][sortKey]*scale;
-  				const name = arr[i].name;
+  				const name = arr[i].name.replace(/_/g, '\n');
+  				const cases = arr[i].confCases;
+  				const deaths = arr[i].deaths;
 					// graph.innerHTML += `<a-box position="${i-2} 0 -4" height="${val*scale}"></a-box>`
 
-					const box = document.createElement('a-box');
-					box.setAttribute('position', `${i-2} ${val/2} -4`);
-					box.setAttribute('height', val);
-					box.setAttribute('color', i%2 ? '#777777' : '#999999');
-					graph.appendChild(box);
+					if (cases) {
+						const box = document.createElement('a-box');
+						box.setAttribute('position', `${i-2} ${val/2} -4`);
+						box.setAttribute('height', val);
+						box.setAttribute('color', i%2 ? '#777777' : '#999999');
+						graph.appendChild(box);
 
-					const text = document.createElement('a-text');
-					text.setAttribute('position', `${i-2} ${val/2} -3`);
-					text.setAttribute('align', 'center');
-					text.setAttribute('value', name);
-					graph.appendChild	(text);
+						const text = document.createElement('a-text');
+						text.setAttribute('position', `${i-2} ${val/2} -3`);
+						text.setAttribute('align', 'center');
+						text.setAttribute('value', `${name}\nc: ${cases}\nd: ${deaths}`);
+						graph.appendChild	(text);
+					}
   			}
 
   			// finally, fix graph's z rotation to ensure mobile devizes are facing -Z
