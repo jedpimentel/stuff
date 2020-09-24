@@ -3,12 +3,7 @@
 <html>
     <head>
         <title>Jose's Stuff</title>
-        <!-- in-vr links break upgrading 8.2 to 9.2 -->
-        <!-- <script src="https://aframe.io/releases/0.9.2/aframe.min.js"></script> -->
-        <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
-        <!-- <script src="https://aframe.io/releases/1.0.1/aframe.min.js"></script> -->
-
-        <!-- <script src="../../lib/GLTFExporter.js"></script> -->
+        <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
         <script src="lib/jose-components.js"></script>
         
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
@@ -28,23 +23,14 @@
         <!-- <a-scene id="scene" embedded style="height:1000px;width:1000px;"> -->
 
             <a-entity position="1.5 0 -3.5">
-                <!-- WAX OFF -->
-                <!-- <a-camera look-controls="pointerLockEnabled: true" near="0.001" wasd-controls>
-                    <a-cylinder id="fing-longer" position="0.2 -0.4 -0.9" radius="0.01" height= "1.0" rotation="90 0 0" color="beige" opacity="1.0"></a-cylinder>
-                    <a-entity pos-trail-line="segments: 10000" position="0.2 -0.4 -2"></a-entity>
-                    <a-entity position="0.2 -0.4 -1.4" cursor="rayOrigin: entity; showLine: true;" raycaster="showLine: true; far: 16" line="color: white; opacity:0.5"></a-entity>
-                </a-camera> -->
-                <!-- WAX ON -->
                 <a-entity joses-default-interface></a-entity>
             </a-entity>
 
             <!-- place these things first in HTML, for render order reasons -->
             <a-image src="turtles-in-sink.jpg" position="0 -15 0" rotation="90 0 0" width="20.48" height="15.36"></a-image>
             <a-image src="beach-on-cup.jpg" position="-10 2.15 0" rotation="0 90 0" width="5.76" height="10.24"></a-image>
-            <a-image src="mella.png" position="-10.01 -0.09 0" rotation="0 90 0" width="5.76" height="5.76"></a-image>
+            <a-image src="mella.png" position="-12 -0.09 0" rotation="0 90 0" width="5.76" height="5.76"></a-image>
 
-            <!-- transparency fix, ensure the stranslucent floor tiles and stuff -->
-            <!-- are higher up in the html, for transparency reasons -->
             <a-entity id="blob"></a-entity>
 
             <a-assets>
@@ -57,65 +43,41 @@
 
             <a-video id="video-clip" src="#video-asset" position="-3 2 -11" width="2.56" height="1.44" position="0 2 -5"></a-video>
 
+            <!-- TODO: make clicker game stuff its own component or something -->
             <a-box id="clicker-game-banner" src="clicker-game.png" position="0.5 2.5 -7.5" color="white"></a-box>
 
-            <!-- 20191224-note-to-self: Make an AFrame component with multiple instances (a-button, b-button, ..., n-button ?), that takes a function, action, tool, or some sort of whatever as an argument/parameter that does an action. Startup script checks scene for component and registers it with an ActionHandler.\n\nEx: &lt;a-key&gt; exists in a scene as a cube that goes "ding" if the "a" key is pressed. Keys/buttons defined inside the a-unified-ui component need to be moved around before the component's innerHTML gets set, allowing easier camera-anchored stuff. Attaching them to Quest/Etc controller could be a flag. If a-unified-ui component already has something for that key, maybe have a menu/wizard to sort things out when entering scene. Basic: press "f" to ding. Extra: UI-attached line-drawing button that attaches self to mouse, touchscreen, tracked-gamepad, etc. -->
-            <a-text value="20191224-note-to-self: Make an AFrame component with multiple instances (a-button, b-button, ..., n-button ?), that takes a function, action, tool, or some sort of whatever as an argument/parameter that does an action. Startup script checks scene for component and registers it with an ActionHandler.\n\nEx: &lt;A-KEY&gt; exists in a scene as a cube that goes &ldquo;DING&rdquo; if the &ldquo;A&rdquo;key is pressed. Keys/buttons defined inside the a-unified-ui component need to be moved around before the component's innerHTML gets set, allowing easier camera-anchored stuff. Attaching them to Quest/Etc controller could be a flag. If a-unified-ui component already has something for that key, maybe have a menu/wizard to sort things out when entering scene. Basic: press&ldquo;f&rdquo;to ding. Extra: UI-attached line-drawing button that attaches self to mouse, touchscreen, tracked-gamepad, etc." 
-                width='4'
-                wrap-count='82'
-                position='-0.5 1.2 -6.5'></a-text>
-            <!-- wrapCount not working? -->
-
-            <a-text value="[Sticking to 0.8.2 for now] - Known bugs:\n- yellow button sometimes doesn't work???\n- dual-raycaster/clicker is glitchy\n- Updating to Aframe 0.9.2 from 0.8.2 would break link traversal. 1.0.1 was unsafe (VR button broke my mouse+keyboard implementation, phone camera was looking straight down)" position="1.1 2.5 -8"></a-text>
-
-            <a-entity class='table' position='-4 0.01 -9'>
+             <a-entity class='table' position='0 0.01 -9'>
                 <a-entity class='grid-fitter' position='0.5 0 0.5'>
-
-                    <a-text  position='6 2.2 5' value='scanned\nhandwriting' align='center' src='chalk-effect.png' rotation='0 -90 0'></a-text>
-                    <a-image  position='6 1.5 5' src='chalk-effect.png' rotation='0 -90 0'></a-image>
-                    <a-entity position='5 0 3'>
-
+                    <a-text  position='6 2.2 5' value='handwriting\ntest' align='center' src='chalk-effect.png' rotation='0 -90 0'>
+                        <a-image  position='0 -0.7 0' src='chalk-effect.png'></a-image>
+                    </a-text>
+                    
+                    <a-entity position='1 0 3'>
                         <!-- table base -->
                         <a-cylinder color='saddlebrown' radius='0.25' height='0.7' position='0 0.35 0'></a-cylinder>
-
                         <!-- table top -->
                         <a-cylinder color='saddlebrown' radius='1' height='0.05' position='0 0.725 0'></a-cylinder>
-
                         <!-- table surface -->
                         <a-entity position='0 0.75 0'>
-
                             <a-entity class='table-demo' position='0 0 0'>
-
                                 <a-entity id='clock-hrs'><a-sphere position='0 0 -0.35' radius='0.1'></a-sphere></a-entity>
                                 <a-entity id='clock-min'><a-sphere position='0 0 -0.60' radius='0.1'></a-sphere></a-entity>
                                 <a-entity id='clock-sec'><a-sphere position='0 0 -0.85' radius='0.1'></a-sphere></a-entity>
-
-                                <!-- <a-box id="clicker-button" depth= '0.52' width="0.52" height="0.16" position="0 0.08 0" color="yellow"></a-box>
-                                <a-text value="<- click" position="0.26 0 0" rotation="-90 0 0"></a-text>
-                                <a-text value="Score:" align="center" position="0 0 0.45" rotation="-90 0 0"></a-text>
-                                <a-text id="clicker-score" value="0" align="center" position="0 0 0.70" rotation="-90 0 0"></a-text> -->
-
                             </a-entity>
-
                             <a-entity class='table-demo' position='-2 0 0'>
                                 <a-box id="clicker-button" class="clickable" depth= '0.52' width="0.52" height="0.32" position="0 0.05 0" color="yellow"></a-box>
                                 <a-text value="<- click" position="0.26 0 0" rotation="-90 0 0"></a-text>
                                 <a-text value="Score:" align="center" position="0 0 0.45" rotation="-90 0 0"></a-text>
                                 <a-text id="clicker-score" value="0" align="center" position="0 0 0.70" rotation="-90 0 0"></a-text>
                             </a-entity>
-
-
                         </a-entity>
-
                     </a-entity>
-
 <!-- 
                     <a-entity id='next-button'>
                         <a-text position='7 1 3' value='next' align='center'></a-text> 
                         <a-box src='next.png' position='7 0.7 3' height='0.25' width='0.25' depth='0.25'></a-box>
                     </a-entity>
  -->                    
-
                 </a-entity>
 
             </a-entity>
@@ -134,26 +96,9 @@
                 </a-entity>
             </a-entity>
 
-            <!-- place these things last in HTML, for render order reasons -->
             <!-- <a-image src="abstract.png" position="10 2 0" rotation="0 -90 0" width="6" height="6"></a-image> -->
-
         </a-scene>
-        <script type="text/javascript">
-            
-            AFRAME.registerComponent('desktop', {
-                init: function () {
-                    console.log('boop')
-                    // const voxel = document.createElement('a-box')
-                    // voxel.setAttribute('color', 'red')
-                    // voxel.setAttribute('height', '0.1')
-                    // voxel.setAttribute('width', '0.1')
-                    // voxel.setAttribute('depth', '0.1')
-                    // voxel.setAttribute('position', '0 0.1 -1')
-                    // this.el.appendChild(voxel)
-                    // window.e = this
-                }
-            })
-        </script>
+
         <div id="0Panel">
             <style type="text/css">
                 h1{
@@ -169,11 +114,9 @@
                 }
             </style>
 
-            <h1>A place for stuff</h1>
+            <h1>A place for stuff and tests</h1>
             <br>
             <p><a href="test/cage.html">[ cage.html ]</a></p>
-            <br>
-            <p>Sorry for the layout, this index page is meant to be seen on a 1200+ pixel wide monitor.</p>
             <br>
             <p>COVID-19 CHART • <a href="data/covid-19/viz.html">[ covid-19/viz.html ]</a>: chart from excel-file</p>
             <p>Drawing app test • <a href="test/draw-app.html">[ draw-app.html ]</a>: draw stuff</p>
@@ -182,27 +125,25 @@
             <br>
             <p>Desktop Only:</p>
             <p>Screen Share Test • <a href="demo/screen-share.html">[ demo/screen-share.html ]</a>: your screen</p>
-            <p>Drag and Drop Test • <a href="test/linear-drag-n-drop.html">[ test/linear-drag-n-drop.html ]</a>: drag some squares
+            <p>Drag and Drop Test • <a href="test/linear-drag-n-drop.html">[ test/linear-drag-n-drop.html ]</a>: drag some squares</p>
+            <br>
+            <p>Phone Stuff</p>
+            <p>Touchscreen Locomotion • <a href="demo/touch-controls.html">[ demo/touch-controls.html ]</a>: your screen</p>
+            <br>
+            <p>Artsy Stuff</p>
+            <p>Orange Rain • <a href="https://jedpimentel.github.io/stuff/art/mangogeddon.html">Mangogeddon</a></p>
+            <p>Spiky angles thing • <a href="demo/bench.html">thing</a></p>
             <!-- <br>
             <p>2D/flat stuff:</p> --><!-- </p>
             <br>
             <p><a href="/tools">[ RANDOM TOOLS ]</a></p> -->
+            <br>            
             <br>
-            <p>The Basics:</p>
+            <p>"Stuff" main page (you are here): click blue cube to play video, red sphere to move it around, green cylinder to play an audio file. Yellow box has a click counter. <!-- The paper cup image is just something I drew on (blue marker, black pen, pink powerade and coffee for the sand), the glithy image it sometimes shows is an example of <a href="https://en.wikipedia.org/wiki/Z-fighting">z-fighting<a>. The lamb is a PNG cutout. The handwriting is my actual handwriting, blown-up. --></p>
             <br>
-            <p>This is a personal sandbox site for testing WebVR/Aframe components. My focus so far has been more on creating re-usable reference code than making a consumer-ish website.</p>
-            <br>
-            <p><span class="red">NOTE: </span>This doesn't support iPhones because Apple isn't on-board with WebXR yet.</p>
-            <br>
-            <p>Most of my are adaptive and should work on either a VR Headset (I'm using an Oculus Quest) or Mouse+Keyboard. I'm currently figuring out making things usable on phone/tablet via on-screen UI elements. <a href="demo/touch-controls.html">[ Phone/Tablet UI preview ]<a></p>
-            <br>
-            <p>"Stuff" main page (you are here): click blue cube to play video, red sphere to move it around, green cylinder to play an audio file. Yellow box has a click counter. The paper cup image is just something I drew on (blue marker, black pen, pink powerade and coffee for the sand), the glithy image it sometimes shows is an example of <a href="https://en.wikipedia.org/wiki/Z-fighting">z-fighting<a>. The lamb is a PNG cutout. The handwriting is my actual handwriting, blown-up.</p>
-            <br>
-            <p>I apologize by how spartan this mess might look. My R&D focus has been mostly on interactivity and getting the basics down. It took me long enough to get where I am, but fear not: my JavaScript skills are enough to control a <a class="chunky-green" href="https://www.youtube.com/watch?v=MWjKUd7x7O4&list=PLp1h6x4FOZbD1WFxB6FbCl7TboPiQIAH8&index=6&t=0s">ROBOT<a> in real-time (from the Front End!). On the "artsy" side I have <a href="https://jedpimentel.github.io/stuff/art/mangogeddon.html">these</a> <a href="demo/bench.html">two</a> art innstallations.</p>
             <br>
             <p class="quote">"Remember kids, the only difference between screwing around and science is writing it down"<br>&nbsp;&nbsp;&nbsp;&nbsp; - Alex Jason (balistics expert)</p>
             <br>
-            <p>The laser stick that's attached to you is a clicking device. Initially meant as a head-mounted pointing apparatus for cardboard-type devices, it's an improvement to "hover to click" reticules that plays well with mouse+keyboard interfaces.</p>
             <br>
             <p>TODAY'S MENU</p>
             <br>
@@ -210,16 +151,16 @@
                 <li>
                     <span class="red">►</span> Oculust Quest test <a href="demo/oculus-quest/index.html">[open]</a>. Hold down grip button to start moving, use A/B buttons to draw in air.
                 </li>
-                <li>
+                <!-- <li>
                     <span class="red">►</span> WebVR Micro-Demos <a href="demo/index.html">[open]</a>
                 </li>
                 <li>
                     <span class="red">►</span> Project Robot <a href="https://www.youtube.com/watch?v=YwtfH2BK4ac&list=PLp1h6x4FOZbD1WFxB6FbCl7TboPiQIAH8">[open]</a>
-                </li>
+                </li> -->
             </ul>
 
             <br>
-            <p>=====</p>
+            <!-- <p>=====</p>
             <p>Oh, hi there! For now please enjoy this simple scene.</p>
             <p>=====</p>
             <br>
@@ -243,7 +184,7 @@
             <br>
             <p>Press "F", or the "Goggles" icon to go to full-screen mode.</p>
             <p>For now, mouse and keyboard constrols only. <span class="gre">#SorryNotSorry</span></p>
-            <br>
+            <br> -->
             <footer>
                 <br>
                 <!-- <p>123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</p> -->
