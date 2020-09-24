@@ -12,6 +12,6 @@
   "dependencies": {
     "https-localhost": "^4.6.2",
     "leapjs": "^0.6.4",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.1"
   }
 }
