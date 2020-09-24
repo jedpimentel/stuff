@@ -56,9 +56,28 @@ https://www.npmjs.com/package/http-server <-- it's dangerous to go alone, take t
 
 
 // https://tecadmin.net/install-latest-nodejs-npm-on-ubuntu/
-var http = require('http');
-http.createServer(function (req, res) {
-  res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.end('Hello World\n');
-}).listen(3000, "127.0.0.1");
-console.log('Server running at http://127.0.0.1:3000/');
+// var http = require('http');
+// http.createServer(function (req, res) {
+//   res.writeHead(200, {'Content-Type': 'text/plain'});
+//   res.end('Hello World\n');
+// }).listen(3000, "127.0.0.1");
+// console.log('Server running at http://127.0.0.1:3000/');
+
+
+const app = require("https-localhost")()
+// app is an express app, do what you usually do with express
+// app.listen('8080')
+// To redirect the http traffic to https use app.redirect().
+app.redirect();
+app.serve();
+// app.listen(8080);
+
+
+// initLocalHost();
+// async function initLocalHost() {
+// 	const httpsLocalhost = require("https-localhost")()
+// 	// const app = ...
+// 	// const port = 443
+// 	const certs = await httpsLocalhost.getCerts()
+// 	const server = https.createServer(certs, app).listen(port)
+// }
