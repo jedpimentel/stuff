@@ -6,6 +6,7 @@
         <!-- in-vr links break upgrading 8.2 to 9.2 -->
         <!-- <script src="https://aframe.io/releases/0.9.2/aframe.min.js"></script> -->
         <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
+        <!-- <script src="https://aframe.io/releases/1.0.1/aframe.min.js"></script> -->
 
         <!-- <script src="../../lib/GLTFExporter.js"></script> -->
         <script src="lib/jose-components.js"></script>
@@ -57,7 +58,15 @@
             <a-video id="video-clip" src="#video-asset" position="-3 2 -11" width="2.56" height="1.44" position="0 2 -5"></a-video>
 
             <a-box id="clicker-game-banner" src="clicker-game.png" position="0.5 2.5 -7.5" color="white"></a-box>
-            <a-text value="Known bugs:\n- yellow button sometimes doesn't work for a few seconds\n- dual-raycaster/clicker is glitchy\n- Updating to Aframe 0.9.2 from 0.8.2 would break link traversal" position="1.1 2.5 -8"></a-text>
+
+            <!-- 20191224-note-to-self: Make an AFrame component with multiple instances (a-button, b-button, ..., n-button ?), that takes a function, action, tool, or some sort of whatever as an argument/parameter that does an action. Startup script checks scene for component and registers it with an ActionHandler.\n\nEx: &lt;a-key&gt; exists in a scene as a cube that goes "ding" if the "a" key is pressed. Keys/buttons defined inside the a-unified-ui component need to be moved around before the component's innerHTML gets set, allowing easier camera-anchored stuff. Attaching them to Quest/Etc controller could be a flag. If a-unified-ui component already has something for that key, maybe have a menu/wizard to sort things out when entering scene. Basic: press "f" to ding. Extra: UI-attached line-drawing button that attaches self to mouse, touchscreen, tracked-gamepad, etc. -->
+            <a-text value="20191224-note-to-self: Make an AFrame component with multiple instances (a-button, b-button, ..., n-button ?), that takes a function, action, tool, or some sort of whatever as an argument/parameter that does an action. Startup script checks scene for component and registers it with an ActionHandler.\n\nEx: &lt;A-KEY&gt; exists in a scene as a cube that goes &ldquo;DING&rdquo; if the &ldquo;A&rdquo;key is pressed. Keys/buttons defined inside the a-unified-ui component need to be moved around before the component's innerHTML gets set, allowing easier camera-anchored stuff. Attaching them to Quest/Etc controller could be a flag. If a-unified-ui component already has something for that key, maybe have a menu/wizard to sort things out when entering scene. Basic: press&ldquo;f&rdquo;to ding. Extra: UI-attached line-drawing button that attaches self to mouse, touchscreen, tracked-gamepad, etc." 
+                width='4'
+                wrap-count='82'
+                position='-0.5 1.2 -6.5'></a-text>
+            <!-- wrapCount not working? -->
+
+            <a-text value="[Sticking to 0.8.2 for now] - Known bugs:\n- yellow button sometimes doesn't work???\n- dual-raycaster/clicker is glitchy\n- Updating to Aframe 0.9.2 from 0.8.2 would break link traversal. 1.0.1 was unsafe (VR button broke my mouse+keyboard implementation, phone camera was looking straight down)" position="1.1 2.5 -8"></a-text>
 
             <a-entity class='table' position='-4 0.01 -9'>
                 <a-entity class='grid-fitter' position='0.5 0 0.5'>
@@ -129,6 +138,22 @@
             <!-- <a-image src="abstract.png" position="10 2 0" rotation="0 -90 0" width="6" height="6"></a-image> -->
 
         </a-scene>
+        <script type="text/javascript">
+            
+            AFRAME.registerComponent('desktop', {
+                init: function () {
+                    console.log('boop')
+                    // const voxel = document.createElement('a-box')
+                    // voxel.setAttribute('color', 'red')
+                    // voxel.setAttribute('height', '0.1')
+                    // voxel.setAttribute('width', '0.1')
+                    // voxel.setAttribute('depth', '0.1')
+                    // voxel.setAttribute('position', '0 0.1 -1')
+                    // this.el.appendChild(voxel)
+                    // window.e = this
+                }
+            })
+        </script>
         <div id="0Panel">
             <style type="text/css">
                 h1{
@@ -147,19 +172,33 @@
             <h1>A place for stuff</h1>
             <br>
             <p><a href="test/cage.html">[ cage.html ]</a></p>
-            <p><a href="test/cube-clicker.html">[ cube-clicker.html ]</a></p>
+            <br>
+            <p>Sorry for the layout, this index page is meant to be seen on a 1200+ pixel wide monitor.</p>
+            <br>
+            <p>COVID-19 CHART • <a href="data/covid-19/viz.html">[ covid-19/viz.html ]</a>: chart from excel-file</p>
+            <p>Drawing app test • <a href="test/draw-app.html">[ draw-app.html ]</a>: draw stuff</p>
+            <p>Clicky game test • <a href="test/cube-clicker.html">[ cube-clicker.html ]</a>: click stuff</p>
+            <p>Touchscreen test • <a href="demo/touch-controls.html">[ touch-controls.html ]</a>: on-screen joystick phone/tablet</p>
+            <br>
+            <p>Desktop Only:</p>
+            <p>Screen Share Test • <a href="demo/screen-share.html">[ demo/screen-share.html ]</a>: your screen</p>
+            <p>Drag and Drop Test • <a href="test/linear-drag-n-drop.html">[ test/linear-drag-n-drop.html ]</a>: drag some squares
+            <!-- <br>
+            <p>2D/flat stuff:</p> --><!-- </p>
+            <br>
+            <p><a href="/tools">[ RANDOM TOOLS ]</a></p> -->
             <br>
             <p>The Basics:</p>
             <br>
             <p>This is a personal sandbox site for testing WebVR/Aframe components. My focus so far has been more on creating re-usable reference code than making a consumer-ish website.</p>
             <br>
-            <p><span class="red">NOTE: </span>"VR mode" freezes some phones, I'm looking into it.</p>
+            <p><span class="red">NOTE: </span>This doesn't support iPhones because Apple isn't on-board with WebXR yet.</p>
             <br>
-            <p>Most of my demos are targetted for Mouse+Keyboard, if you are on a VR-Headset please try out my <a href="demo/oculus-quest/index.html">Oculus Quest Demo</a>. If you are on a cell phone, you can at least move around inside my <a href="demo/touch-controls.html">Touchscreen Joystick Test<a>.</p>
+            <p>Most of my are adaptive and should work on either a VR Headset (I'm using an Oculus Quest) or Mouse+Keyboard. I'm currently figuring out making things usable on phone/tablet via on-screen UI elements. <a href="demo/touch-controls.html">[ Phone/Tablet UI preview ]<a></p>
             <br>
             <p>"Stuff" main page (you are here): click blue cube to play video, red sphere to move it around, green cylinder to play an audio file. Yellow box has a click counter. The paper cup image is just something I drew on (blue marker, black pen, pink powerade and coffee for the sand), the glithy image it sometimes shows is an example of <a href="https://en.wikipedia.org/wiki/Z-fighting">z-fighting<a>. The lamb is a PNG cutout. The handwriting is my actual handwriting, blown-up.</p>
             <br>
-            <p>I apologize by how spartan this mess might look. My R&D focus has been mostly on interactivity and getting the basics down. It took me long enough to get where I am, and my ThreeJS skills are enough to control a <a class="chunky-green" href="https://www.youtube.com/watch?v=MWjKUd7x7O4&list=PLp1h6x4FOZbD1WFxB6FbCl7TboPiQIAH8&index=6&t=0s">ROBOTIC ARM<a> in real-time (from the frontend, via WebSockets). As an "aesthetic" consolation prize, please have this <a href="demo/bench.html">pointy ball thing</a> as proof that I can programmatically place lines and spheres in space and/or create somewhat aesthetically pleasing compositions. Consumer-ish landing page TBA.</p>
+            <p>I apologize by how spartan this mess might look. My R&D focus has been mostly on interactivity and getting the basics down. It took me long enough to get where I am, but fear not: my JavaScript skills are enough to control a <a class="chunky-green" href="https://www.youtube.com/watch?v=MWjKUd7x7O4&list=PLp1h6x4FOZbD1WFxB6FbCl7TboPiQIAH8&index=6&t=0s">ROBOT<a> in real-time (from the Front End!). On the "artsy" side I have <a href="https://jedpimentel.github.io/stuff/art/mangogeddon.html">these</a> <a href="demo/bench.html">two</a> art innstallations.</p>
             <br>
             <p class="quote">"Remember kids, the only difference between screwing around and science is writing it down"<br>&nbsp;&nbsp;&nbsp;&nbsp; - Alex Jason (balistics expert)</p>
             <br>

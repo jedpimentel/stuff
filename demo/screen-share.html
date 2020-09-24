@@ -1,0 +1,171 @@
+
+<!DOCTYPE html> 
+<html>
+    <head>
+        <title>Player</title>
+        <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
+        <meta charset="UTF-8">
+    </head>
+    <body style="font-family:courier; color:white; background-color: black">
+        <section id="main"></section>
+        <a-scene ar id="scene">
+
+            <!-- https://stackoverflow.com/questions/51659276/how-do-i-use-a-webcam-feed-as-an-a-frame-texture -->
+            <a-assets>
+                <!-- being replaced with a frontend webcam stream -->
+                <video id="webcam" playsinline></video>
+                <!-- <video id="video-asset" autoplay loop="true" src="video.mp4"></video> -->
+            </a-assets>
+            <!-- Start the webcam stream and attach it to the video element -->
+            <!-- create the stream -->
+            <script>
+              // You can also set which camera to use (front/back/etc)
+
+                // https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints/facingMode
+                // https://developer.mozilla.org/en-US/docs/Web/API/Media_Streams_API/Constraints#Example_Constraint_exerciser
+                const video_constraints = {
+                    // https://addpipe.com/blog/getusermedia-video-constraints/
+                    facingMode: { ideal: 'environment' },
+                };
+
+                if (false) {
+                    // navigator.mediaDevices.getUserMedia({audio: false, video: true})
+                    navigator.mediaDevices.getUserMedia({audio: false, video: video_constraints})
+                    .then(stream => {
+                        const vid_el = document.querySelector('#webcam');
+                        vid_el.srcObject = stream;
+                        vid_el.onloadedmetadata = () => {
+                            // can we get the dimensions?
+                            const tracks = stream.getVideoTracks()
+                            console.log(tracks);
+                            // phones are weird because the can have both front and rear facing cameras
+                            // once I get a backend up I'll want to save user devices so app will remember which is which
+                            // a 'Device Setup' wizard could walk someone through the process of using their device for the 
+                            // first time, or to update their device config whenever a new feature is implimented
+
+                            // whole page click listener... didn't end up using
+                            // window.addEventListener("click", function(event) {
+                                // toggle video playback
+                                // if(vid_el.paused) {
+                                //     vid_el.play();
+                                // } else {
+                                //     vid_el.pause();
+                                // }
+                            // });
+
+                            vid_el.play() ;
+                        }
+                    })
+                }
+
+                if (true) {
+                    // https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Using_Screen_Capture
+
+                    var displayMediaOptions = {
+                      video: {
+                        cursor: "always"
+                      },
+                      audio: false
+                    };
+
+                    // async function startCapture() {
+                    //   logElem.innerHTML = "";
+
+                    //   try {
+                    //     videoElem.srcObject = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
+                    //     dumpOptionsInfo();
+                    //   } catch(err) {
+                    //     console.error("Error: " + err);
+                    //   }
+                    // }
+                    navigator.mediaDevices.getDisplayMedia(displayMediaOptions)
+                    .then(stream => {
+                        const vid_el = document.querySelector('#webcam');
+                        vid_el.srcObject = stream;
+                        vid_el.onloadedmetadata = () => {
+                            // can we get the dimensions?
+                            const tracks = stream.getVideoTracks()
+                            console.log(tracks);
+                            // phones are weird because the can have both front and rear facing cameras
+                            // once I get a backend up I'll want to save user devices so app will remember which is which
+                            // a 'Device Setup' wizard could walk someone through the process of using their device for the 
+                            // first time, or to update their device config whenever a new feature is implimented
+
+                            // whole page click listener... didn't end up using
+                            // window.addEventListener("click", function(event) {
+                                // toggle video playback
+                                // if(vid_el.paused) {
+                                //     vid_el.play();
+                                // } else {
+                                //     vid_el.pause();
+                                // }
+                            // });
+
+                            vid_el.play() ;
+                        }
+                    })
+
+
+                }
+
+                // https://stackoverflow.com/questions/18625007/enable-rear-camera-with-html5
+                navigator.mediaDevices.enumerateDevices()
+                  .then(function(devices) {
+                    devices.forEach(function(device) {
+                      console.log(device.kind + ": " + device.label +
+                        " id = " + device.deviceId);
+                    });
+                  })
+                  .catch(function(e) {
+                    console.log(e.name + ": " + e.message);
+                  });
+            </script>
+
+            <a-light type='ambient' color='white'></a-light>
+
+
+            <a-entity position="0 0 0" opacity='0.1'>
+                <a-camera look-controls="pointerLockEnabled: true" wasd-controls>
+                    <!-- <a-cylinder id="fing-longer" position="0.2 -0.2 -0.2" radius="0.01" height= "1.0" rotation="90 0 0" color="beige" opacity="1.0"></a-cylinder> -->
+                    <!-- <a-entity position="0.2 -0.2 -0.7" cursor="rayOrigin: entity; showLine: true;" raycaster="showLine: true; far: 16" line="color: white; opacity:0.5"></a-entity> -->
+
+                    <!-- HUD pass-through camera -->
+                    <!-- <a-video id='video-element' src='#webcam' autoplay loop="true" position='0 0 -0.75' ></a-video> -->
+
+                </a-camera>
+            </a-entity>
+            
+            <!-- base platform -->
+            <a-circle radius='1' position='0 0 0' rotation='-90 0 0' color='gray' opacity='0.1'></a-circle>
+
+            <!-- standing "television" -->
+            <a-entity position='0 1.6 0'>   
+
+                <!-- frame -->
+                <a-box color='gray' width='1' height='1' depth='0.3'  position='0 0 -0.91' opacity='0.1'></a-box>
+                <a-box color='#666' width='0.3' height='1.1' depth='0.15'  position='0 -1.05 -0.91' opacity='0.1'></a-box>
+
+                <!-- screen -->
+                <!-- <a-video id='video-element' src='#webcam' autoplay loop="true" position='0 0 -0.75' width='0.5' height='0.5'></a-video> -->
+                <a-video id='video-element' src='#webcam' autoplay loop="true" position='0 0 -0.75'></a-video>
+                
+                <!-- screen title -->
+                <a-text value='webcam stuff' align='center' position='0 0.75 -0.75 opacity='0.1''></a-text>
+            </a-entity>
+        </a-scene>
+
+        <script type="text/javascript">
+            // {
+            //     // TODO: make this display the user's webcam on a giant display
+            //     // AFTER: work on gamepad.html, make a xbox/ps/switch polyfill for referring to the buttons
+
+            //     const play = document.querySelector('#play');
+            //     const pause = document.querySelector('#pause');
+            //     const vid = document.querySelector('#video-asset');
+
+            //     play.addEventListener('click', () => vid.play());
+            //     pause.addEventListener('click', () => vid.pause());           
+            // }
+        </script>
+    </body>
+</html>

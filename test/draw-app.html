@@ -52,12 +52,11 @@
       },
       draw_at: function (intersection) {
         const point = intersection.point
-        const voxel_size = 0.01
         point.x = round(point.x)
         point.y = round(point.y)
         point.z = round(point.z)
         function round(i) { 
-          return Math.round(i/voxel_size)*voxel_size
+          return Math.round(i*10)/10
         }
 
         // don't add if voxel already exists
@@ -65,9 +64,9 @@
 
         const voxel = document.createElement('a-box')
         voxel.setAttribute('color', 'red')
-        voxel.setAttribute('height', voxel_size)
-        voxel.setAttribute('width', voxel_size)
-        voxel.setAttribute('depth', voxel_size)
+        voxel.setAttribute('height', '0.1')
+        voxel.setAttribute('width', '0.1')
+        voxel.setAttribute('depth', '0.1')
         voxel.setAttribute('position', `${point.x} ${point.y} ${point.z}`)
 
         if (!(point.x in this.voxels)) this.voxels[point.x] = {};

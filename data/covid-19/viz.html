@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>COVID-19</title>
+
+  <!-- <script src="https://aframe.io/releases/1.0.3/aframe.min.js"></script> -->
+  <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
+
+
+  <!-- https://stackoverflow.com/questions/8238407/how-to-parse-excel-file-in-javascript-html5 -->
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
+	<script>
+	class ExcelToJSON {
+
+	  static parseExcel(file) {
+	    return new Promise((resolve, reject) => {
+		    var reader = new FileReader();
+
+		    reader.onload = function(e) {
+		      var data = e.target.result;
+		      var workbook = XLSX.read(data, {
+		        type: 'binary'
+		      });
+
+		      const chunks = [];
+		      workbook.SheetNames.forEach(function(sheetName) {
+		        // Here is your object
+		        var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+		        chunks.push(XL_row_object)
+		        // var json_object = JSON.stringify(XL_row_object);
+		        // chunks.push(json_object)
+		        // console.log(json_object);
+
+		      })
+		      resolve(chunks)
+		    };
+
+		    reader.onerror = function(ex) {
+		      console.log(ex);
+		    };
+
+		    reader.readAsBinaryString(file);
+	    });
+	  };
+	};
+	// ExcelToJSON()
+	// console.log('aaa')
+	// AFRAME.registerComponent('box-line', {
+	// AFRAME.registerPrimitive('box-line', {
+	// 	schema: {
+	// 		// inneficient for from/to to be strings?
+	// 		from: {type: 'string', default: '0 0 -1'},
+	// 		to: {type: 'string', default: '0 1 -1'},
+	// 		width: {type: 'number', default: 0.25 }
+	// 	}
+	// })
+
+	// conf => {
+	// 	from: THREE.Vector3
+	// 	to: THREE.Vector3
+	// 	width: number
+	// }
+	function boxLine(conf) {
+		return `<a-box></a-box>`
+	}
+
+	</script>
+</head>
+<body>
+
+  <a-scene>
+
+
+	  <a-assets>
+	  	<!-- https://www.ecdc.europa.eu/sites/default/files/documents/COVID-19-geographic-disbtribution-worldwide.csv -->
+	    <a-asset-item id="xls" response-type="blob" src="COVID-19-geographic-disbtribution-worldwide.xlsx"></a-asset-item>
+
+	  </a-assets>
+
+	  <a-entity id="rig">
+		  <a-camera id="camera"></a-camera>
+		</a-entity>
+
+	  <a-entity position="0 0 -4">
+	    <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
+	    <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
+	    <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
+	    <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
+	    <a-sky color="#AAAAEC"></a-sky>
+	  </a-entity>
+
+
+    <a-entity id="graph">
+    	<!--
+    		graph entity is centered on user-start-position and gets rotated towards
+    		user's default angle. Some devices use magnetometer for resolving the
+    		camera's default angle
+    	-->
+    	<a-entity rotation="0 55 0">
+	    	<a-entity id="info-board" position="0 2 -3.6">
+	    		<a-box color="#444444" depth="0.1" width="2">
+	    			<a-text id="as-of-date" value="Work in progress,\ndata as of:\n" position="0 0 0.1" align="center"></a-text>
+	    		</a-box>
+
+	    		<a-text value="Confirmed Cases\nsource: ecdc.europa.eu\n(parsed from an .xlsx file)" color="#444444" position="0 1 0" align="center"></a-text>
+	    	</a-entity>
+    	</a-entity>
+    </a-entity>
+  </a-scene>
+
+  <script type="text/javascript">
+
+  	document.querySelector('a-assets').addEventListener('loaded', e => {
+  		// console.log('ding!', e)
+  		var sheet = e.target.querySelector('#xls')
+  		// window.sheet = sheet
+
+  		// ExcelToJSON.parseExcel(sheet.data).then(e => console.log('eee'));
+  		let reader = ExcelToJSON.parseExcel(sheet.data);
+  		// console.log(reader)
+  		reader.then(sheets => {
+  			// console.log(typeof sheets, sheets.length, sheets)
+  			// console.log(typeof sheets[0], sheets[0].length, sheets[0])
+  			// all the data is on the first sheet
+  			const sheet = sheets[0];
+  			// SHEET DATA FORMAT
+				// Countries and territories: "Philippines"
+				// DateRep: "1/9/20"
+				// EU: "Non-EU/EEA"
+				// GeoId: "PH"
+				// Cases: "0"
+				// Deaths: "0"
+				const confirmedCases = {};
+				const dat = {};
+				let times = 10;
+				// populate dat
+				class Country {
+					constructor(name) {
+						this.name = name;
+						this.confCases = 0;
+						this.deaths = 0;
+					}
+					addEntry(entry) {
+						this.confCases += Number(entry.Cases);
+						this.deaths += Number(entry.Deaths);
+					}
+				}
+				// class DataSet {
+				// 	constructor
+				// }
+				let mostRecentDate = dateParser(sheet[0].Day, sheet[0].Month, sheet[0].Year);
+  			sheet.forEach((item, index, array) => {
+  				// console.log(item)
+  				// if (times-- <= 0) return;
+  				// console.log(item['Countries and territories'], item.Cases)
+  				const country = item['Countries and territories'];
+  				const date = dateParser(item.Day, item.Month, item.Year);
+
+  				const newCases = Number(item.Cases);
+  				if (confirmedCases.hasOwnProperty(country)) {
+  					confirmedCases[country] += newCases;
+  				} else {
+  					confirmedCases[country] = newCases;
+  				}
+  				const Deaths = Number(item.Deaths);
+					// console.log(date)
+					// console.log(date.getTime())
+  				if ((newCases	|| Deaths) && date.getTime() > mostRecentDate.getTime()) {
+  					// console.log(newCases, Deaths, date, item.DateRep)
+  					mostRecentDate = date;
+  				}
+
+  				if(!dat[country]) dat[country] = new Country(country);
+  				dat[country].addEntry(item);
+  			});
+  			const txt = document.querySelector('#as-of-date');
+  			// const dateStr = mostRecentDate.
+  			console.log(mostRecentDate)
+  			txt.setAttribute('value', txt.getAttribute('value') + mostRecentDate.toDateString())
+  			// console.log(txt)
+  			// console.log(dat)
+  			const arr = [];
+  			for (const [key, country] of Object.entries(dat)) {
+  				// console.log(key, country)
+  				arr.push(country);
+  			}
+  			const sortKey = 'confCases';
+  			const maxHeight = 5;
+  			arr.sort((a, b) => b[sortKey] - a[sortKey]);
+  			const casesScale = maxHeight/arr[1]['confCases'];
+  			const deathsScale = maxHeight/arr[1]['deaths'];
+  			const graph = document.querySelector('#graph');
+  			
+  			for (let i = 0; i < arr.length; i++) {
+  				const cases = arr[i].confCases;
+				// graph.innerHTML += `<a-box position="${i-2} 0 -4" height="${scaledCases*casesScale}"></a-box>`
+				// assume all deaths count as cases
+				if (cases) {
+	  				const deaths = arr[i].deaths;
+	  				const scaledCases = arr[i]['confCases']*casesScale;
+	  				// const scaledDeaths = arr[i]['deaths']*deathsScale;
+	  				const name = arr[i].name.replace(/_/g, '\n');
+
+					const aBox = document.createElement('a-box');
+					aBox.setAttribute('position', `${i-2} ${scaledCases/2} -4`);
+					aBox.setAttribute('height', scaledCases);
+					aBox.setAttribute('color', i%2 ? '#777777' : '#999999');
+					graph.appendChild(aBox);
+
+					// const deathBox = document.createElement('a-box');
+					// // const deathHeight = dea
+					// deathBox.setAttribute('position', `${i-2} ${scaledDeaths/2} -5`);
+					// deathBox.setAttribute('height', scaledDeaths);
+					// deathBox.setAttribute('color', i%2 ? '#777777' : '#999999');
+					// graph.appendChild(deathBox);
+
+					const text = document.createElement('a-text');
+					text.setAttribute('position', `${i-2} ${scaledCases/2} -3.5`);
+					text.setAttribute('align', 'center');
+					const ratio = (cases / deaths).toFixed(1);
+					const percent = (100 * deaths / cases).toFixed(1);
+					text.setAttribute('value', `${name}\nc: ${cases}\nd: ${deaths}\nd%:${percent}`);
+					graph.appendChild	(text);
+				}
+  			}
+
+  			// finally, fix graph's z rotation to ensure mobile devizes are facing -Z
+  			graph.object3D.rotation.y = AFRAME.scenes[0].camera.el.object3D.rotation.y;
+  		})
+  		// sheet
+  	});
+  	function dateParser(dd, mm, yyyy) {
+  		const d = new Date();
+  		d.setFullYear(yyyy);
+  		d.setMonth(mm - 1);
+  		d.setDate(dd);
+  		return d;
+  	}
+  </script>
+</body>
+</html>

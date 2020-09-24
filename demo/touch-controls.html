@@ -12,6 +12,146 @@
         <script src="../lib/jose-components.js"></script>
 
         <meta charset="UTF-8">
+
+
+        <script type="text/javascript">
+            AFRAME.registerComponent('follow-camera', {
+                // attaches thing to camera position, but not rotation
+                // wasd controls was making this move glitchily, but became smothe if tabbing out and in again
+                schema: {
+                    camID: {type: 'string'}
+                },
+                init: function() {
+
+                    this.camera = document.querySelector(`#${this.data.camID}`)
+                    if (!this.camera) throw `error, could not find "#${this.data.camID}"`
+
+                },
+                tick: function() {
+                    this.el.object3D.position.copy(this.camera.object3D.position)
+                    this.el.object3D.rotation.y = this.camera.object3D.rotation.y
+                }
+            });
+
+            // zoidberg zardbarg
+            AFRAME.registerSystem('analog-input-handler-test', {
+                // STATE: keep internal to touch-controls.html, 
+                // resolve forward/flatForward naming convention, keep both modes under a flag?
+                // is it okay to move the camera itself instead of wrapper? (prob not)
+                // how about rotating the wrapper versus the camera itself?
+                schema: {},
+                foo: () => console.log('bar'),
+                init: function () {
+                    this.camwrapper = document.querySelector('#camera-wrapper');
+                    this.camera = document.querySelector('#camera-actual');
+                    this._active = false;
+                    this._direction = new THREE.Vector2(0, 0);
+                    document.addEventListener('DOMContentLoaded', (event) => {
+
+                        // ADD UI TO THE DOM
+                        const div = document.createElement('div');
+                        // no need to make a div in a div
+                        div.innerHTML = `
+                            <div id="overlay">
+                                <p>use this touch-pad to move around</p>
+                            </div>
+                        `;
+                        document.body.appendChild(div);
+
+                        const style = document.createElement('style');
+                        style.innerHTML = `
+                            #overlay {
+                                position:absolute;
+                                bottom:0px;
+                                left:0px;
+                                z-index:1000;
+                                background-color: gray;
+
+                                height: 200px;
+                                width: 200px;
+                                margin: 50px
+                            }
+                        `;
+                        document.head.appendChild(style);
+
+                        // avoid accessing properties before initialized,
+                        // might be goood to have system methhoods/props check
+                        // if system has been fully initialized/loaded, defined
+                        // as having camwrapper and all dependencies already be initialized
+                        this.cWrapPos = this.camwrapper.object3D.position;
+
+
+                        // https://nunustudio.org/learn/basics/14_joystick/page.html
+                        inputHandler = document.querySelector('a-scene').systems['analog-input-handler-test'];
+                        
+                        // direction = new THREE.Vector2(0, 0);
+
+                        const manager = nipplejs.create({
+                            zone: document.getElementById('overlay'),
+                            color: 'blue'
+                        });
+
+                        // setInterval(function(){
+                        //     if(this._active) {
+                        //         inputHandler.move(this._direction.y, this._direction.x)
+                        //     }
+                        // }, 1000 / 90);
+
+                        manager.on("added", (event, nipple) => {
+                            nipple.on("start", (event, data) => {
+                                this._active = true;
+                            });
+                            nipple.on("move", (event, data) => {
+                                const force = 0.08 * data.force;
+                                this._direction.x = Math.cos(data.angle.radian) * force;
+                                this._direction.y = Math.sin(data.angle.radian) * force;
+                            });
+                            nipple.on("end", (event, data) => {
+                                speed = 0
+                                this._active = false;
+                            });
+                        });
+                        manager.on("removed", (event, nipple) => {
+                            nipple.off("move start end");
+                        });
+                    });
+
+                    // this.heading = new THREE.Vector3()
+                },
+
+                move: function (forward, rightward) {
+                    const yRot = this.camera.object3D.rotation.y;
+                    this.cWrapPos.z += rightward *  Math.sin(-yRot) - forward * Math.cos(yRot);
+                    this.cWrapPos.x += rightward *  Math.cos(-yRot) - forward * Math.sin(yRot);
+
+                },
+
+                // // TODO: Remove "forward" and "rightward" stuff, document "alt version" in a vlog post
+                // forward: function (value) {
+                //     //!! maybe not stable, see: Quaternions
+                //     // https://threejs.org/docs/#api/en/math/Quaternion
+                //     const yRot = this.camera.object3D.rotation.y 
+                //     this.cWrapPos.z -= (value * Math.cos(yRot));
+                //     this.cWrapPos.x -= (value * Math.sin(yRot));
+                    
+                //     // {// alt version, move slower if looking down
+                //     //     this.camera.object3D.getWorldDirection(this.heading);
+                //     //     this.camwrapper.object3D.position.x -= this.heading.x * value
+                //     //     this.camwrapper.object3D.position.z -= this.heading.z * value
+                //     // }
+                // },
+                // rightward: function (value) {
+                //     const yRot = this.camera.object3D.rotation.y 
+                //     this.cWrapPos.z += (value * Math.sin(-yRot));
+                //     this.cWrapPos.x += (value * Math.cos(-yRot));
+                // },
+                tick: function () {                    
+                    if(this._active) {
+                        this.move(this._direction.y, this._direction.x)
+                    }
+                },
+            })
+        </script>
     </head>
 
     <body style="margin : 0px; overflow: hidden; font-family:courier; color:white; background-color: black">
@@ -22,16 +162,16 @@
           <p>Your user agent does not support the HTML5 Audio element.</p>
         </audio>
 
+
         <a-scene>
-
-
             <a-assets>
                 <img id="my-image" src="lamb.png">
             </a-assets>
 
             <a-entity id="camera-wrapper" position="0 1.6 0">
                 <!-- it seems disabling look controls leaves camera on floor -->
-                <a-camera look-controls="enabled: false; pointerLockEnabled: false" near="0.001" wasd-controls>
+                <!-- <a-camera look-controls="enabled: false; pointerLockEnabled: false" near="0.001" wasd-controls> -->
+                <a-camera id="camera-actual" near="0.001" >
                     <a-cylinder id="fing-longer" position="0.2 -0.4 -0.9" radius="0.01" height= "1.0" rotation="90 0 0" color="beige" opacity="1.0"></a-cylinder>
                     <a-entity position="0.2 -0.4 -1.4" cursor="rayOrigin: entity; showLine: true;" raycaster="showLine: true; far: 16" line="color: white; opacity:0.5">
                         <!-- <a-image src="lamb.png" rotation="-90 0 0"></a-image> -->
@@ -46,78 +186,16 @@
         </a-scene>
 
         <!-- https://stackoverflow.com/questions/51989945/on-screen-button-for-a-frame-ar -->
-        <div id="overlay" style="position:absolute; bottom:0px; left:0px; z-index:1000; background-color: gray;">
-            <!-- your overlay content here -->
+        <!-- <div id="overlay" style="position:absolute; bottom:0px; left:0px; z-index:1000; background-color: gray;">
             <p>use this touch-pad to move around</p>
-        </div>
-        <style type="text/css">
+        </div> -->
+        <!-- <style type="text/css">
             #overlay {
                 height: 200px;
                 width: 200px;
                 margin: 50px
             }
-        </style>
-        <script type="text/javascript">
-            // https://nunustudio.org/learn/basics/14_joystick/page.html
-
-            // scene = window.getObjectByName("a-scene");
-            // camera = scene.getObjectByName("camera");
-            // cube = scene.getObjectByName("cube");
-            camera = document.getElementById("camera-wrapper");
-            cube = document.getElementById("green-cyl");
-            
-            direction = new THREE.Vector2(0, 0);
-            pressed = false;
-
-            var manager = nipplejs.create({
-                zone: document.getElementById('overlay'),
-                color: 'blue'
-            });
-
-            // camera movement loop
-            // speed = 0;
-            setInterval(function(){
-                if(pressed) {
-                    // camera.object3D.position.set(1, 1, 1);
-                    let x = camera.object3D.position.x
-                    let y = camera.object3D.position.y
-                    let z = camera.object3D.position.z
-
-                    camera.object3D.position.set(x + direction.x, y, z - direction.y);
-                }
-                // console.log("Hello"); 
-            }, 1000 / 90);
-
-            manager.on("added", function(event, nipple)
-            {
-                nipple.on("move start end", function(event, data)
-                {
-                    if(event.type === "move") {
-                        var force = 0.08 * data.force;
-                        
-                        direction.x = Math.cos(data.angle.radian) * force;
-                        direction.y = Math.sin(data.angle.radian) * force;
-                        console.log('move', force, direction.x, direction.y)
-
-                    }
-                    else if(event.type === "start") {
-                        console.log('start')
-                        pressed = true;
-                    }
-                    else if(event.type === "end") {
-                        console.log('end')
-                        speed = 0
-                        pressed = false;
-                    }
-                });
-            });
-
-            manager.on("removed", function(event, nipple)
-            {
-                nipple.off("move start end");
-            });
-        </script>
-        <div></div>
+        </style> -->
 
         <script type="text/javascript">
             // cylinder interaction

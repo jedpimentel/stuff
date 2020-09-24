@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Drag-n-Drop</title>
+	<!-- how about a "Dragon Drop" game? -->
+	<!-- https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API -->
+	<!-- https://developer.mozilla.org/en-US/docs/Web/API/Document/drop_event -->
+	<style type="text/css">
+		div div {
+			width: 5em;
+			height: 5em;
+			border: 1px solid black;
+			padding: auto;
+			margin: auto;
+		}
+	</style>
+</head>
+<body>
+	<h1>Drag the squares to reorder them</h1>
+	<div id="test-area"></div>
+	<script type="text/javascript">
+		const testArea = document.querySelector('#test-area');
+		const innerValues = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+		innerValues.forEach(v => testArea.appendChild(genDraggable(v)));
+
+		let dragged;
+		function dragstart_handler(event) {
+			dragged = event.target;
+			const bounds = event.target.getBoundingClientRect();
+			const x = (bounds.right - bounds.left) / 2;
+			const y = (bounds.bottom - bounds.top) / 2;
+			event.dataTransfer.setDragImage(dragged, x, y);
+		}
+
+		function genDraggable(innerHTML) {
+			const d = document.createElement('div');
+			d.innerHTML = innerHTML;
+			d.setAttribute('draggable', true);
+			d.ondragstart = dragstart_handler;
+			d.ondragover = event => event.preventDefault();;
+			d.ondrop = dropHandler;
+			d.style.backgroundColor = randHexColor();
+			return d;
+		}
+
+		function dropHandler(event) {
+			const dropped = event.target;
+			if (dropped === dragged) return;
+
+			const draggedTop = dragged.getBoundingClientRect().top;
+			const droppedTop = dropped.getBoundingClientRect().top;
+
+			if (droppedTop - draggedTop < 0) {
+				dropped.before(dragged);
+			} else {
+				dropped.after(dragged);
+			}
+		}
+
+		function randHexColor() {
+			let str = '#';
+			while (str.length < 7) {
+				str += Math.floor(100 + 156*Math.random()).toString(16);
+			}
+			return str
+		}
+
+		// didn't end up using, but def not gonna delete this
+		// function swapNodes(a, b) {
+		// 	const swapNode = document.createElement('div');
+		// 	const oldA = a.parentNode.replaceChild(swapNode, a);
+		// 	const oldB = b.parentNode.replaceChild(oldA, b);
+		// 	swapNode.replaceWith(oldB);
+		// }
+	</script>
+</body>
+</html>
