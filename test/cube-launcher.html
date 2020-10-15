@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="eng">
+
+<head>
+  <title>CUBE LAUNCHER</title>
+  <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+  <script src="//cdn.rawgit.com/donmccurdy/aframe-physics-system/v4.0.1/dist/aframe-physics-system.min.js"></script>
+
+
+
+  <script src="../lib/jose-components.js"></script>
+  <meta charset="utf-8">
+</head>
+
+<body style="font-family:courier; color:white; background-color: black">
+
+	<script type="text/javascript">
+		AFRAME.registerComponent('click-me', {
+
+			init: function () {
+				this.flickTarget = document.querySelector('#flick-target');
+				this.flickVector = new THREE.Vector3(0, 32, -4);
+				//this.flickVector = new CANNON.Vec3();
+				//this.flickPoint = new CANNON.Vec3();
+				this.flickPoint = new THREE.Vector3();
+				this.el.addEventListener('click', () => this.click());// works as expected
+			},
+			click: function () {
+				console.log('doop')
+				this.flickTarget.object3D.getWorldPosition(this.flickPoint)
+				this.flickTarget.body.applyImpulse(
+				    this.flickVector,
+				    this.flickPoint
+				);
+			},
+
+
+		})
+	</script>
+
+	<a-scene loading-screen="dotsColor: white; backgroundColor: black">
+
+    <a-entity joses-default-interface></a-entity>
+
+    <a-box id="flick-target" dynamic-body color="orange" position="-1 1 -4"></a-box>
+    <a-plane static-body height="100" width="100" rotation="90 0 0"></a-plane>
+
+    <a-entity click-me position="0 1 -4">
+		<a-text value="CLICK ME" align="center" side="double"></a-text>
+		<a-box class="clickable" color="red" opacity="0.2"></a-box>
+    </a-entity>
+
+
+	</a-scene>
+</body>
+</html>
