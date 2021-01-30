@@ -1,14 +1,3 @@
-// what if you have two linked lists and cross them mid way, converging?
-	// append(data) {
-	// 	// (this.head instanceof Node ? this.last.next : this.head) = new Node(data);
-// class Bogo {
-// 	constructor(data) {
-// 		console.log(arguments.length)
-// 	}
-// }
-// 
-// 
-// 
 // make a linked list with the methods: size, clear, getLast, getFirst
 class Node {
 	constructor(data) {
