@@ -12,6 +12,8 @@
   "dependencies": {
     "https-localhost": "^4.6.2",
     "leapjs": "^0.6.4",
-    "node-fetch": "^2.6.0"
+    "robotjs": "^0.6.0",
+    "webrtc-adapter": "^7.6.1",
+    "ws": "^7.2.1"
   }
 }

@@ -1,262 +1,203 @@
 
 <!DOCTYPE html> 
 <html>
-    <head>
-        <title>Mangogeddon</title>
-        <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
-        <script src="../lib/jose-components.js"></script>
-    </head>
-    <body style="font-family:courier; color:white; background-color: black">
+  <head>
+    <title>Mangogeddon</title>
+    <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
+    <script src="../lib/jose-components.js"></script>
+  </head>
+  <body style="font-family:courier; color:white; background-color: black">
+    <section id="main"></section>
 
-
-        <!-- <audio id='audio-clip'>
-          <source src="mangogeddon.ogg" type='audio/flac' />
-          <p>Your user agent does not support the HTML5 Audio element.</p>
-        </audio> -->
-
-        <section id="main"></section>
-
-        <script type="text/javascript">
-          AFRAME.registerComponent('mango', {
-            schema: {
-              yRoof: {type: 'number', default: 8},
-              tickDropMeters: {type: 'number', default: 0.005},
-              mangoRadius: {type: 'number', default: 0.1},
-            },
-            init: function() {
-                this.pos = this.el.object3D.position;
-            },
-            tick: function() {
-                if(this.pos.y < 0-this.data.mangoRadius) {
-                    this.el.object3D.position.y += this.data.yRoof;
-                } else {
-                    this.el.object3D.position.y -= this.data.tickDropMeters;
-                }
+    <script type="text/javascript">
+      AFRAME.registerComponent('mango', {
+        schema: {
+          yRoof: {type: 'number', default: 8},
+          tickDropMeters: {type: 'number', default: 0.005},
+          mangoRadius: {type: 'number', default: 0.1},
+        },
+        init: function() {
+            this.pos = this.el.object3D.position;
+        },
+        tick: function() {
+            if(this.pos.y < 0-this.data.mangoRadius) {
+                this.el.object3D.position.y += this.data.yRoof;
+            } else {
+                this.el.object3D.position.y -= this.data.tickDropMeters;
             }
-          });
-
-          // https://gist.github.com/blixt/f17b47c62508be59987b
-          function Random(seed) {
-            this._seed = seed % 2147483647;
-            if (this._seed <= 0) this._seed += 2147483646;
-          }
-          Random.prototype.next = function () {
-            return this._seed = this._seed * 16807 % 2147483647;
-          };
-          Random.prototype.nextFloat = function (opt_minOrMax, opt_max) {
-            return (this.next() - 1) / 2147483646;
-          };
-        </script>
-
-        <a-scene id="scene">
-            <!-- FIX THIS FOR QUEST!!! -->
-            <a-entity joses-default-interface position="8.2 0 4.9" rotation="0 48 0"></a-entity>
-
-            <!-- <a-entity joses-default-interface></a-entity> -->
-
-
-<!--             <a-entity position="8.2 0 4.9" rotation="0 48 0">
-                <a-camera look-controls="pointerLockEnabled: false" wasd-controls></a-camera>
-                <a-entity cursor="rayOrigin: mouse" raycaster="objects:.clickable"></a-entity>
-            </a-entity> -->
-
-
-            <a-cylinder id='green-cyl' class="clickable" sound="src: url(mangogeddon.ogg); on: click" position="2 0.75 -6" radius="0.5" height="1.5" color="green" opacity="0.8">
-                <a-text value="(click)" align="center" side="double"></a-text>
-            </a-cylinder>
-
-            <!-- <a-image src='shaggy.png' height='10' width='5' position='0 5 -10'></a-image> -->
-            <!-- <a-image src='shaggy.png' height='1.905' width='0.6088' position='0 0.9525 -0.5'></a-image> -->
-
-            <a-entity id="blob"></a-entity>
-        </a-scene>
-    </body>
-
-    <script type="text/javascript">{
-        // play audio on cylinder click 
-        {
-            let cyl = document.querySelector('#green-cyl');
-            window.cyl = cyl
-            // let audio = document.querySelector('#audio-clip');
-            let audio = cyl.components.sound;
-
-            let paused_opacity = cyl.getAttribute('opacity');
-            let playing_opacity = 0.4;
-
-            cyl.addEventListener('click', function (evt) {
-                // console.log('click')
-                cyl.setAttribute('opacity', playing_opacity)
-                // audio.currentTime = 0;
-                audio.playSound();
-            });
-            cyl.addEventListener('sound-ended', function(evt) {
-                cyl.setAttribute('opacity', paused_opacity)
-            })
-            // audio.addEventListener('ended', () => {
-            //     cyl.setAttribute('opacity', paused_opacity)
-            // });
         }
+      });
 
-    // make a floor and a wall
+      // https://gist.github.com/blixt/f17b47c62508be59987b
+      function Random(seed) {
+        this._seed = seed % 2147483647;
+        if (this._seed <= 0) this._seed += 2147483646;
+      }
+      Random.prototype.next = function () {
+        return this._seed = this._seed * 16807 % 2147483647;
+      };
+      Random.prototype.nextFloat = function (opt_minOrMax, opt_max) {
+        return (this.next() - 1) / 2147483646;
+      };
+    </script>
+
+    <a-scene id="scene">
+      <!-- FIX THIS FOR QUEST!!! -->
+      <a-entity joses-default-interface position="8.2 0 4.9" rotation="0 48 0"></a-entity>
+
+
+
+      <a-cylinder id='green-cyl' class="clickable" position="2 0.75 -6" radius="0.5" height="1.5" color="green" opacity="0.8"></a-cylinder>
+
+      <a-entity id="blob"></a-entity>
+    </a-scene>
+  </body>
+
+  <script type="text/javascript">{
     {
+      let cyl = document.querySelector('#green-cyl');
 
-      const BLOB = document.querySelector('#blob');
-
-      const YROOF = 8;// same value hard-coded onto "mango" component
-      const TICK_DROP_METERS = 0.005// same value hard-coded onto "mango" component
-      const mangoRadius = 0.1;// same value hard-coded onto "mango" component
-      const heightSlack = 0 + mangoRadius;
-
-      class Sphere {
-        constructor(config={}) {
-          this.element = document.createElement(config.element || 'a-sphere')
-          this.element.setAttribute('color', config.color || 'white');
-          this.element.setAttribute('radius', '0.01');
-          this.element.setAttribute('material', "shader: flat")
-          this.element.setAttribute('type', "point")
-
-          this.element.setAttribute('position', `${config.pos_x} ${config.pos_y} ${config.pos_z}`);
-          BLOB.appendChild(this.element)
-        }
-      }
-
-      // AFRAME.registerComponent('mango', {
-      //   schema: {
-      //     yRoof: {type: 'number', default: '8'},
-      //     tickDropMeters: {type: 'number', default: '0.005'}
-      //   },
-      //   init: function() {
-      //       this.pos = this.el.object3D.position;
-      //   },
-      //   tick: function() {
-      //       if(this.pos.y < 0-heightSlack) {
-      //           this.el.object3D.position.y += this.data.yRoof;
-      //       } else {
-      //           this.el.object3D.position.y -= this.data.tickDropMeters;
-      //       }
-      //   }
-      // });
-
-
-      let grass_rgb_hex_generator = () => {
-        let r = Math.floor(Math.random()*(256/4)).toString(16);
-        let g = Math.floor(Math.random()*(256/2) + 256/4).toString(16);
-        let b = Math.floor(Math.random()*(256/4)).toString(16);
-        let rgb = [r, g, b].map(i => i.length === 1 ? '0'.concat(i) : i).join("");
-        return rgb;
-      }
-      let mango_rgb_hex_generator = () => {
-        let r = Math.floor(Math.random()*(256*1/16) + 256*15/16).toString(16);
-        let g = Math.floor(Math.random()*(256*4/16) + 256*8/16).toString(16);
-        let b = Math.floor(Math.random()*(256/16)+ 256/16).toString(16);
-        let rgb = [r, g, b].map(i => i.length === 1 ? '0'.concat(i) : i).join("");
-        return rgb;
-      }
-      let cloud_rgb_hex_generator = () => {
-        let r = Math.floor(Math.random()*(256*2/8) + 256*5/8).toString(16);
-        // let g = Math.floor(Math.random()*(256/8) + 256*6/8).toString(16);
-        let g = r;
-        let b = Math.floor(Math.random()*(256/8) + 256*7/8).toString(16);
-        let rgb = [r, g, b].map(i => i.length === 1 ? '0'.concat(i) : i).join("");
-        return rgb;
-      }
-      class Dropject {
-        constructor(config={}) {
-          this.element = document.createElement(config.element || 'a-sphere')
-          this.element.setAttribute('color', config.color || `#${mango_rgb_hex_generator()}`);
-          this.element.setAttribute('radius', mangoRadius*(0.8 +0.4*Math.random()));
-          this.element.setAttribute('material', "shader: flat")
-          this.element.setAttribute('type', "point")
-
-          this.element.setAttribute('mango', '')
-
-          this.element.setAttribute('position', `${config.pos_x} ${config.pos_y} ${config.pos_z}`);
-          BLOB.appendChild(this.element)
-        }
-      }
-      class Cloud {
-        constructor(config={}) {
-          this.element = document.createElement(config.element || 'a-sphere')
-          this.element.setAttribute('color', config.color || `#${cloud_rgb_hex_generator()}`);
-          this.element.setAttribute('radius', 1 + Math.random()*0.4);
-          // this.element.setAttribute('opacity', '0.8');
-
-          this.element.setAttribute('material', "shader: flat")
-          this.element.setAttribute('type', "point")
-          this.element.setAttribute('position', `${config.pos_x} ${config.pos_y} ${config.pos_z}`);
-          BLOB.appendChild(this.element)
-        }
-      }
-      class Plane {
-        constructor(config={}) {
-          this.element = document.createElement(config.element || 'a-plane')
-          this.element.setAttribute('color', config.color || `#${grass_rgb_hex_generator()}`);
-          this.element.setAttribute('rotation', '-90 0 0');
-          this.element.setAttribute('material', "shader: flat")
-          this.element.setAttribute('type', "point")
-
-          this.element.setAttribute('position', `${config.pos_x} ${config.pos_y} ${config.pos_z}`);
-          BLOB.appendChild(this.element)
-        }
-      }
-      // class Marker extends Sphere {
-      //   // this is just a convenience thing
-      //   constructor(x, y, z) {
-      //     super({pos_x:x, pos_y:y, pos_z:z})
-      //   }
-      // }
-      class Marker extends Dropject {
-        // this is just a convenience thing
-        constructor(x, y, z) {
-          super({pos_x:x, pos_y:y, pos_z:z})
-        }
-      }
-      class CloudWithPosThing extends Cloud {
-        // this is just a convenience thing
-        constructor(x, y, z) {
-          super({pos_x:x, pos_y:y, pos_z:z})
-        }
-      }
-      class Floor extends Plane {
-        // this is just a convenience thing
-        constructor(x, y, z) {
-          super({pos_x:x, pos_y:y, pos_z:z})
-        }
-      }
-      // floor
-      for (let i = -10; i <= 10; i++) {
-        // for (let j = -10; j <= 10; j++) {
-          for (let k = -10; k <= 10; k++) {
-            new Floor(i, 0, k)
-          }
-        // }
-      }
-      // rain wall
-      for (let i = -4; i <= 4; i++) {
-        for (let j = 1; j <= 8; j++) {
-          // for (let k = -10; k <= 10; k++) {
-            new Marker(
-                i + Math.random()-0.5,
-                j + Math.random()-0.5,
-                -10 + Math.random()-0.5,
-            )
-          // }
-        }
-      }
-      // clouds
-      for (let i = -4.5; i <= 4.5; i+=0.5) {
-        // for (let j = 1; j <= 8; j++) {
-          // for (let k = -10; k <= 10; k++) {
-            new CloudWithPosThing(
-                i + Math.random()-0.5,
-                YROOF + Math.random()-0.5,
-                -10 + Math.random()-0.5,
-            )
-          // }
-        // }
-      }
-
+      cyl.addEventListener('click', function (evt) {
+        ;
+      });
     }
-    }</script>
+
+  // make a floor and a wall
+  {
+
+    const BLOB = document.querySelector('#blob');
+
+    const YROOF = 8;// same value hard-coded onto "mango" component
+    const TICK_DROP_METERS = 0.005// same value hard-coded onto "mango" component
+    const mangoRadius = 0.1;// same value hard-coded onto "mango" component
+    const heightSlack = 0 + mangoRadius;
+
+    class Sphere {
+      constructor(config={}) {
+        this.element = document.createElement(config.element || 'a-sphere')
+        this.element.setAttribute('color', config.color || 'white');
+        this.element.setAttribute('radius', '0.01');
+        this.element.setAttribute('material', "shader: flat")
+        this.element.setAttribute('type', "point")
+
+        this.element.setAttribute('position', `${config.pos_x} ${config.pos_y} ${config.pos_z}`);
+        BLOB.appendChild(this.element)
+      }
+    }
+
+    let grass_rgb_hex_generator = () => {
+      let r = Math.floor(Math.random()*(256/4)).toString(16);
+      let g = Math.floor(Math.random()*(256/2) + 256/4).toString(16);
+      let b = Math.floor(Math.random()*(256/4)).toString(16);
+      let rgb = [r, g, b].map(i => i.length === 1 ? '0'.concat(i) : i).join("");
+      return rgb;
+    }
+    let mango_rgb_hex_generator = () => {
+      let r = Math.floor(Math.random()*(256*1/16) + 256*15/16).toString(16);
+      let g = Math.floor(Math.random()*(256*4/16) + 256*8/16).toString(16);
+      let b = Math.floor(Math.random()*(256/16)+ 256/16).toString(16);
+      let rgb = [r, g, b].map(i => i.length === 1 ? '0'.concat(i) : i).join("");
+      return rgb;
+    }
+    let cloud_rgb_hex_generator = () => {
+      let r = Math.floor(Math.random()*(256*2/8) + 256*5/8).toString(16);
+      // let g = Math.floor(Math.random()*(256/8) + 256*6/8).toString(16);
+      let g = r;
+      let b = Math.floor(Math.random()*(256/8) + 256*7/8).toString(16);
+      let rgb = [r, g, b].map(i => i.length === 1 ? '0'.concat(i) : i).join("");
+      return rgb;
+    }
+    class Dropject {
+      constructor(config={}) {
+        this.element = document.createElement(config.element || 'a-sphere')
+        this.element.setAttribute('color', config.color || `#${mango_rgb_hex_generator()}`);
+        this.element.setAttribute('radius', mangoRadius*(0.8 +0.4*Math.random()));
+        this.element.setAttribute('material', "shader: flat")
+        this.element.setAttribute('type', "point")
+
+        this.element.setAttribute('mango', '')
+
+        this.element.setAttribute('position', `${config.pos_x} ${config.pos_y} ${config.pos_z}`);
+        BLOB.appendChild(this.element)
+      }
+    }
+    class Cloud {
+      constructor(config={}) {
+        this.element = document.createElement(config.element || 'a-sphere')
+        this.element.setAttribute('color', config.color || `#${cloud_rgb_hex_generator()}`);
+        this.element.setAttribute('radius', 1 + Math.random()*0.4);
+        // this.element.setAttribute('opacity', '0.8');
+
+        this.element.setAttribute('material', "shader: flat")
+        this.element.setAttribute('type', "point")
+        this.element.setAttribute('position', `${config.pos_x} ${config.pos_y} ${config.pos_z}`);
+        BLOB.appendChild(this.element)
+      }
+    }
+    class Plane {
+      constructor(config={}) {
+        this.element = document.createElement(config.element || 'a-plane')
+        this.element.setAttribute('color', config.color || `#${grass_rgb_hex_generator()}`);
+        this.element.setAttribute('rotation', '-90 0 0');
+        this.element.setAttribute('material', "shader: flat")
+        this.element.setAttribute('type', "point")
+
+        this.element.setAttribute('position', `${config.pos_x} ${config.pos_y} ${config.pos_z}`);
+        BLOB.appendChild(this.element)
+      }
+    }
+    class Marker extends Dropject {
+      // this is just a convenience thing
+      constructor(x, y, z) {
+        super({pos_x:x, pos_y:y, pos_z:z})
+      }
+    }
+    class CloudWithPosThing extends Cloud {
+      // this is just a convenience thing
+      constructor(x, y, z) {
+        super({pos_x:x, pos_y:y, pos_z:z})
+      }
+    }
+    class Floor extends Plane {
+      // this is just a convenience thing
+      constructor(x, y, z) {
+        super({pos_x:x, pos_y:y, pos_z:z})
+      }
+    }
+    // floor
+    for (let i = -10; i <= 10; i++) {
+      // for (let j = -10; j <= 10; j++) {
+        for (let k = -10; k <= 10; k++) {
+          new Floor(i, 0, k)
+        }
+      // }
+    }
+    // rain wall
+    for (let i = -4; i <= 4; i++) {
+      for (let j = 1; j <= 8; j++) {
+        // for (let k = -10; k <= 10; k++) {
+          new Marker(
+              i + Math.random()-0.5,
+              j + Math.random()-0.5,
+              -10 + Math.random()-0.5,
+          )
+        // }
+      }
+    }
+    // clouds
+    for (let i = -4.5; i <= 4.5; i+=0.5) {
+      // for (let j = 1; j <= 8; j++) {
+        // for (let k = -10; k <= 10; k++) {
+          new CloudWithPosThing(
+              i + Math.random()-0.5,
+              YROOF + Math.random()-0.5,
+              -10 + Math.random()-0.5,
+          )
+        // }
+      // }
+    }
+
+  }
+  }</script>
 
 </html>

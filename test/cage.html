@@ -15,6 +15,94 @@
 <body style="font-family:courier; color:white; background-color: black">
 
   <script type="text/javascript">
+    // setTimeout(() => window.history.go(), 4000)
+    console.log('start')
+    // Hey, so I know this meant for the 45 minute interview but I was 
+
+    // Given a set of light switches, and their on/off combinations being defined as
+    // zeros and ones, "zero" being an "off" switch, and "one" being an "on" switch
+    // ex: "000": [off, off, off]; "101": [on, off, on]
+
+    // The switches can only flipped one at a time, setting them in an invalid
+    // combination will burn the circuit
+    // ex: the only safe states are '000', '010', '101', '001', and '111'
+
+    // given the context of switches being physically flipped, depth-first searach
+    // makes more sense than depth-first search, since it prioritizes shorter paths
+
+    let safeCombinatinos = ['000', '010', '101', '001', '111']
+    // safeCombinatinos = ['000', '010', '101', '001', '111']
+    console.log(pathFromAtoB('010', '111', safeCombinatinos))
+
+
+    safeCombinatinos = [
+      '000000', '010000', '101000', '001000', '111000', '01001'
+    ]
+    console.log(pathFromAtoB('00000', '11111', safeCombinatinos))
+
+    // representing these in binary makes more sense
+    function pathFromAtoB(originConf, targetConf, safeCombs) {
+      const safeStates = new Set(safeCombs)
+      if (!safeStates.has(originConf) || !safeStates.has(targetConf)) {
+        throw 'origin state not in valid states';
+      } 
+      if () {
+        throw 'target state not in valid states'
+      }
+      class StateNode {
+        constructor (val, left=null) {
+          this.val = val;
+          this.left = left;
+          if (val === targetConf) {
+            target = this;
+            safeStates.clear()
+          }
+          
+        }
+      }
+
+      const root = new StateNode(originConf)
+      let target = null;
+      let queue = [root]
+
+      while (queue.length > 0) {
+        const n = queue.shift();
+        const options = optionsOf(n.val);
+        for (let o of options) {
+          let newNode = new StateNode(o, n)
+          if (o === targetConf) {
+            return nodePath(newNode)
+          }
+          queue.push(newNode)
+        }
+      }
+
+      function optionsOf (combination) {
+        const switchesCount = combination.length;
+        const state = parseInt(combination, 2);
+        let options = [];
+        for (let i = 0; i < switchesCount; i++) {
+          let newState = ( state ^ 1 << i ).toString(2);
+          while (newState.length < switchesCount) newState = '0' + newState;
+          if (safeStates.has(newState)) options.push(newState);
+        }
+        return options
+      }
+
+      function nodePath(last) {
+        let node = last
+        let pathToOrigin = [last.val]
+        while (node.left) {
+          node = node.left
+          pathToOrigin.push(node.val)
+        }
+        return pathToOrigin.reverse()
+      }
+
+    }
+  </script>
+
+  <script type="text/javascript">
 
     AFRAME.registerComponent('voxel-board', {
       // target is to work with single ray for now multi-ray could be

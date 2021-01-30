@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>National Parks</title>
+</head>
+<body>
+	<h1>National Parks</h1>
+
+	<table>
+		<thead>
+			<tr>
+				<th>s</th>
+				<th>s</th>
+				<th>s</th>
+				<th>s</th>
+				<th>s</th>
+				<th>s</th>
+			</tr>
+		</thead>
+		<tbody></tbody>
+	</table>
+
+	<script type="text/javascript">
+		// fetch('https://prm-interview.s3.amazonaws.com/parks.json', {mode: 'no-cors'}).then(r => {
+		fetch(
+			'parks.json',
+			// {mode: 'no-cors'}
+		)
+		.then(r => r.json())
+		.then(data => {
+			console.log(data)
+
+			// keys
+			const keys = [
+				'Name',
+				'Image',
+				'Thumbnail',
+				'Location',
+				'Established',
+				'Area',
+				'Rereation visitors',
+				'Description'
+			]
+
+			const tbody = document.querySelector('tbody');
+
+			data.forEach(d => {
+				const tr = document.createElement('tr');
+				tr.innerHTML = `
+					<td class="name">${d['Name']}</td>
+					<td class="thumbnail">
+						<a href="${d['Image']}">
+							<img src="${d['Thumbnail']}"/>
+						</a>
+					</td>
+					<td class="location">${d['Location']}</td>
+					<td class="established">${d['Established']}</td>
+					<td class="area">${d['Area']}</td>
+					<td class="visitors">${d['Recreation visitors']}</td>
+					<td class="description">${d['Description']}</td>
+				`
+
+				tbody.appendChild(tr);
+			});
+		})
+	</script>
+	<style type="text/css">
+		table {
+			/*width: 50px;*/
+		}
+		td {
+			display: inline-block;
+			/*width: 300px;*/
+			width: 10em;
+			overflow: hidden;
+		}
+		td.name{
+			/*width: 20em;*/
+		}
+		td.thumbnail.img {
+			width: 1em;
+		}
+		td.location {
+
+		}
+		td.established {
+
+		}
+		td.area {
+
+		}
+		td.visitors {
+
+		}
+		td.description {
+
+		}
+	</style>
+
+</body>
+</html>

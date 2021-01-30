@@ -55,10 +55,15 @@
                             <div id="overlay">
                                 <p>use this touch-pad to move around</p>
                             </div>
+                            <div id="touch-buttons">
+                                <div class="touch-button" id="touch-button-a">A</div>
+                                <div class="touch-button" id="touch-button-b">B</div>
+                            </div>
                         `;
                         document.body.appendChild(div);
 
                         const style = document.createElement('style');
+                        // const BUTTON_HEIGHT = 100
                         style.innerHTML = `
                             #overlay {
                                 position:absolute;
@@ -71,9 +76,36 @@
                                 width: 200px;
                                 margin: 50px
                             }
+
+                            #touch-buttons {
+                                position:absolute;
+                                bottom:0px;
+                                right:0px;
+                                z-index:1000;
+                                background-color: gray;
+
+                                height: 200px;
+                                width: 200px;
+                                margin: 50px
+                            }
+                            .touch-button {
+                                height: 100px;
+                                border: 1px solid black;
+                            }
+                            #touch-button-a {
+                                top: 0px;
+                            }
+                            #touch-button-b {
+                                top: 100px;
+                            }
                         `;
                         document.head.appendChild(style);
+                        this._aButton = document.querySelector('#touch-button-a')
+                        this._bButton = document.querySelector('#touch-button-b')
 
+                        // https://developer.mozilla.org/en-US/docs/Web/API/Touch_events
+                        this._aButton.addEventListener('touchstart'
+)
                         // avoid accessing properties before initialized,
                         // might be goood to have system methhoods/props check
                         // if system has been fully initialized/loaded, defined

@@ -1,0 +1,73 @@
+<!DOCTYPE html> 
+<html>
+    <head>
+        <title>Pomodoro</title>
+        <script src="https://aframe.io/releases/1.0.3/aframe.min.js"></script>
+        <!-- <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css"> -->
+        <meta charset="UTF-8">
+
+        <!-- https://github.com/aframevr/aframe/issues/3018 -->
+        <style type="text/css">
+            html, button {
+                font-size: 32px;
+            }
+            #bar {
+                background-color: blue;
+                height: 50px;
+                width: 90%;
+            }
+            #display {
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body style="font-family:courier; color:white; background-color: black">
+        <h1>Pomodoro <button onclick="history.go(0)">r</button></h1>
+        <!-- <a-scene embedded vr-mode-ui="enabled: false" style="height: 40px; width: 100%; border: 1px solid white">
+            <a-camera position="0 0 0"></a-camera>
+            <a-plane position="0 0 -4"></a-plane>
+        </a-scene> -->
+        <dir id="bar">
+            <h2 id=display>00</h2>
+        </dir>
+        <br>
+        <h2><a href="pomodoro.html">Pomodoro</a></h2>
+        <p>Pomodoro clock made using AFrame. Meant to run on a cell phone while using a PC.</p>
+        <button onclick="window.navigator.vibrate([200, 20, 200])">Vibration Test</button>
+        <button onclick="history.back()">"Navigate Back" test</button>
+        <button onclick="timer(3)">TIMER</button>
+
+
+        <script type="text/javascript">
+            const bar = document.querySelector('#bar')
+            const display = document.querySelector('#display')
+            let timeLeft = 0;
+            active = false
+            function timer(sec) {
+                timeLeft = sec
+                display.innerHTML = timeLeft
+
+                // doing a 1000ms settimeout isn't perfect, perfect would be to check the actual time
+                // waiting 1000ms would mean each tick takes a second plus the time to run the script
+                // scope of this project doesn't require much precision, so going with easy solution.
+
+                // if (active) timeLeft = sec
+                // else 
+                 // setTimeout(() => timer(timeLeft-1), 1000)
+
+                if (active && timeLeft <= 0) {
+                    window.navigator.vibrate([200, 20, 200])
+                    active = false
+                    return;
+                } else {
+
+                    if (active) {
+                        active = true
+                        setTimeout(() => timer(timeLeft-1), 1000)
+                    }
+                    
+                }
+            }
+        </script>
+    </body>
+</html>
