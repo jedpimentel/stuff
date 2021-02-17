@@ -172,3 +172,74 @@
 	    }
 	};
 }
+
+// 1557. Minimum Number of Vertices to Reach All Nodes    https://leetcode.com/problems/minimum-number-of-vertices-to-reach-all-nodes/
+{
+	var findSmallestSetOfVertices = function(n, edges) {
+	    const branches = new Set();
+	    // nodes with pointers to them are branches, not roots
+	    edges.forEach(([from, to] = e) => branches.add(to));
+	    
+	    const roots = new Array();
+	    for (let i = 0; i < n; i++) {
+	        if (!branches.has(i)) {
+	            roots.push(i);
+	        }
+	    }
+	    return roots;
+	};
+}
+
+// 1761. Minimum Degree of a Connected Trio in a Graph    https://leetcode.com/problems/minimum-degree-of-a-connected-trio-in-a-graph/
+{
+	var minTrioDegree = function(n, edges) {
+	    class Node {
+	        constructor(id) {
+	            this.id = id;
+	            this.next = new Set();
+	        }
+	        static connect(a, b) {
+	            a.next.add(b);
+	            b.next.add(a);
+	        }
+	    }
+	    
+	    const nodes = [];
+	    for (let i = 0; i <= n; i++) {
+	        nodes.push(new Node(i))
+	    }
+	    
+	    edges.forEach(edge => {
+	        const [a, b] = edge;
+	        const nA = nodes[a];
+	        const nB = nodes[b];
+	        Node.connect(nA, nB);
+	    })
+	    
+	    let minDegree = -1;
+	    
+	    nodes.forEach(n1 => {
+	        n1.next.forEach(n2 => {
+	            if (n1.id > n2.id) return;
+	            n2.next.forEach(n3 => {
+	                if (n2.id > n3.id) return;
+	                if (n3.next.has(n1)) {
+	                    tallyTrio(n1, n2, n3);
+	                }
+	            })
+	        })
+	    })
+	    
+	    function tallyTrio(a, b, c) {
+	        let degrees = 0;
+	        degrees += a.next.size - 2;
+	        degrees += b.next.size - 2;
+	        degrees += c.next.size - 2;
+	        if (minDegree === -1 || minDegree > degrees) {
+	            minDegree = degrees;
+	        }
+	    }
+	    
+	    return minDegree;
+	};
+}
